@@ -314,5 +314,120 @@ snmf('stickleback_data.geno',
      repetitions = 5,
      project = 'new')
 
+project = load.snmfProject("Charr_Lab.snmfProject")
+# project = load.snmfProject('Charr_Poly.snmfProject')
+# 
+summary(project)
+
+plot(project,
+     cex = 1.2,
+     col = "black",
+     pch = 19)
+
+# K=23 has the lowst cross entropy coefficient
+ce = cross.entropy(project, K = 4)
+best_ce = which.min(ce)
+
+qmatrix = Q(project, 
+            K = 4, 
+            run = best_ce)
+# head(qmatrix)
+# dim(qmatrix)
+## This will show the clusters each individual was assigned to
+## The order is the same as the .ped file!!
+## Take the first two columns of the ped file to group by population
+apply(qmatrix, 1, which.max) %>%
+  as_tibble() %>%
+  dplyr::rename(Genetic_group = value) %>%
+  write_tsv('Charr_poly_snmf_groups_k4.txt')
+
+## shitty base R plot
+plot = barplot(qmatrix, 
+               border = NA, 
+               space = 0, 
+               # col = my.colors, 
+               # xlab = "Individuals",
+               ylab = "Ancestry proportions", 
+               main = "Ancestry matrix")
+
+# bp = LEA::barchart(qmatrix, 
+#                 K = 23, 
+#                 border = NA, 
+#                 space = 0, 
+#                 xlab = 'Individuals', 
+#                 ylab = 'Ancestry proportions', 
+#                 main = 'Ancestry matrix')
+
+as_tibble(qmatrix) %>%
+  dplyr::rename(Q1 = V1,
+                Q2 = V2,
+                Q3 = V3,
+                Q4 = V4) %>% 
+  # Q5 = V5,
+  # Q6 = V6,
+  # Q7 = V7,
+  # Q8 = V8,
+  # Q9 = V9,
+  # Q10 = V10,
+  # Q11 = V11,
+  # Q12 = V12,
+  # Q13 = V13,
+  # Q14 = V14,
+  # Q15 = V15,
+# Q16 = V16,
+# Q17 = V17,
+# Q18 = V18,
+# Q19 = V19,
+# Q20 = V20,
+# Q21 = V21,
+# Q22 = V22,
+# Q23 = V23) %>%
+write_csv('Charr_poly_snmf_qvalues_k4.csv')
+
+
+snmf_data = read_csv('Mito_Nuclear_snmf_data.csv')
+
+snmf_data %>% 
+  group_by(`#Familyid`) %>% 
+  summarise(n = n())
+
+
+theme_set(theme_bw())
+
+library(viridis)
+## plot is currently arranged by Latitude 
+## See arrange function in snmf_data
+
+## snmf latitude plot
+snmf_plot = ggplot(data = snmf_data, 
+                   aes(x = reorder(Individualid, Lat),
+                       y = value, 
+                       fill = variable, 
+                       group = Lat))+
+  geom_bar(stat = "identity", 
+           width = 1)+
+  scale_fill_manual(values = magma(n = 20))+
+  labs(x = 'Individuals', 
+       y = 'Ancestry proportion')+
+  theme(axis.text.y = element_text(color = 'black'),
+        axis.text.x = element_blank(),
+        axis.title.x = element_blank(),
+        # axis.text.x = element_text(angle = 90,
+        #                            hjust = 1,
+        #                            vjust = -0.09,
+        #                            size = 6,
+        #                            color = 'black'),
+        legend.position = 'none')+
+  scale_y_continuous(expand = c(0,0))+
+  scale_x_discrete(guide = guide_axis(n.dodge = 5))
+
+snmf_plot
+
+ggsave('Mito_Nuclear_snmf_k20.tiff',
+       # path = '~/BradburyLab_Postdoc/Charr_Project_1/Figures',
+       plot = snmf_plot, 
+       dpi = 'retina', 
+       units = 'cm')
+
 # rda analysis ------------------------------------------------------------
 
