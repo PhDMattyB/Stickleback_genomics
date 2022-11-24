@@ -309,12 +309,12 @@ convert = ped2geno('stickleback_maf0.05_ldpruned_filtered.ped',
                    'stickleback_data.geno')
 
 snmf('stickleback_data.geno',
-     K = 1:5,
+     K = 1:10,
      entropy = T,
      repetitions = 5,
      project = 'new')
 
-project = load.snmfProject("Charr_Lab.snmfProject")
+project = load.snmfProject("stickleback_data.snmfProject")
 # project = load.snmfProject('Charr_Poly.snmfProject')
 # 
 summary(project)
