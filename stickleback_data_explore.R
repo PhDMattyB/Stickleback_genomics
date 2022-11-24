@@ -297,3 +297,7 @@ ggsave(file = 'stickleback_manhattan_plot.tiff',
        units = 'cm', 
        width = 20, 
        height = 20)
+
+
+# rda analysis ------------------------------------------------------------
+
