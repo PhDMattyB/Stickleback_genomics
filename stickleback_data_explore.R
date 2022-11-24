@@ -299,5 +299,20 @@ ggsave(file = 'stickleback_manhattan_plot.tiff',
        height = 20)
 
 
+
+# snmf analysis -----------------------------------------------------------
+setwd('C:/Stickleback_Genomic/vcf_filter/')
+
+library(LEA)
+
+convert = ped2geno('stickleback_maf0.05_ldpruned_filtered.ped',
+                   'stickleback_data.geno')
+
+snmf('stickleback_data.geno',
+     K = 1:5,
+     entropy = T,
+     repetitions = 5,
+     project = 'new')
+
 # rda analysis ------------------------------------------------------------
 
