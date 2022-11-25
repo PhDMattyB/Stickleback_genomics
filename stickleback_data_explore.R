@@ -152,10 +152,12 @@ stickleback_pca = stickle_plot %>%
   # group_by(population) %>% 
   ggplot(aes(x = PC1, 
              y = PC2))+
-  geom_point(aes(col = Location),
+  # geom_point(aes(col = Location),
+  #            size = 2)+
+  geom_point(aes(col = population),
              size = 2)+
-  # scale_color_manual(values = cold_warm_cols)+
-  scale_color_manual(values = location_cols)+
+  scale_color_manual(values = cold_warm_cols)+
+  # scale_color_manual(values = location_cols)+
   theme(panel.grid.major = element_blank(),
         panel.grid.minor = element_blank(), 
         axis.title = element_text(size = 15), 
@@ -169,7 +171,7 @@ stickleback_pca = stickle_plot %>%
        y = 'Principal component 2 (14.96%)', 
        col = 'Populations')
 
-ggsave(file = 'stickleback_pca.tiff', 
+ggsave(file = 'stickleback_pca_cold_warm_split.tiff', 
        path = 'C:/Stickleback_Genomic/Figures/', 
        plot = stickleback_pca, 
        dpi = 'retina', 
@@ -295,11 +297,11 @@ library(LEA)
 convert = ped2geno('stickleback_maf0.05_ldpruned_filtered.ped',
                    'stickleback_data.geno')
 
-snmf('stickleback_data.geno',
-     K = 1:10,
-     entropy = T,
-     repetitions = 5,
-     project = 'new')
+# snmf('stickleback_data.geno',
+#      K = 1:10,
+#      entropy = T,
+#      repetitions = 5,
+#      project = 'new')
 
 project = load.snmfProject("stickleback_data.snmfProject")
 # project = load.snmfProject('Charr_Poly.snmfProject')
