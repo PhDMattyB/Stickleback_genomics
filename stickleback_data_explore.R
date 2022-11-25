@@ -74,13 +74,15 @@ stickle_plot = read_csv('pcadapt_stickle_pc_scores.csv')
 
 identifiers = read_table2('stickleback_maf0.05-ldpruned_nomissing.fam', 
          col_names = F) %>% 
-  dplyr::select(X1) %>% 
-  rename(population = X1) %>% 
+  dplyr::select(X1, 
+                X2) %>% 
+  rename(population = X1, 
+         individual_id = X2) %>% 
   separate(col = population, 
-           into = c('individual_id', 
+           into = c('garbage', 
                 'population'), 
            sep = '-') %>% 
-  separate(col = individual_id, 
+  separate(col = garbage, 
             into = c('garbage', 
                    'temp_pop'), 
             sep = 'Sample_')
@@ -89,22 +91,30 @@ identifiers = read_table2('stickleback_maf0.05-ldpruned_nomissing.fam',
 
 id_one = identifiers %>% 
   slice(1:86) %>% 
-  select(population) %>% 
+  select(population, 
+         individual_id) %>% 
   separate(col = population, 
            into = c('population', 
                     'garbage'), 
            sep = '_') %>% 
-  select(population)
+  select(population, 
+         individual_id)
 
 id_two = identifiers %>% 
   slice(87:109) %>% 
-  select(temp_pop) %>% 
+  select(temp_pop, 
+         individual_id) %>% 
   separate(col = temp_pop, 
            into = c('population', 
                     'garbage1', 
                     'garbage2'), 
            sep = '_') %>% 
-  select(population)
+  separate(col = individual_id, 
+           into = c('garbage', 
+                    'individual_id'), 
+           sep = 'Sample_') %>% 
+  select(population, 
+         individual_id)
 
 identifiers = bind_rows(id_one, 
                         id_two)
@@ -364,42 +374,33 @@ identifiers
 snmf_data = bind_cols(identifiers, 
                       snmf_data)
 
-# snmf_melted = melt(snmf_data, 
-#                    id.vars = c('FID', 
-#                                'IndivID', 
-#                                'Genetic_group', 
-#                                'Lat',
-#                                'Long')) %>% 
-#   as_tibble()
 snmf_melted = melt(snmf_data, 
-                   id.vars = c('population')) %>% 
+                   id.vars = c('population', 
+                               'individual_id')) %>% 
   as_tibble()
 
 
-## plot is currently arranged by Latitude 
-## See arrange function in snmf_data
-
-## snmf latitude plot
+## snmf plot
 snmf_plot = ggplot(data = snmf_melted, 
-                   aes(x = reorder(population),
+                   aes(x = individual_id,
                        y = value, 
                        fill = variable, 
                        group = population))+
   geom_bar(stat = "identity", 
            width = 1)+
-  # scale_fill_manual(values = test_col)+
-  scale_fill_manual(values = magma(n = 4))+
+  scale_fill_manual(values = test_col)+
+  # scale_fill_manual(values = magma(n = 4))+
   labs(x = 'Individuals', 
        y = 'Ancestry proportion')+
   theme(axis.text.y = element_text(color = 'black'),
-        axis.text.x = element_blank(),
-        axis.title.x = element_blank(),
+        # axis.text.x = element_blank(),
+        # axis.title.x = element_blank(),
         ## can add xaxis labels if needed
-        # axis.text.x = element_text(angle = 90,
-        #                            hjust = 1,
-        #                            vjust = -0.09,
-        #                            size = 6,
-        #                            color = 'black'),
+        axis.text.x = element_text(angle = 90,
+                                   hjust = 1,
+                                   vjust = -0.09,
+                                   size = 6,
+                                   color = 'black'),
         legend.position = 'none')+
   scale_x_discrete(guide = guide_axis(n.dodge = 5))+
   scale_y_continuous(expand = c(0,0))
