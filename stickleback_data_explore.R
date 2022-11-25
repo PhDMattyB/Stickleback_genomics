@@ -97,6 +97,27 @@ id_one = identifiers %>%
            into = c('population', 
                     'garbage'), 
            sep = '_') %>% 
+  slice(1:16) %>% 
+  # separate(individual_id, 
+  #          into = c('garbage', 
+  #                   'individual_id'), 
+  #          sep = 'Sample_') %>% View() 
+  select(population, 
+         individual_id)
+
+id_three = identifiers %>% 
+  slice(17:86) %>% 
+  select(population, 
+         individual_id) %>% 
+  separate(col = population, 
+           into = c('population', 
+                    'garbage'), 
+           sep = '_') %>% 
+  # slice(1:16) %>% 
+  separate(individual_id,
+           into = c('garbage',
+                    'individual_id'),
+           sep = 'Sample_') %>%
   select(population, 
          individual_id)
 
@@ -116,7 +137,8 @@ id_two = identifiers %>%
   select(population, 
          individual_id)
 
-identifiers = bind_rows(id_one, 
+identifiers = bind_rows(id_one,
+                        id_three,
                         id_two)
 
 stickle_plot = bind_cols(identifiers, 
@@ -372,13 +394,22 @@ snmf_data = read_csv('stickleback_snmf_qvalues_k4.csv')
 identifiers
 
 snmf_data = bind_cols(identifiers, 
-                      snmf_data)
+                      snmf_data) %>% 
+  # arrange(population, 
+  #         individual_id)
+  arrange(population)
 
 snmf_melted = melt(snmf_data, 
                    id.vars = c('population', 
                                'individual_id')) %>% 
   as_tibble()
 
+## need colour scheme
+location_cols = c('#d62828',
+                  '#264653',
+                  '#219ebc',
+                  '#06d6a0',
+                  '#5f0f40')
 
 ## snmf plot
 snmf_plot = ggplot(data = snmf_melted, 
@@ -388,7 +419,7 @@ snmf_plot = ggplot(data = snmf_melted,
                        group = population))+
   geom_bar(stat = "identity", 
            width = 1)+
-  scale_fill_manual(values = test_col)+
+  scale_fill_manual(values = location_cols)+
   # scale_fill_manual(values = magma(n = 4))+
   labs(x = 'Individuals', 
        y = 'Ancestry proportion')+
@@ -399,7 +430,7 @@ snmf_plot = ggplot(data = snmf_melted,
         axis.text.x = element_text(angle = 90,
                                    hjust = 1,
                                    vjust = -0.09,
-                                   size = 6,
+                                   size = 10,
                                    color = 'black'),
         legend.position = 'none')+
   scale_x_discrete(guide = guide_axis(n.dodge = 5))+
@@ -407,11 +438,13 @@ snmf_plot = ggplot(data = snmf_melted,
 
 snmf_plot
 
-ggsave('Mito_Nuclear_snmf_k20.tiff',
-       # path = '~/BradburyLab_Postdoc/Charr_Project_1/Figures',
+ggsave(file = 'stickleback_snmf.tiff', 
+       path = 'C:/Stickleback_Genomic/Figures/', 
        plot = snmf_plot, 
        dpi = 'retina', 
-       units = 'cm')
+       units = 'cm', 
+       width = 50.0, 
+       height = 20)
 
 # rda analysis ------------------------------------------------------------
 
