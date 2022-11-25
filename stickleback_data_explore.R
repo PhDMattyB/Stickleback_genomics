@@ -125,7 +125,7 @@ stickle_plot = mutate(.data = stickle_plot,
 
 
 
-
+##
 # pca plot ----------------------------------------------------------------
 
 theme_set(theme_bw())
@@ -180,7 +180,7 @@ ggsave(file = 'stickleback_pca_cold_warm_split.tiff',
        height = 13)
 
 
-
+##
 # pcadapt outliers --------------------------------------------------------
 
 plot(stickle_pca, 
@@ -293,6 +293,8 @@ ggsave(file = 'stickleback_manhattan_plot.tiff',
 setwd('C:/Stickleback_Genomic/vcf_filter/')
 
 library(LEA)
+library(viridis)
+library(reshape2)
 
 convert = ped2geno('stickleback_maf0.05_ldpruned_filtered.ped',
                    'stickleback_data.geno')
@@ -308,17 +310,17 @@ project = load.snmfProject("stickleback_data.snmfProject")
 # 
 summary(project)
 
-plot(project,
+ce_plot = plot(project,
      cex = 1.2,
      col = "black",
      pch = 19)
 
 # K=23 has the lowst cross entropy coefficient
-ce = cross.entropy(project, K = 5)
+ce = cross.entropy(project, K = 4)
 best_ce = which.min(ce)
 
 qmatrix = Q(project, 
-            K = 5, 
+            K = 4, 
             run = best_ce)
 # head(qmatrix)
 # dim(qmatrix)
@@ -328,7 +330,7 @@ qmatrix = Q(project,
 apply(qmatrix, 1, which.max) %>%
   as_tibble() %>%
   dplyr::rename(Genetic_group = value) %>%
-  write_tsv('stickleback_k5.txt')
+  write_tsv('stickleback_snmf_k4.txt')
 
 ## shitty base R plot
 plot = barplot(qmatrix, 
@@ -351,46 +353,56 @@ as_tibble(qmatrix) %>%
   dplyr::rename(Q1 = V1,
                 Q2 = V2,
                 Q3 = V3,
-                Q4 = V4, 
-                Q5 = V5) %>% 
+                Q4 = V4) %>% 
   write_csv('stickleback_snmf_qvalues_k4.csv')
 
 
 snmf_data = read_csv('stickleback_snmf_qvalues_k4.csv')
 
-snmf_data %>% 
-  group_by(`#Familyid`) %>% 
-  summarise(n = n())
+identifiers
+
+snmf_data = bind_cols(identifiers, 
+                      snmf_data)
+
+# snmf_melted = melt(snmf_data, 
+#                    id.vars = c('FID', 
+#                                'IndivID', 
+#                                'Genetic_group', 
+#                                'Lat',
+#                                'Long')) %>% 
+#   as_tibble()
+snmf_melted = melt(snmf_data, 
+                   id.vars = c('population')) %>% 
+  as_tibble()
 
 
-theme_set(theme_bw())
-
-library(viridis)
 ## plot is currently arranged by Latitude 
 ## See arrange function in snmf_data
 
 ## snmf latitude plot
-snmf_plot = ggplot(data = snmf_data, 
-                   aes(x = reorder(Individualid, Lat),
+snmf_plot = ggplot(data = snmf_melted, 
+                   aes(x = reorder(population),
                        y = value, 
                        fill = variable, 
-                       group = Lat))+
+                       group = population))+
   geom_bar(stat = "identity", 
            width = 1)+
-  scale_fill_manual(values = magma(n = 20))+
+  # scale_fill_manual(values = test_col)+
+  scale_fill_manual(values = magma(n = 4))+
   labs(x = 'Individuals', 
        y = 'Ancestry proportion')+
   theme(axis.text.y = element_text(color = 'black'),
         axis.text.x = element_blank(),
         axis.title.x = element_blank(),
+        ## can add xaxis labels if needed
         # axis.text.x = element_text(angle = 90,
         #                            hjust = 1,
         #                            vjust = -0.09,
         #                            size = 6,
         #                            color = 'black'),
         legend.position = 'none')+
-  scale_y_continuous(expand = c(0,0))+
-  scale_x_discrete(guide = guide_axis(n.dodge = 5))
+  scale_x_discrete(guide = guide_axis(n.dodge = 5))+
+  scale_y_continuous(expand = c(0,0))
 
 snmf_plot
 
