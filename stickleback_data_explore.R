@@ -348,11 +348,11 @@ ce_plot = plot(project,
      pch = 19)
 
 # K=23 has the lowst cross entropy coefficient
-ce = cross.entropy(project, K = 4)
+ce = cross.entropy(project, K = 5)
 best_ce = which.min(ce)
 
 qmatrix = Q(project, 
-            K = 4, 
+            K = 5, 
             run = best_ce)
 # head(qmatrix)
 # dim(qmatrix)
@@ -362,7 +362,7 @@ qmatrix = Q(project,
 apply(qmatrix, 1, which.max) %>%
   as_tibble() %>%
   dplyr::rename(Genetic_group = value) %>%
-  write_tsv('stickleback_snmf_k4.txt')
+  write_tsv('stickleback_snmf_k5.txt')
 
 ## shitty base R plot
 plot = barplot(qmatrix, 
@@ -385,11 +385,12 @@ as_tibble(qmatrix) %>%
   dplyr::rename(Q1 = V1,
                 Q2 = V2,
                 Q3 = V3,
-                Q4 = V4) %>% 
-  write_csv('stickleback_snmf_qvalues_k4.csv')
+                Q4 = V4, 
+                Q5 = V5) %>% 
+  write_csv('stickleback_snmf_qvalues_k5.csv')
 
 
-snmf_data = read_csv('stickleback_snmf_qvalues_k4.csv')
+snmf_data = read_csv('stickleback_snmf_qvalues_k5.csv')
 
 identifiers
 
@@ -405,11 +406,12 @@ snmf_melted = melt(snmf_data,
   as_tibble()
 
 ## need colour scheme
-location_cols = c('#d62828',
-                  '#264653',
-                  '#219ebc',
+## real
+location_cols = c('#264653',
+                  '#5f0f40',
                   '#06d6a0',
-                  '#5f0f40')
+                  '#219ebc',
+                  '#d62828')
 
 ## snmf plot
 snmf_plot = ggplot(data = snmf_melted, 
@@ -424,14 +426,14 @@ snmf_plot = ggplot(data = snmf_melted,
   labs(x = 'Individuals', 
        y = 'Ancestry proportion')+
   theme(axis.text.y = element_text(color = 'black'),
-        # axis.text.x = element_blank(),
-        # axis.title.x = element_blank(),
+        axis.text.x = element_blank(),
+        axis.title.x = element_blank(),
         ## can add xaxis labels if needed
-        axis.text.x = element_text(angle = 90,
-                                   hjust = 1,
-                                   vjust = -0.09,
-                                   size = 10,
-                                   color = 'black'),
+        # axis.text.x = element_text(angle = 90,
+        #                            hjust = 1,
+        #                            vjust = -0.09,
+        #                            size = 10,
+        #                            color = 'black'),
         legend.position = 'none')+
   scale_x_discrete(guide = guide_axis(n.dodge = 5))+
   scale_y_continuous(expand = c(0,0))
@@ -443,8 +445,8 @@ ggsave(file = 'stickleback_snmf.tiff',
        plot = snmf_plot, 
        dpi = 'retina', 
        units = 'cm', 
-       width = 50.0, 
-       height = 20)
+       width = 30, 
+       height = 8)
 
 # rda analysis ------------------------------------------------------------
 
