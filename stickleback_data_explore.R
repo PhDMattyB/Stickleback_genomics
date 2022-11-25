@@ -207,11 +207,6 @@ map = read_tsv('stickleback_maf0.05_ldpruned_filtered.map',
 final_df = bind_cols(snp_vals, 
           map)
 
-# final_df  %>%  mutate(logpval = -log(pvalues), 
-#                       logqval = -log(qvalues))
-
-## read in the data
-# final_df = read_csv('~/Charr_Adaptive_Introgression/Charr_Project_1/GeneticData/Charr_Lab_PCARDA_FinalDF.csv')
 
 ## calculate cumulative base pair per chromosome
 dist_cal = final_df %>% 
@@ -229,22 +224,14 @@ axisdf = dist_cal %>%
   group_by(chromosome) %>% 
   summarize(center=(max(BPcum) + min(BPcum))/2 )  
 
-## get the absolute score for the RDA outliers
-## the negatives plot like shit
-# dist_cal$RDA_score_abs = abs(dist_cal$RDA_score)
-
-# write_csv(dist_cal,
-#           '~/Charr_Adaptive_Introgression/Charr_Project_1/RDA_Environmental_Variables/RDA_Outliers_distcal_df.csv')
-# write_csv(axisdf,
-#           '~/Charr_Adaptive_Introgression/Charr_Project_1/RDA_Environmental_Variables/RDA_Outliers_axisdf_df.csv')
 
 ## Get the neutral snps
-non_outs = dist_cal %>% 
-  filter(qvalues >= 0.05) %>% 
-  mutate
-## Get the outliers
-outs = dist_cal %>% 
-  filter(qvalues < 0.05)
+# non_outs = dist_cal %>% 
+#   filter(qvalues >= 0.05) %>% 
+#   mutate
+# ## Get the outliers
+# outs = dist_cal %>% 
+#   filter(qvalues < 0.05)
 
 non_outs = dist_cal %>% 
   filter(qvalues >= 0.05) %>% 
