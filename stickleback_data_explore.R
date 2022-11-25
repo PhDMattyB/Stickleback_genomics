@@ -7,17 +7,12 @@
 ##
 ##############################
 
-# library(patchwork)
-# library(janitor)
-# library(devtools)
-# library(skimr)
-# library(rsed)
-# library(data.table)
-# library(sjPlot)
-library(tidyverse)
-# library(vcfR)
 library(pcadapt)
+library(viridis)
+library(LEA)
 library(qvalue)
+library(tidyverse)
+
 # 
 
 
@@ -450,13 +445,25 @@ ggsave(file = 'stickleback_snmf.tiff',
 
 
 
-# dapca -------------------------------------------------------------------
-library(adegenet)
 
+# PCA Umap --------------------------------------------------------------------
 
+stickle_pca = read.pcadapt('stickleback_maf0.05_ldpruned_filtered.bed', 
+                               type = 'bed')
 
+## First we need to compute the first 50 pc axes
+## based on the umap paper
+stickle_pca = pcadapt::pcadapt(stickle_pca, 
+                               K = 50, 
+                               method = 'mahalanobis', 
+                               min.maf = 0.01)
 
-# Umap --------------------------------------------------------------------
+plot(stickle_pca, 
+     option = 'screeplot', 
+     K = 50)
+
+pcscores = as_tibble(stickle_pca$scores) 
+
 
 
 # rda analysis ------------------------------------------------------------
