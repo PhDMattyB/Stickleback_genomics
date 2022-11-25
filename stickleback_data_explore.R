@@ -325,11 +325,11 @@ plot(project,
      pch = 19)
 
 # K=23 has the lowst cross entropy coefficient
-ce = cross.entropy(project, K = 4)
+ce = cross.entropy(project, K = 5)
 best_ce = which.min(ce)
 
 qmatrix = Q(project, 
-            K = 4, 
+            K = 5, 
             run = best_ce)
 # head(qmatrix)
 # dim(qmatrix)
@@ -339,7 +339,7 @@ qmatrix = Q(project,
 apply(qmatrix, 1, which.max) %>%
   as_tibble() %>%
   dplyr::rename(Genetic_group = value) %>%
-  write_tsv('Charr_poly_snmf_groups_k4.txt')
+  write_tsv('stickleback_k5.txt')
 
 ## shitty base R plot
 plot = barplot(qmatrix, 
@@ -362,30 +362,12 @@ as_tibble(qmatrix) %>%
   dplyr::rename(Q1 = V1,
                 Q2 = V2,
                 Q3 = V3,
-                Q4 = V4) %>% 
-  # Q5 = V5,
-  # Q6 = V6,
-  # Q7 = V7,
-  # Q8 = V8,
-  # Q9 = V9,
-  # Q10 = V10,
-  # Q11 = V11,
-  # Q12 = V12,
-  # Q13 = V13,
-  # Q14 = V14,
-  # Q15 = V15,
-# Q16 = V16,
-# Q17 = V17,
-# Q18 = V18,
-# Q19 = V19,
-# Q20 = V20,
-# Q21 = V21,
-# Q22 = V22,
-# Q23 = V23) %>%
-write_csv('Charr_poly_snmf_qvalues_k4.csv')
+                Q4 = V4, 
+                Q5 = V5) %>% 
+  write_csv('stickleback_snmf_qvalues_k4.csv')
 
 
-snmf_data = read_csv('Mito_Nuclear_snmf_data.csv')
+snmf_data = read_csv('stickleback_snmf_qvalues_k4.csv')
 
 snmf_data %>% 
   group_by(`#Familyid`) %>% 
