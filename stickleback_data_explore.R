@@ -468,6 +468,8 @@ pcscores = as_tibble(stickle_pca$scores)
 pc_data = bind_cols(identifiers, 
                     pcscores)
 
+# pc_data %>% write_csv('stickleback_pcscores_umap.csv')
+
 ## now we can run umap on the pc scores
 set.seed(666)
 
