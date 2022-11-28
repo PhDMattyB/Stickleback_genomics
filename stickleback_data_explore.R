@@ -12,6 +12,7 @@ library(viridis)
 library(LEA)
 library(qvalue)
 library(tidyverse)
+library(umap)
 
 # 
 
@@ -464,7 +465,18 @@ plot(stickle_pca,
 
 pcscores = as_tibble(stickle_pca$scores) 
 
+pc_data = bind_cols(identifiers, 
+                    pcscores)
+
+## now we can run umap on the pc scores
+set.seed(666)
+
+umap_fit = pc_data %>%
+  dplyr::select(V1:V50) %>% 
+  scale() %>% 
+  umap()
 
 
+##
 # rda analysis ------------------------------------------------------------
 
