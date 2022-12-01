@@ -718,7 +718,7 @@ ASHN_per_chrom = ASHN_Fst %>%
         panel.grid.minor = element_blank(),
         axis.title = element_blank(), 
         axis.text = element_blank(), 
-        axis.ticks.x = element_blank(),
+        axis.ticks = element_blank(),
         strip.background = element_rect(fill = 'white'), 
         strip.text = element_text(color = 'black'))
 
@@ -740,7 +740,7 @@ MYV_per_chrom = MYV_Fst %>%
         panel.grid.minor = element_blank(),
         axis.title = element_blank(), 
         axis.text = element_blank(), 
-        axis.ticks.x = element_blank(),
+        axis.ticks = element_blank(),
         strip.background = element_rect(fill = 'white'), 
         strip.text = element_text(color = 'black'))
 
@@ -761,7 +761,7 @@ SKR_per_chrom = SKR_Fst %>%
         panel.grid.minor = element_blank(),
         axis.title = element_blank(), 
         axis.text = element_blank(), 
-        axis.ticks.x = element_blank(),
+        axis.ticks = element_blank(),
         strip.background = element_rect(fill = 'white'), 
         strip.text = element_text(color = 'black'))
 
@@ -780,9 +780,12 @@ GTS_CSWY_per_chrom = GTS_CSWY_Fst %>%
        title = 'D)')+
   theme(panel.grid.major = element_blank(), 
         panel.grid.minor = element_blank(),
-        axis.title = element_text(size = 14), 
-        axis.text = element_text(size = 8, 
-                                 angle = 90),
+        axis.title.x = element_text(size = 14), 
+        axis.text.x = element_text(size = 8, 
+                                 angle = 90), 
+        axis.text.y = element_blank(), 
+        axis.title.y = element_blank(), 
+        axis.ticks = element_blank(),
         strip.background = element_rect(fill = 'white'), 
         strip.text = element_text(color = 'black'))
 
