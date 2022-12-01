@@ -521,10 +521,11 @@ identifiers %>%
 ## identifiers
 
 identifiers %>% 
-  filter(population %in% c('GTS', 
-                           'CSWY')) %>%
+  filter(population %in% c('ASHNW', 
+                           'ASHNC')) %>%
   rename(`#population` = population) %>%
   select(1:2) %>% 
-  write_tsv('GTS_CSWY_Fst_keep.txt')
+  write_tsv('ASHN_Fst_keep.txt', 
+            col_names = F)
 
 ## use plink to make the fst input set up
