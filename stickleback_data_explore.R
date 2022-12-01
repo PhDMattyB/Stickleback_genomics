@@ -137,6 +137,8 @@ identifiers = bind_rows(id_one,
                         id_three,
                         id_two)
 
+# identifiers %>% write_csv('stickleback_identifiers.csv')
+
 stickle_plot = bind_cols(identifiers, 
                          stickle_plot)
 
@@ -482,3 +484,48 @@ umap_fit = pc_data %>%
 ##
 # rda analysis ------------------------------------------------------------
 
+
+# Fst Plink ---------------------------------------------------------------
+
+identifiers = read_csv('stickleback_identifiers.csv')
+identifiers = mutate(.data = identifiers,
+       type = as.factor(case_when(
+         population == 'ASHNC' ~ 'Cold',
+         population == 'ASHNW' ~ 'Warm',
+         population == 'CSWY' ~ 'Manmade',
+         population == 'GTS' ~ 'Thermal',
+         population == 'MYVC' ~ 'Cold',
+         population == 'MYVW' ~ 'Warm',
+         population == 'SKRC' ~ 'Cold',
+         population == 'SKRW' ~ 'Warm')))
+
+## Need to split based on each comparison 
+## ASHW vs ASHC
+
+identifiers %>% 
+  filter(population %in% c('ASHNW', 
+                         'ASHNC')) %>%
+  rename(`#population` = population) %>% 
+  write_tsv('ASHN_Fst_grouping.txt')
+  
+
+## MYVW vs MYVC
+identifiers %>% 
+  filter(population %in% c('MYVW', 
+                           'MYVC')) %>%
+  rename(`#population` = population) %>% 
+  write_tsv('MYV_Fst_grouping.txt')
+
+## SKRW vs SKRC
+identifiers %>% 
+  filter(population %in% c('SKRW', 
+                           'SKRC')) %>%
+  rename(`#population` = population) %>% 
+  write_tsv('SKR_Fst_grouping.txt')
+
+## GTS vs CSWY
+identifiers %>% 
+  filter(population %in% c('GTS', 
+                           'CSWY')) %>%
+  rename(`#population` = population) %>% 
+  write_tsv('GTS_CSWY_Fst_grouping.txt')
