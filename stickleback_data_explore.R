@@ -547,15 +547,58 @@ ped_ids %>%
 
 # FST analysis ------------------------------------------------------------
 
-ASHN_Fst = read_tsv('ASHN_Fst_values.fst')
-MYV_Fst = read_tsv('MYV_Fst_values.fst')
-SKR_Fst = read_tsv('SKR_Fst_values.fst')
-GTS_CSWY_Fst = read_tsv('GTS_CSWY_Fst_values.fst')
+ASHN_Fst = read_tsv('ASHN_Fst_values.fst') %>% 
+  na.omit() %>%  ##pull out na's
+  mutate(FST_zero = if_else(FST < 0, 0, FST))
+MYV_Fst = read_tsv('MYV_Fst_values.fst')%>% 
+  na.omit() %>%  ##pull out na's
+  mutate(FST_zero = if_else(FST < 0, 0, FST))
+SKR_Fst = read_tsv('SKR_Fst_values.fst')%>% 
+  na.omit() %>%  ##pull out na's
+  mutate(FST_zero = if_else(FST < 0, 0, FST))
+GTS_CSWY_Fst = read_tsv('GTS_CSWY_Fst_values.fst')%>% 
+  na.omit() %>%  ##pull out na's
+  mutate(FST_zero = if_else(FST < 0, 0, FST))
 
+## snps that are the top 5% fst distribution
+ASHN_top_dist = ASHN_Fst[ASHN_Fst$FST_zero > quantile(ASHN_Fst$FST_zero, 
+                                    prob = 1-5/100),]
 
+# ASHN_top_dist %>% write_csv('ASHN_FST_Outliers.csv')
+ASHN_top_dist %>% 
+  # group_by(CHR) %>% 
+  summarise(min_fst = min(FST_zero), 
+            max_fst = max(FST_zero), 
+            mean_fst = mean(FST_zero)) 
 
+MYV_top_dist = MYV_Fst[MYV_Fst$FST_zero > quantile(MYV_Fst$FST_zero, 
+                                                      prob = 1-5/100),]
+# MYV_top_dist %>% write_csv('MYV_FST_Outliers.csv')
+MYV_top_dist %>% 
+  # group_by(CHR) %>% 
+  summarise(min_fst = min(FST_zero), 
+            max_fst = max(FST_zero), 
+            mean_fst = mean(FST_zero))
 
+SKR_top_dist = SKR_Fst[SKR_Fst$FST_zero > quantile(SKR_Fst$FST_zero, 
+                                                   prob = 1-5/100),]
+# SKR_top_dist %>% write_csv('SKR_FST_Outliers.csv')
 
+SKR_top_dist %>% 
+  # group_by(CHR) %>% 
+  summarise(min_fst = min(FST_zero), 
+            max_fst = max(FST_zero), 
+            mean_fst = mean(FST_zero))
+
+GTS_CSWY_top_dist = GTS_CSWY_Fst[GTS_CSWY_Fst$FST_zero > quantile(GTS_CSWY_Fst$FST_zero, 
+                                                   prob = 1-5/100),]
+# GTS_CSWY_top_dist %>% write_csv('GTS_CSWY_FST_Outliers.csv')
+
+GTS_CSWY_top_dist %>% 
+  # group_by(CHR) %>% 
+  summarise(min_fst = min(FST_zero), 
+            max_fst = max(FST_zero), 
+            mean_fst = mean(FST_zero))
 
 
 
