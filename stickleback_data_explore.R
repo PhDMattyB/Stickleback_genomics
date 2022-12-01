@@ -486,7 +486,7 @@ umap_fit = pc_data %>%
 # rda analysis ------------------------------------------------------------
 
 
-# Fst Plink ---------------------------------------------------------------
+# Fst set up Plink ---------------------------------------------------------------
 
 identifiers = read_csv('stickleback_identifiers.csv')
 identifiers = mutate(.data = identifiers,
@@ -500,25 +500,34 @@ identifiers = mutate(.data = identifiers,
          population == 'SKRC' ~ 'Cold',
          population == 'SKRW' ~ 'Warm')))
 
+ped_ids = read_table2('stickleback_maf0.05_ldpruned_filtered.fam', 
+                      col_names = F) %>%
+  dplyr::select(X1,
+                X2)
+ped_ids = bind_cols(ped_ids, 
+                    identifiers)
+
+
 ## Need to split based on each comparison 
 ## ASHW vs ASHC
 ## MYVW vs MYVC
 ## SKRW vs SKRC
 ## GTS vs CSWY
 
-identifiers %>% 
-  filter(population %in% c('ASHNW', 
-                         'ASHNC')) %>%
-  rename(`#population` = population) %>% 
-  write_tsv('ASHN_Fst_grouping.txt')
+ped_ids %>% 
+  filter(population %in% c('GTS', 
+                         'CSWY')) %>%
+  select(X1, 
+         X2, 
+         type) %>% 
+  rename(`#population` = 1, 
+         individual_id = 2) %>% 
+  write_tsv('GTS_CSWY_Fst_grouping.txt')
 
 ## Holy fuck!! Make sure to use the actual family and individual
 ## identifiers in the fucking ped file. WOW
 
-ped_ids = read_table2('stickleback_maf0.05_ldpruned_filtered.fam', 
-                     col_names = F) %>%
-              dplyr::select(X1,
-                            X2) 
+ 
 
 ## Need to make a ped and map file for each of these comparisons
 ## the ped file is waaaay to big to open in R
@@ -527,10 +536,6 @@ ped_ids = read_table2('stickleback_maf0.05_ldpruned_filtered.fam',
 ## the --keep file needs to be a text file with family and individual
 ## identifiers
 
-ped_ids = bind_cols(ped_ids, 
-          identifiers)
-
-
 ped_ids %>% 
   filter(population %in% c('GTS', 
                            'CSWY')) %>%
@@ -538,3 +543,19 @@ ped_ids %>%
   select(1:2) %>% 
   write_tsv('GTS_CSWY_Fst_keep.txt', 
             col_names = F)
+
+
+# FST analysis ------------------------------------------------------------
+
+ASHN_Fst = read_tsv('ASHN_Fst_values.fst')
+MYV_Fst = read_tsv('MYV_Fst_values.fst')
+SKR_Fst = read_tsv('SKR_Fst_values.fst')
+GTS_CSWY_Fst = read_tsv('GTS_CSWY_Fst_values.fst')
+
+
+
+
+
+
+
+
