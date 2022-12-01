@@ -801,3 +801,116 @@ ggsave(file = 'stickleback_FST_Distribution_per_chrome.tiff',
        units = 'cm', 
        width = 30.0, 
        height = 15)
+
+
+
+# Fst manhattan set up ----------------------------------------------------
+
+## Need to remove outliers from this dataset
+ASHN_Fst
+ASHN_Fst_labs = rep('Neutral', 
+                    nrow(ASHN_Fst)) %>% 
+  as_tibble()
+
+ASHN_Fst = bind_cols(ASHN_Fst, 
+                     ASHN_Fst_labs)
+
+
+
+ASHN_top_dist
+ASHN_top_labs = rep('Outlier', 
+                    nrow(ASHN_top_dist)) %>% 
+  as_tibble()
+
+ASHN_top_dist = bind_cols(ASHN_top_dist, 
+                          ASHN_top_labs)
+
+ASHN_Fst = anti_join(ASHN_Fst, 
+          ASHN_top_dist) %>% 
+  filter(value == 'Neutral')
+
+ASHN_Fst_clean = bind_rows(ASHN_Fst, 
+                           ASHN_top_dist)
+
+
+# FST outlier manhattan plot ----------------------------------------------
+
+
+
+## calculate cumulative base pair per chromosome
+dist_cal = final_df %>% 
+  group_by(chromosome) %>% 
+  summarise(chr_len = max(physical_pos)) %>% 
+  mutate(total = cumsum(chr_len)-chr_len) %>% 
+  dplyr::select(-chr_len) %>% 
+  left_join(final_df, ., by = c('chromosome'='chromosome')) %>%
+  arrange(chromosome, 
+          physical_pos) %>% 
+  mutate(BPcum = physical_pos + total) 
+
+## calculate the center of the chromosome
+axisdf = dist_cal %>% 
+  group_by(chromosome) %>% 
+  summarize(center=(max(BPcum) + min(BPcum))/2 )  
+
+
+## Get the neutral snps
+# non_outs = dist_cal %>% 
+#   filter(qvalues >= 0.05) %>% 
+#   mutate
+# ## Get the outliers
+# outs = dist_cal %>% 
+#   filter(qvalues < 0.05)
+
+non_outs = dist_cal %>% 
+  filter(qvalues >= 0.05) %>% 
+  mutate(logqval = -log(qvalues))
+## Get the outliers
+outs = dist_cal %>% 
+  filter(qvalues < 0.05) %>% 
+  mutate(logqval = -log(qvalues))
+
+
+pcadapt_man = ggplot(non_outs, 
+                     aes(x = BPcum, 
+                         y = logqval))+
+  # plot the non outliers in grey
+  geom_point(aes(color = as.factor(chromosome)), 
+             alpha = 0.8, 
+             size = 1.3)+
+  ## alternate colors per chromosome
+  scale_color_manual(values = rep(c("grey", "dimgrey"), 39))+
+  ## plot the outliers on top of everything
+  ## currently digging this hot pink colour
+  geom_point(data = outs,
+             col = '#8C0F26',
+             alpha=0.8, 
+             size=1.3)+
+  scale_x_continuous(label = axisdf$chromosome, 
+                     breaks = axisdf$center)+
+  scale_y_continuous(expand = c(0, 0))+
+  # scale_y_reverse(expand = c(0, 0))+
+  # remove space between plot area and x axis
+  labs(x = 'Cumulative base pair', 
+       y = '-log10(q-values)')+
+  theme(legend.position="none",
+        # panel.border = element_blank(),
+        panel.grid.major.x = element_blank(),
+        panel.grid.minor.x = element_blank(), 
+        axis.text.x = element_text(size = 9, 
+                                   angle = 90), 
+        axis.title = element_text(size = 14),
+        axis.title.x = element_blank(),
+        axis.text.y = element_text(size = 12))
+
+pcadapt_man
+## ggsave that plot
+
+ggsave(file = 'stickleback_manhattan_plot.tiff', 
+       path = 'C:/Stickleback_Genomic/Figures/', 
+       plot = pcadapt_man, 
+       dpi = 'retina', 
+       units = 'cm', 
+       width = 20, 
+       height = 20)
+
