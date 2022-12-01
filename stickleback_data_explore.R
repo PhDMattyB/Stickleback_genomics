@@ -694,4 +694,107 @@ ggsave(file = 'stickleback_FST_Distribution_plots.tiff',
        width = 20.0, 
        height = 15)
 
+# Fst distribution per chromosome plot ------------------------------------
+location_cols = c('#06d6a0',
+                  '#264653',
+                  '#219ebc',
+                  '#d62828',
+                  '#5f0f40')
 
+ASHN_per_chrom = ASHN_Fst %>% 
+  ggplot()+
+  geom_density(aes(x = FST_zero), 
+               col = '#06d6a0', 
+               fill = '#06d6a0')+
+  geom_density(data = ASHN_top_dist, 
+               aes(x = FST_zero),
+               col = '#000000',
+               fill = '#000000')+
+  facet_grid(~CHR)+
+  labs(x = 'Fst', 
+       y = 'Density', 
+       title = 'A)')+
+  theme(panel.grid.major = element_blank(), 
+        panel.grid.minor = element_blank(),
+        axis.title = element_blank(), 
+        axis.text = element_blank(), 
+        axis.ticks.x = element_blank(),
+        strip.background = element_rect(fill = 'white'), 
+        strip.text = element_text(color = 'black'))
+
+
+MYV_per_chrom = MYV_Fst %>% 
+  ggplot()+
+  geom_density(aes(x = FST_zero), 
+               col = '#d62828', 
+               fill = '#d62828')+
+  geom_density(data = MYV_top_dist, 
+               aes(x = FST_zero),
+               col = '#000000',
+               fill = '#000000')+
+  facet_grid(~CHR)+
+  labs(x = 'Fst', 
+       y = 'Density', 
+       title = 'B)')+
+  theme(panel.grid.major = element_blank(), 
+        panel.grid.minor = element_blank(),
+        axis.title = element_blank(), 
+        axis.text = element_blank(), 
+        axis.ticks.x = element_blank(),
+        strip.background = element_rect(fill = 'white'), 
+        strip.text = element_text(color = 'black'))
+
+SKR_per_chrom = SKR_Fst %>% 
+  ggplot()+
+  geom_density(aes(x = FST_zero), 
+               col = '#5f0f40', 
+               fill = '#5f0f40')+
+  geom_density(data = SKR_top_dist, 
+               aes(x = FST_zero),
+               col = '#000000',
+               fill = '#000000')+
+  facet_grid(~CHR)+
+  labs(x = 'Fst', 
+       y = 'Density', 
+       title = 'C)')+
+  theme(panel.grid.major = element_blank(), 
+        panel.grid.minor = element_blank(),
+        axis.title = element_blank(), 
+        axis.text = element_blank(), 
+        axis.ticks.x = element_blank(),
+        strip.background = element_rect(fill = 'white'), 
+        strip.text = element_text(color = 'black'))
+
+GTS_CSWY_per_chrom = GTS_CSWY_Fst %>% 
+  ggplot()+
+  geom_density(aes(x = FST_zero), 
+               col = '#264653', 
+               fill = '#264653')+
+  geom_density(data = GTS_CSWY_top_dist, 
+               aes(x = FST_zero),
+               col = '#000000',
+               fill = '#000000')+
+  facet_grid(~CHR)+
+  labs(x = 'Fst', 
+       y = 'Density', 
+       title = 'D)')+
+  theme(panel.grid.major = element_blank(), 
+        panel.grid.minor = element_blank(),
+        axis.title = element_text(size = 14), 
+        axis.text = element_text(size = 8, 
+                                 angle = 90),
+        strip.background = element_rect(fill = 'white'), 
+        strip.text = element_text(color = 'black'))
+
+
+per_chrom_combo = ASHN_per_chrom/MYV_per_chrom/SKR_per_chrom/GTS_CSWY_per_chrom
+
+
+
+ggsave(file = 'stickleback_FST_Distribution_per_chrome.tiff', 
+       path = 'C:/Stickleback_Genomic/Figures/', 
+       plot = per_chrom_combo, 
+       dpi = 'retina', 
+       units = 'cm', 
+       width = 30.0, 
+       height = 15)
