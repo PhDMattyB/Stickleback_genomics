@@ -806,13 +806,18 @@ ggsave(file = 'stickleback_FST_Distribution_per_chrome.tiff',
 
 # Fst manhattan set up ----------------------------------------------------
 
+
+intersect(ASHN_Fst$SNP, 
+          ASHN_top_dist$SNP) %>% as_tibble()
+
+ASHN_FST_Neutral = anti_join(ASHN_Fst, 
+          ASHN_top_dist)
 ## Need to remove outliers from this dataset
-ASHN_Fst
 ASHN_Fst_labs = rep('Neutral', 
-                    nrow(ASHN_Fst)) %>% 
+                    nrow(ASHN_FST_Neutral)) %>% 
   as_tibble()
 
-ASHN_Fst = bind_cols(ASHN_Fst, 
+ASHN_FST_Neutral = bind_cols(ASHN_FST_Neutral, 
                      ASHN_Fst_labs)
 
 
@@ -825,57 +830,45 @@ ASHN_top_labs = rep('Outlier',
 ASHN_top_dist = bind_cols(ASHN_top_dist, 
                           ASHN_top_labs)
 
-ASHN_Fst = anti_join(ASHN_Fst, 
-          ASHN_top_dist) %>% 
-  filter(value == 'Neutral')
 
-ASHN_Fst_clean = bind_rows(ASHN_Fst, 
+ASHN_Fst_clean = bind_rows(ASHN_FST_Neutral, 
                            ASHN_top_dist)
 
+ASHN_Fst_clean %>% write_csv('ASHN_Fst_clean.csv')
 
 # FST outlier manhattan plot ----------------------------------------------
 
-
+ASHN_Fst_clean = read_csv('ASHN_Fst_clean.csv')
 
 ## calculate cumulative base pair per chromosome
-dist_cal = final_df %>% 
-  group_by(chromosome) %>% 
-  summarise(chr_len = max(physical_pos)) %>% 
+dist_cal = ASHN_Fst_clean %>% 
+  group_by(CHR) %>% 
+  summarise(chr_len = max(POS)) %>% 
   mutate(total = cumsum(chr_len)-chr_len) %>% 
   dplyr::select(-chr_len) %>% 
-  left_join(final_df, ., by = c('chromosome'='chromosome')) %>%
-  arrange(chromosome, 
-          physical_pos) %>% 
-  mutate(BPcum = physical_pos + total) 
+  left_join(ASHN_Fst_clean, ., by = c('CHR'='CHR')) %>%
+  arrange(CHR, 
+          POS) %>% 
+  mutate(BPcum = POS + total) 
 
 ## calculate the center of the chromosome
 axisdf = dist_cal %>% 
-  group_by(chromosome) %>% 
+  group_by(CHR) %>% 
   summarize(center=(max(BPcum) + min(BPcum))/2 )  
 
 
-## Get the neutral snps
-# non_outs = dist_cal %>% 
-#   filter(qvalues >= 0.05) %>% 
-#   mutate
-# ## Get the outliers
-# outs = dist_cal %>% 
-#   filter(qvalues < 0.05)
-
 non_outs = dist_cal %>% 
-  filter(qvalues >= 0.05) %>% 
-  mutate(logqval = -log(qvalues))
+  filter(value == 'Neutral') 
+
 ## Get the outliers
 outs = dist_cal %>% 
-  filter(qvalues < 0.05) %>% 
-  mutate(logqval = -log(qvalues))
+  filter(value == 'Outlier') 
 
-
-pcadapt_man = ggplot(non_outs, 
+ASHN_Fst_manhattan = ggplot(non_outs, 
                      aes(x = BPcum, 
-                         y = logqval))+
+                         y = FST_zero))+
   # plot the non outliers in grey
-  geom_point(aes(color = as.factor(chromosome)), 
+  geom_point(aes(color = as.factor(CHR)), 
              alpha = 0.8, 
              size = 1.3)+
   ## alternate colors per chromosome
@@ -886,13 +879,13 @@ pcadapt_man = ggplot(non_outs,
              col = '#8C0F26',
              alpha=0.8, 
              size=1.3)+
-  scale_x_continuous(label = axisdf$chromosome, 
+  scale_x_continuous(label = axisdf$CHR, 
                      breaks = axisdf$center)+
   scale_y_continuous(expand = c(0, 0))+
   # scale_y_reverse(expand = c(0, 0))+
   # remove space between plot area and x axis
   labs(x = 'Cumulative base pair', 
-       y = '-log10(q-values)')+
+       y = 'Fst')+
   theme(legend.position="none",
         # panel.border = element_blank(),
         panel.grid.major.x = element_blank(),
@@ -903,7 +896,7 @@ pcadapt_man = ggplot(non_outs,
         axis.title.x = element_blank(),
         axis.text.y = element_text(size = 12))
 
-pcadapt_man
+ASHN_Fst_manhattan
 ## ggsave that plot
 
 ggsave(file = 'stickleback_manhattan_plot.tiff', 
