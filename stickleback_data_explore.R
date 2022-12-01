@@ -502,33 +502,27 @@ identifiers = mutate(.data = identifiers,
 
 ## Need to split based on each comparison 
 ## ASHW vs ASHC
+## MYVW vs MYVC
+## SKRW vs SKRC
+## GTS vs CSWY
 
 identifiers %>% 
   filter(population %in% c('ASHNW', 
                          'ASHNC')) %>%
   rename(`#population` = population) %>% 
   write_tsv('ASHN_Fst_grouping.txt')
-  
 
-## MYVW vs MYVC
-identifiers %>% 
-  filter(population %in% c('MYVW', 
-                           'MYVC')) %>%
-  rename(`#population` = population) %>% 
-  write_tsv('MYV_Fst_grouping.txt')
 
-## SKRW vs SKRC
-identifiers %>% 
-  filter(population %in% c('SKRW', 
-                           'SKRC')) %>%
-  rename(`#population` = population) %>% 
-  write_tsv('SKR_Fst_grouping.txt')
+## Need to make a ped and map file for each of these comparisons
+## the ped file is waaaay to big to open in R
+## use the --keep or --keep-fam flags in plink to filter the 
+## populations out. 
+## the --keep file needs to be a text file with family and individual
+## identifiers
 
-## GTS vs CSWY
 identifiers %>% 
   filter(population %in% c('GTS', 
                            'CSWY')) %>%
-  rename(`#population` = population) %>% 
-  write_tsv('GTS_CSWY_Fst_grouping.txt')
-
-## Need to make a ped and map file for each of these comparisons
+  rename(`#population` = population) %>%
+  select(1:2) %>% 
+  write_tsv('GTS_CSWY_Fst_keep.txt')
