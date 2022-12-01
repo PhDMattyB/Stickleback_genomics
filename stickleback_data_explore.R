@@ -526,3 +526,5 @@ identifiers %>%
   rename(`#population` = population) %>%
   select(1:2) %>% 
   write_tsv('GTS_CSWY_Fst_keep.txt')
+
+## use plink to make the fst input set up
