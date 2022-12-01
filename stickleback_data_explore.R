@@ -68,74 +68,75 @@ stickle_scores = as_tibble(stickle_pca$scores) %>%
 
 stickle_plot = read_csv('pcadapt_stickle_pc_scores.csv')
 
-identifiers = read_table2('stickleback_maf0.05-ldpruned_nomissing.fam', 
-         col_names = F) %>% 
-  dplyr::select(X1, 
-                X2) %>% 
-  rename(population = X1, 
-         individual_id = X2) %>% 
-  separate(col = population, 
-           into = c('garbage', 
-                'population'), 
-           sep = '-') %>% 
-  separate(col = garbage, 
-            into = c('garbage', 
-                   'temp_pop'), 
-            sep = 'Sample_')
-## going to need to separate into two data frames and 
-## then bring them back together due to sample name issues
-
-id_one = identifiers %>% 
-  slice(1:86) %>% 
-  select(population, 
-         individual_id) %>% 
-  separate(col = population, 
-           into = c('population', 
-                    'garbage'), 
-           sep = '_') %>% 
-  slice(1:16) %>% 
-  # separate(individual_id, 
-  #          into = c('garbage', 
-  #                   'individual_id'), 
-  #          sep = 'Sample_') %>% View() 
-  select(population, 
-         individual_id)
-
-id_three = identifiers %>% 
-  slice(17:86) %>% 
-  select(population, 
-         individual_id) %>% 
-  separate(col = population, 
-           into = c('population', 
-                    'garbage'), 
-           sep = '_') %>% 
-  # slice(1:16) %>% 
-  separate(individual_id,
-           into = c('garbage',
-                    'individual_id'),
-           sep = 'Sample_') %>%
-  select(population, 
-         individual_id)
-
-id_two = identifiers %>% 
-  slice(87:109) %>% 
-  select(temp_pop, 
-         individual_id) %>% 
-  separate(col = temp_pop, 
-           into = c('population', 
-                    'garbage1', 
-                    'garbage2'), 
-           sep = '_') %>% 
-  separate(col = individual_id, 
-           into = c('garbage', 
-                    'individual_id'), 
-           sep = 'Sample_') %>% 
-  select(population, 
-         individual_id)
-
-identifiers = bind_rows(id_one,
-                        id_three,
-                        id_two)
+identifiers = read_csv('stickleback_identifiers.csv')
+# identifiers = read_table2('stickleback_maf0.05-ldpruned_nomissing.fam', 
+#          col_names = F) %>% 
+#   dplyr::select(X1, 
+#                 X2) %>% 
+#   rename(population = X1, 
+#          individual_id = X2) %>% 
+#   separate(col = population, 
+#            into = c('garbage', 
+#                 'population'), 
+#            sep = '-') %>% 
+#   separate(col = garbage, 
+#             into = c('garbage', 
+#                    'temp_pop'), 
+#             sep = 'Sample_')
+# ## going to need to separate into two data frames and 
+# ## then bring them back together due to sample name issues
+# 
+# id_one = identifiers %>% 
+#   slice(1:86) %>% 
+#   select(population, 
+#          individual_id) %>% 
+#   separate(col = population, 
+#            into = c('population', 
+#                     'garbage'), 
+#            sep = '_') %>% 
+#   slice(1:16) %>% 
+#   # separate(individual_id, 
+#   #          into = c('garbage', 
+#   #                   'individual_id'), 
+#   #          sep = 'Sample_') %>% View() 
+#   select(population, 
+#          individual_id)
+# 
+# id_three = identifiers %>% 
+#   slice(17:86) %>% 
+#   select(population, 
+#          individual_id) %>% 
+#   separate(col = population, 
+#            into = c('population', 
+#                     'garbage'), 
+#            sep = '_') %>% 
+#   # slice(1:16) %>% 
+#   separate(individual_id,
+#            into = c('garbage',
+#                     'individual_id'),
+#            sep = 'Sample_') %>%
+#   select(population, 
+#          individual_id)
+# 
+# id_two = identifiers %>% 
+#   slice(87:109) %>% 
+#   select(temp_pop, 
+#          individual_id) %>% 
+#   separate(col = temp_pop, 
+#            into = c('population', 
+#                     'garbage1', 
+#                     'garbage2'), 
+#            sep = '_') %>% 
+#   separate(col = individual_id, 
+#            into = c('garbage', 
+#                     'individual_id'), 
+#            sep = 'Sample_') %>% 
+#   select(population, 
+#          individual_id)
+# 
+# identifiers = bind_rows(id_one,
+#                         id_three,
+#                         id_two)
 
 # identifiers %>% write_csv('stickleback_identifiers.csv')
 
@@ -529,3 +530,5 @@ identifiers %>%
                            'CSWY')) %>%
   rename(`#population` = population) %>% 
   write_tsv('GTS_CSWY_Fst_grouping.txt')
+
+## Need to make a ped and map file for each of these comparisons
