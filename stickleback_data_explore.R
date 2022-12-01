@@ -512,6 +512,13 @@ identifiers %>%
   rename(`#population` = population) %>% 
   write_tsv('ASHN_Fst_grouping.txt')
 
+## Holy fuck!! Make sure to use the actual family and individual
+## identifiers in the fucking ped file. WOW
+
+ped_ids = read_table2('stickleback_maf0.05_ldpruned_filtered.fam', 
+                     col_names = F) %>%
+              dplyr::select(X1,
+                            X2) 
 
 ## Need to make a ped and map file for each of these comparisons
 ## the ped file is waaaay to big to open in R
@@ -520,12 +527,14 @@ identifiers %>%
 ## the --keep file needs to be a text file with family and individual
 ## identifiers
 
-identifiers %>% 
-  filter(population %in% c('ASHNW', 
-                           'ASHNC')) %>%
-  rename(`#population` = population) %>%
-  select(1:2) %>% 
-  write_tsv('ASHN_Fst_keep.txt', 
-            col_names = F)
+ped_ids = bind_cols(ped_ids, 
+          identifiers)
 
-## use plink to make the fst input set up
+
+ped_ids %>% 
+  filter(population %in% c('GTS', 
+                           'CSWY')) %>%
+  # rename(`#population` = population) %>%
+  select(1:2) %>% 
+  write_tsv('GTS_CSWY_Fst_keep.txt', 
+            col_names = F)
