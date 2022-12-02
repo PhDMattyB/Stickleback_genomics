@@ -857,7 +857,8 @@ GTS_CSWY_Fst_clean = Fst_manhatan_format(GTS_CSWY_Fst,
 ASHN_Fst_clean = read_csv('ASHN_Fst_clean.csv')
 MYV_Fst_clean = read_csv('MYV_Fst_clean.csv')
 SKR_Fst_clean = read_csv('SKR_Fst_clean.csv')
-GTS_CSWY_Fst_clean = read_csv('GTS_CSWY_Fst_clean.csv')
+GTS_CSWY_Fst_clean = read_csv('GTS_CSWY_Fst_clean.csv') %>% 
+  stickle_CHR_reorder()
 
 ## calculate cumulative base pair per chromosome
 ## cycle through the data frames above to make all graphs
@@ -885,16 +886,70 @@ outs = dist_cal %>%
   filter(value == 'Outlier') 
 
 
-# dist_cal %>% 
-#   group_by(value) %>%
-#   select() %>% 
-#   distinct()
+# non_outs %>% 
+#     select(CHR) %>% 
+#   distinct(CHR) %>% 
+#   arrange(CHR) %>% 
+#   View()
+# 
+# non_outs$CHR <- factor(non_outs$CHR, 
+#                        levels=c("chr_I",
+#                                 "chr_II", 
+#                                 "chr_III", 
+#                                 'chr_IV', 
+#                                 'chr_V', 
+#                                 'chr_VI', 
+#                                 'chr_VII', 
+#                                 'chr_VIII', 
+#                                 'chr_IX', 
+#                                 'chr_X', 
+#                                 'chr_XI', 
+#                                 'chr_XII', 
+#                                 'chr_XIII', 
+#                                 'chr_XIV', 
+#                                 'chr_XV', 
+#                                 'chr_XVI', 
+#                                 'chr_XVII', 
+#                                 'chr_XVIII', 
+#                                 'chr_XIX', 
+#                                 'chr_XX', 
+#                                 'chr_XXI', 
+#                                 'chr_Y', 
+#                                 'chr_M', 
+#                                 'chr_Un'))
+# 
+# outs$CHR <- factor(outs$CHR, 
+#                        levels=c("chr_I",
+#                                 "chr_II", 
+#                                 "chr_III", 
+#                                 'chr_IV', 
+#                                 'chr_V', 
+#                                 'chr_VI', 
+#                                 'chr_VII', 
+#                                 'chr_VIII', 
+#                                 'chr_IX', 
+#                                 'chr_X', 
+#                                 'chr_XI', 
+#                                 'chr_XII', 
+#                                 'chr_XIII', 
+#                                 'chr_XIV', 
+#                                 'chr_XV', 
+#                                 'chr_XVI', 
+#                                 'chr_XVII', 
+#                                 'chr_XVIII', 
+#                                 'chr_XIX', 
+#                                 'chr_XX', 
+#                                 'chr_XXI', 
+#                                 'chr_Y', 
+#                                 'chr_M', 
+#                                 'chr_Un'))
 
 ## ASHN colour = #06d6a0
 ## MYV colour = #d62828
 ## SKR colour = #5f0f40
 ## GTS_CSWY colour = #264653
 
+## Need to fix chromosome order
 GTS_CSWY_Fst_manhattan = ggplot(non_outs, 
                      aes(x = BPcum, 
                          y = FST_zero))+
