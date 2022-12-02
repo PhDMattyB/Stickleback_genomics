@@ -93,7 +93,9 @@ Fst_manhattan = function(non_outs,
                          axisdf,
                          xval, 
                          yval, 
-                         chr){
+                         chr, 
+                         out_col = '', 
+                         plot_letter = ''){
   ggplot(non_outs, 
          aes(x = {{xval}}, 
              y = {{yval}}))+
@@ -106,7 +108,7 @@ Fst_manhattan = function(non_outs,
     ## plot the outliers on top of everything
     ## currently digging this hot pink colour
     geom_point(data = outs,
-               col = '#264653',
+               col = out_col,
                alpha=0.8, 
                size=1.3)+
     scale_x_continuous(label = axisdf$CHR, 
@@ -121,7 +123,7 @@ Fst_manhattan = function(non_outs,
     # remove space between plot area and x axis
     labs(x = 'Cumulative base pair', 
          y = 'Fst', 
-         title = 'D)')+
+         title = plot_letter)+
     theme(legend.position="none",
           # panel.border = element_blank(),
           panel.grid.major.x = element_blank(),
