@@ -842,35 +842,15 @@ ASHN_Fst_clean = Fst_manhatan_format(ASHN_Fst,
 
 MYV_Fst_clean = Fst_manhatan_format(MYV_Fst, 
                                     MYV_top_dist) %>% 
+  write_csv('MYC_Fst_clean.csv')
 
+SKR_Fst_clean = Fst_manhatan_format(SKR_Fst, 
+                                    SKR_top_dist) %>% 
+  write_csv('SKR_Fst_clean.csv')
 
-
-MYV_FST_Neutral = anti_join(MYV_Fst,
-                            MYV_top_dist)
-
-## Need to remove outliers from this dataset
-MYV_Fst_labs = rep('Neutral',
-                    nrow(MYV_FST_Neutral)) %>%
-  as_tibble()
-
-MYV_FST_Neutral = bind_cols(MYV_FST_Neutral,
-                     MYV_Fst_labs)
-
-
-
-MYV_top_dist
-MYV_top_labs = rep('Outlier',
-                    nrow(MYV_top_dist)) %>%
-  as_tibble()
-
-MYV_top_dist = bind_cols(MYV_top_dist,
-                          MYV_top_labs)
-
-
-ASHN_Fst_clean = bind_rows(ASHN_FST_Neutral,
-                           ASHN_top_dist)
-
-# ASHN_Fst_clean %>% write_csv('ASHN_Fst_clean.csv')
+GTS_CSWY_Fst_clean = Fst_manhatan_format(GTS_CSWY_Fst, 
+                                         GTS_CSWY_top_dist) %>% 
+  write_csv('GTS_CSWY_Fst_clean.csv')
 
 # FST outlier manhattan plot ----------------------------------------------
 
