@@ -842,7 +842,7 @@ ASHN_Fst_clean = Fst_manhatan_format(ASHN_Fst,
 
 MYV_Fst_clean = Fst_manhatan_format(MYV_Fst, 
                                     MYV_top_dist) %>% 
-  write_csv('MYC_Fst_clean.csv')
+  write_csv('MYV_Fst_clean.csv')
 
 SKR_Fst_clean = Fst_manhatan_format(SKR_Fst, 
                                     SKR_top_dist) %>% 
@@ -855,14 +855,18 @@ GTS_CSWY_Fst_clean = Fst_manhatan_format(GTS_CSWY_Fst,
 # FST outlier manhattan plot ----------------------------------------------
 
 ASHN_Fst_clean = read_csv('ASHN_Fst_clean.csv')
+MYV_Fst_clean = read_csv('MYV_Fst_clean.csv')
+SKR_Fst_clean = read_csv('SKR_Fst_clean.csv')
+GTS_CSWY_Fst_clean = read_csv('GTS_CSWY_Fst_clean.csv')
 
 ## calculate cumulative base pair per chromosome
-dist_cal = ASHN_Fst_clean %>% 
+## cycle through the data frames above to make all graphs
+dist_cal = MYV_Fst_clean %>% 
   group_by(CHR) %>% 
   summarise(chr_len = max(POS)) %>% 
   mutate(total = cumsum(chr_len)-chr_len) %>% 
   dplyr::select(-chr_len) %>% 
-  left_join(ASHN_Fst_clean, ., by = c('CHR'='CHR')) %>%
+  left_join(MYV_Fst_clean, ., by = c('CHR'='CHR')) %>%
   arrange(CHR, 
           POS) %>% 
   mutate(BPcum = POS + total) 
@@ -903,11 +907,14 @@ ASHN_Fst_manhattan = ggplot(non_outs,
              size=1.3)+
   scale_x_continuous(label = axisdf$CHR, 
                      breaks = axisdf$center)+
-  scale_y_continuous(expand = c(0, 0))+
+  scale_y_continuous(expand = c(0, 0), 
+                     limits = c(0,1))+
+  # ylim(0,1.0)+
   # scale_y_reverse(expand = c(0, 0))+
   # remove space between plot area and x axis
   labs(x = 'Cumulative base pair', 
-       y = 'Fst')+
+       y = 'Fst', 
+       title = 'B)')+
   theme(legend.position="none",
         # panel.border = element_blank(),
         panel.grid.major.x = element_blank(),
@@ -919,6 +926,7 @@ ASHN_Fst_manhattan = ggplot(non_outs,
         axis.text.y = element_text(size = 12))
 
 ASHN_Fst_manhattan
+MYV_Fst_manhattan
 ## ggsave that plot
 
 ggsave(file = 'stickleback_manhattan_plot.tiff', 
