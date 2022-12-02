@@ -605,7 +605,7 @@ GTS_CSWY_top_dist %>%
             mean_fst = mean(FST_zero))
 
 
-
+##
 # FST distribution plots --------------------------------------------------
 
 location_cols = c('#06d6a0',
@@ -807,34 +807,70 @@ ggsave(file = 'stickleback_FST_Distribution_per_chrome.tiff',
 # Fst manhattan set up ----------------------------------------------------
 
 
-intersect(ASHN_Fst$SNP, 
-          ASHN_top_dist$SNP) %>% as_tibble()
+# intersect(ASHN_Fst$SNP, 
+#           ASHN_top_dist$SNP) %>% as_tibble()
 
-ASHN_FST_Neutral = anti_join(ASHN_Fst, 
-          ASHN_top_dist)
+Fst_manhatan_format = function(Fst_data, Fst_outliers){
+  Neutral_snps = anti_join(Fst_data, 
+                               Fst_outliers)
+  ## Need to remove outliers from this dataset
+  labs1 = rep('Neutral', 
+                      nrow(Neutral_snps)) %>% 
+    as_tibble()
+  
+  Fst_neutral = bind_cols(Neutral_snps, 
+                               labs1)
+  
+  
+  labs2 = rep('Outlier', 
+                      nrow(Fst_outliers)) %>% 
+    as_tibble()
+  
+  Fst_outliers = bind_cols(Fst_outliers, 
+                            labs2)
+  
+  
+  Fst_clean = bind_rows(Fst_neutral, 
+                             Fst_outliers)
+  
+  
+}
+
+ASHN_Fst_clean = Fst_manhatan_format(ASHN_Fst, 
+                                     ASHN_top_dist) %>% 
+  write_csv('ASHN_Fst_clean.csv')
+
+MYV_Fst_clean = Fst_manhatan_format(MYV_Fst, 
+                                    MYV_top_dist) %>% 
+
+
+
+MYV_FST_Neutral = anti_join(MYV_Fst,
+                            MYV_top_dist)
+
 ## Need to remove outliers from this dataset
-ASHN_Fst_labs = rep('Neutral', 
-                    nrow(ASHN_FST_Neutral)) %>% 
+MYV_Fst_labs = rep('Neutral',
+                    nrow(MYV_FST_Neutral)) %>%
   as_tibble()
 
-ASHN_FST_Neutral = bind_cols(ASHN_FST_Neutral, 
-                     ASHN_Fst_labs)
+MYV_FST_Neutral = bind_cols(MYV_FST_Neutral,
+                     MYV_Fst_labs)
 
 
 
-ASHN_top_dist
-ASHN_top_labs = rep('Outlier', 
-                    nrow(ASHN_top_dist)) %>% 
+MYV_top_dist
+MYV_top_labs = rep('Outlier',
+                    nrow(MYV_top_dist)) %>%
   as_tibble()
 
-ASHN_top_dist = bind_cols(ASHN_top_dist, 
-                          ASHN_top_labs)
+MYV_top_dist = bind_cols(MYV_top_dist,
+                          MYV_top_labs)
 
 
-ASHN_Fst_clean = bind_rows(ASHN_FST_Neutral, 
+ASHN_Fst_clean = bind_rows(ASHN_FST_Neutral,
                            ASHN_top_dist)
 
-ASHN_Fst_clean %>% write_csv('ASHN_Fst_clean.csv')
+# ASHN_Fst_clean %>% write_csv('ASHN_Fst_clean.csv')
 
 # FST outlier manhattan plot ----------------------------------------------
 
@@ -863,6 +899,12 @@ non_outs = dist_cal %>%
 ## Get the outliers
 outs = dist_cal %>% 
   filter(value == 'Outlier') 
+
+
+# dist_cal %>% 
+#   group_by(value) %>%
+#   select() %>% 
+#   distinct()
 
 ASHN_Fst_manhattan = ggplot(non_outs, 
                      aes(x = BPcum, 
