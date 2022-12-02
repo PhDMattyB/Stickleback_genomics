@@ -861,12 +861,12 @@ GTS_CSWY_Fst_clean = read_csv('GTS_CSWY_Fst_clean.csv')
 
 ## calculate cumulative base pair per chromosome
 ## cycle through the data frames above to make all graphs
-dist_cal = MYV_Fst_clean %>% 
+dist_cal = GTS_CSWY_Fst_clean %>% 
   group_by(CHR) %>% 
   summarise(chr_len = max(POS)) %>% 
   mutate(total = cumsum(chr_len)-chr_len) %>% 
   dplyr::select(-chr_len) %>% 
-  left_join(MYV_Fst_clean, ., by = c('CHR'='CHR')) %>%
+  left_join(GTS_CSWY_Fst_clean, ., by = c('CHR'='CHR')) %>%
   arrange(CHR, 
           POS) %>% 
   mutate(BPcum = POS + total) 
@@ -890,7 +890,12 @@ outs = dist_cal %>%
 #   select() %>% 
 #   distinct()
 
-MYV_Fst_manhattan = ggplot(non_outs, 
+## ASHN colour = #06d6a0
+## MYV colour = #d62828
+## SKR colour = #5f0f40
+## GTS_CSWY colour = #264653
+
+GTS_CSWY_Fst_manhattan = ggplot(non_outs, 
                      aes(x = BPcum, 
                          y = FST_zero))+
   # plot the non outliers in grey
@@ -902,7 +907,7 @@ MYV_Fst_manhattan = ggplot(non_outs,
   ## plot the outliers on top of everything
   ## currently digging this hot pink colour
   geom_point(data = outs,
-             col = '#d62828',
+             col = '#264653',
              alpha=0.8, 
              size=1.3)+
   scale_x_continuous(label = axisdf$CHR, 
@@ -917,7 +922,7 @@ MYV_Fst_manhattan = ggplot(non_outs,
   # remove space between plot area and x axis
   labs(x = 'Cumulative base pair', 
        y = 'Fst', 
-       title = 'B)')+
+       title = 'D)')+
   theme(legend.position="none",
         # panel.border = element_blank(),
         panel.grid.major.x = element_blank(),
@@ -930,11 +935,17 @@ MYV_Fst_manhattan = ggplot(non_outs,
 
 ASHN_Fst_manhattan
 MYV_Fst_manhattan
+SKR_FST_manhattan
+GTS_CSWY_Fst_manhattan
+
+Fst_man_combo = (ASHN_Fst_manhattan|MYV_Fst_manhattan)/(SKR_Fst_manhattan|GTS_CSWY_Fst_manhattan)
+
+
 ## ggsave that plot
 
-ggsave(file = 'ASHN_FST_manhattan_plot.tiff', 
+ggsave(file = 'stickleback_FST_manhattan_plot.tiff', 
        path = 'C:/Stickleback_Genomic/Figures/', 
-       plot = pcadapt_man, 
+       plot = Fst_man_combo, 
        dpi = 'retina', 
        units = 'cm', 
        width = 20, 
