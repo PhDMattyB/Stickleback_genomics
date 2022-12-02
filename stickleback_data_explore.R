@@ -890,7 +890,7 @@ outs = dist_cal %>%
 #   select() %>% 
 #   distinct()
 
-ASHN_Fst_manhattan = ggplot(non_outs, 
+MYV_Fst_manhattan = ggplot(non_outs, 
                      aes(x = BPcum, 
                          y = FST_zero))+
   # plot the non outliers in grey
@@ -902,13 +902,16 @@ ASHN_Fst_manhattan = ggplot(non_outs,
   ## plot the outliers on top of everything
   ## currently digging this hot pink colour
   geom_point(data = outs,
-             col = '#8C0F26',
+             col = '#d62828',
              alpha=0.8, 
              size=1.3)+
   scale_x_continuous(label = axisdf$CHR, 
                      breaks = axisdf$center)+
   scale_y_continuous(expand = c(0, 0), 
-                     limits = c(0,1))+
+                     limits = c(0,1.0))+
+  # geom_hline(yintercept = 0.00043, 
+  #            linetype = 2, 
+  #            col = 'Black')+
   # ylim(0,1.0)+
   # scale_y_reverse(expand = c(0, 0))+
   # remove space between plot area and x axis
@@ -929,7 +932,7 @@ ASHN_Fst_manhattan
 MYV_Fst_manhattan
 ## ggsave that plot
 
-ggsave(file = 'stickleback_manhattan_plot.tiff', 
+ggsave(file = 'ASHN_FST_manhattan_plot.tiff', 
        path = 'C:/Stickleback_Genomic/Figures/', 
        plot = pcadapt_man, 
        dpi = 'retina', 
