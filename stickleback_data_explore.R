@@ -858,31 +858,17 @@ ASHN_Fst_clean = read_csv('ASHN_Fst_clean.csv')
 MYV_Fst_clean = read_csv('MYV_Fst_clean.csv')
 SKR_Fst_clean = read_csv('SKR_Fst_clean.csv')
 GTS_CSWY_Fst_clean = read_csv('GTS_CSWY_Fst_clean.csv') %>% 
-  stickle_CHR_reorder()
+  stickle_CHR_reorder() %>% 
+  dist_cal()
 
-## calculate cumulative base pair per chromosome
-## cycle through the data frames above to make all graphs
-dist_cal = GTS_CSWY_Fst_clean %>% 
-  group_by(CHR) %>% 
-  summarise(chr_len = max(POS)) %>% 
-  mutate(total = cumsum(chr_len)-chr_len) %>% 
-  dplyr::select(-chr_len) %>% 
-  left_join(GTS_CSWY_Fst_clean, ., by = c('CHR'='CHR')) %>%
-  arrange(CHR, 
-          POS) %>% 
-  mutate(BPcum = POS + total) 
+  ## calculate the center of the chromosome
+axisdf = axis_df(GTS_CSWY_Fst_clean)
 
-## calculate the center of the chromosome
-axisdf = dist_cal %>% 
-  group_by(CHR) %>% 
-  summarize(center=(max(BPcum) + min(BPcum))/2 )  
-
-
-non_outs = dist_cal %>% 
+non_outs = GTS_CSWY_Fst_clean %>% 
   filter(value == 'Neutral') 
 
 ## Get the outliers
-outs = dist_cal %>% 
+outs = GTS_CSWY_Fst_clean %>% 
   filter(value == 'Outlier') 
 
 

@@ -64,6 +64,8 @@ stickle_CHR_reorder = function(data){
                                             'chr_Y', 
                                             'chr_M', 
                                             'chr_Un'))
+  data$CHR = as.character(data$CHR)
+  return(data)
   
 }
 
@@ -81,7 +83,7 @@ dist_cal = function(data){
 
 
 axis_df = function(data){
-  dist_cal %>% 
+  data %>% 
     group_by(CHR) %>% 
     summarize(center=(max(BPcum) + min(BPcum))/2 )  
 }
