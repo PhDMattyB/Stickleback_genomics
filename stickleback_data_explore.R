@@ -857,25 +857,35 @@ GTS_CSWY_Fst_clean = Fst_manhatan_format(GTS_CSWY_Fst,
 ASHN_Fst_clean = read_csv('ASHN_Fst_clean.csv') %>% 
   stickle_CHR_reorder() %>% 
   dist_cal()
-MYV_Fst_clean = read_csv('MYV_Fst_clean.csv')
-SKR_Fst_clean = read_csv('SKR_Fst_clean.csv')
+MYV_Fst_clean = read_csv('MYV_Fst_clean.csv') %>% 
+  stickle_CHR_reorder() %>% 
+  dist_cal()
+SKR_Fst_clean = read_csv('SKR_Fst_clean.csv') %>% 
+  stickle_CHR_reorder() %>% 
+  dist_cal()
 GTS_CSWY_Fst_clean = read_csv('GTS_CSWY_Fst_clean.csv') %>% 
   stickle_CHR_reorder() %>% 
   dist_cal()
 
   ## calculate the center of the chromosome
 axisdf = axis_df(ASHN_Fst_clean)
+axisdf = axis_df(MYV_Fst_clean)
+axisdf = axis_df(SKR_Fst_clean)
 axisdf = axis_df(GTS_CSWY_Fst_clean)
 
 non_outs = 
   # ASHN_Fst_clean %>%
-  GTS_CSWY_Fst_clean %>%
+  # MYV_Fst_clean %>% 
+  SKR_Fst_clean %>% 
+  # GTS_CSWY_Fst_clean %>%
   filter(value == 'Neutral') 
 
 ## Get the outliers
 outs = 
-  # ASHN_Fst_clean %>% 
-  GTS_CSWY_Fst_clean %>%
+  # ASHN_Fst_clean %>%
+  # MYV_Fst_clean %>% 
+  SKR_Fst_clean %>% 
+  # GTS_CSWY_Fst_clean %>%
   filter(value == 'Outlier') 
 
 
@@ -893,6 +903,24 @@ ASHN_Fst_manhattan = Fst_manhattan(non_outs = non_outs,
                                        out_col = '#06d6a0', 
                                        plot_letter = 'A)')
 
+MYV_Fst_manhattan = Fst_manhattan(non_outs = non_outs, 
+                                   outs = outs, 
+                                   axisdf = axisdf, 
+                                   xval = BPcum, 
+                                   yval = FST_zero, 
+                                   chr = non_outs$CHR, 
+                                   out_col = '#d62828', 
+                                   plot_letter = 'B)')
+
+SKR_Fst_manhattan = Fst_manhattan(non_outs = non_outs, 
+                                  outs = outs, 
+                                  axisdf = axisdf, 
+                                  xval = BPcum, 
+                                  yval = FST_zero, 
+                                  chr = non_outs$CHR, 
+                                  out_col = '#5f0f40', 
+                                  plot_letter = 'C)')
+
 GTS_CSWY_Fst_manhattan = Fst_manhattan(non_outs = non_outs, 
               outs = outs, 
               axisdf = axisdf, 
@@ -902,11 +930,6 @@ GTS_CSWY_Fst_manhattan = Fst_manhattan(non_outs = non_outs,
               out_col = '#264653', 
               plot_letter = 'D)')
 
-
-ASHN_Fst_manhattan
-MYV_Fst_manhattan
-SKR_FST_manhattan
-GTS_CSWY_Fst_manhattan
 
 Fst_man_combo = (ASHN_Fst_manhattan|MYV_Fst_manhattan)/(SKR_Fst_manhattan|GTS_CSWY_Fst_manhattan)
 
@@ -918,120 +941,5 @@ ggsave(file = 'stickleback_FST_manhattan_plot.tiff',
        plot = Fst_man_combo, 
        dpi = 'retina', 
        units = 'cm', 
-       width = 20, 
+       width = 30, 
        height = 20)
-
-
-
-
-
-
-# manhattan test ----------------------------------------------------------
-GTS_CSWY_Fst_clean = read_csv('GTS_CSWY_Fst_clean.csv') 
-  # stickle_CHR_reorder() %>% 
-  # dist_cal()
-
-GTS_CSWY_Fst_clean$CHR <- factor(GTS_CSWY_Fst_clean$CHR, 
-                   levels=c("chr_I",
-                            "chr_II", 
-                            "chr_III", 
-                            'chr_IV', 
-                            'chr_V', 
-                            'chr_VI', 
-                            'chr_VII', 
-                            'chr_VIII', 
-                            'chr_IX', 
-                            'chr_X', 
-                            'chr_XI', 
-                            'chr_XII', 
-                            'chr_XIII', 
-                            'chr_XIV', 
-                            'chr_XV', 
-                            'chr_XVI', 
-                            'chr_XVII', 
-                            'chr_XVIII', 
-                            'chr_XIX', 
-                            'chr_XX', 
-                            'chr_XXI', 
-                            'chr_Y', 
-                            'chr_M', 
-                            'chr_Un'))
-# GTS_CSWY_Fst_clean$CHR = as.character(GTS_CSWY_Fst_clean$CHR)
-
-GTS_CSWY_Fst_clean = dist_cal(GTS_CSWY_Fst_clean)
-
-axisdf = axis_df(GTS_CSWY_Fst_clean)
-axisdf$CHR = factor(axisdf$CHR, 
-       levels=c("chr_I",
-                "chr_II", 
-                "chr_III", 
-                'chr_IV', 
-                'chr_V', 
-                'chr_VI', 
-                'chr_VII', 
-                'chr_VIII', 
-                'chr_IX', 
-                'chr_X', 
-                'chr_XI', 
-                'chr_XII', 
-                'chr_XIII', 
-                'chr_XIV', 
-                'chr_XV', 
-                'chr_XVI', 
-                'chr_XVII', 
-                'chr_XVIII', 
-                'chr_XIX', 
-                'chr_XX', 
-                'chr_XXI', 
-                'chr_Y', 
-                'chr_M', 
-                'chr_Un'))
-# axisdf$CHR = as.character(axisdf$CHR)
-
-
-non_outs = 
-  # ASHN_Fst_clean %>%
-  GTS_CSWY_Fst_clean %>%
-  filter(value == 'Neutral') 
-
-## Get the outliers
-outs = 
-  # ASHN_Fst_clean %>% 
-  GTS_CSWY_Fst_clean %>%
-  filter(value == 'Outlier') 
-
-## This produces the plot that we wanted
-## once reordered we cant change the CHR values back to a character
-ggplot(non_outs, 
-       aes(x = BPcum, 
-           y = FST_zero))+
-  # plot the non outliers in grey
-  geom_point(aes(color = as.factor(non_outs$CHR)), 
-             alpha = 0.8, 
-             size = 1.3)+
-  ## alternate colors per chromosome
-  scale_color_manual(values = rep(c("grey", "dimgrey"), 39))+
-  ## plot the outliers on top of everything
-  geom_point(data = outs,
-             col = '#264653',
-             alpha=0.8, 
-             size=1.3)+
-  scale_x_continuous(label = axisdf$CHR, 
-                     breaks = axisdf$center)+
-  scale_y_continuous(expand = c(0, 0), 
-                     limits = c(0,1.0))+
-  # scale_y_reverse(expand = c(0, 0))+
-  # remove space between plot area and x axis
-  labs(x = 'Cumulative base pair', 
-       y = 'Fst', 
-       title = 'D)')+
-  theme(legend.position="none",
-        # panel.border = element_blank(),
-        panel.grid.major.x = element_blank(),
-        panel.grid.minor.x = element_blank(), 
-        axis.text.x = element_text(size = 9, 
-                                   angle = 90), 
-        axis.title = element_text(size = 14),
-        axis.title.x = element_blank(),
-        axis.text.y = element_text(size = 12))
-
