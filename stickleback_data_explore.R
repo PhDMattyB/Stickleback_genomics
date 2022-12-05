@@ -274,6 +274,8 @@ outs = dist_cal %>%
   filter(qvalues < 0.05) %>% 
   mutate(logqval = -log(qvalues))
 
+# outs %>% write_csv('pcadapt_outliers_q0.05.csv')
+
 
 pcadapt_man = ggplot(non_outs, 
                        aes(x = BPcum, 
@@ -943,3 +945,65 @@ ggsave(file = 'stickleback_FST_manhattan_plot.tiff',
        units = 'cm', 
        width = 30, 
        height = 20)
+
+
+
+
+
+
+# Outlier - FST colocalization --------------------------------------------
+## Need to figure out if pcadapt, lfmm, and baypass outliers
+## colocalize to high FST snps
+
+
+
+
+# Outlier overlap ---------------------------------------------------------
+
+##Common FST outliers
+ASHN_Fst_clean = read_csv('ASHN_Fst_clean.csv') %>% 
+  stickle_CHR_reorder() %>% 
+  dist_cal() %>% 
+  filter(value == 'Outlier')
+MYV_Fst_clean = read_csv('MYV_Fst_clean.csv') %>% 
+  stickle_CHR_reorder() %>% 
+  dist_cal()%>% 
+  filter(value == 'Outlier')
+SKR_Fst_clean = read_csv('SKR_Fst_clean.csv') %>% 
+  stickle_CHR_reorder() %>% 
+  dist_cal()%>% 
+  filter(value == 'Outlier')
+GTS_CSWY_Fst_clean = read_csv('GTS_CSWY_Fst_clean.csv') %>% 
+  stickle_CHR_reorder() %>% 
+  dist_cal()%>% 
+  filter(value == 'Outlier')
+
+
+common_FST_outliers = inner_join(ASHN_Fst_clean, 
+           MYV_Fst_clean, 
+           by = c('CHR', 
+                  'SNP', 
+                  'POS'))
+common_FST_outliers = inner_join(common_FST_outliers, 
+                                 SKR_Fst_clean, 
+                                 by = c('CHR', 
+                                        'SNP', 
+                                        'POS'))
+common_FST_outliers = inner_join(common_FST_outliers, 
+                                 GTS_CSWY_Fst_clean, 
+                                 by = c('CHR', 
+                                        'SNP', 
+                                        'POS'))
+
+
+
+## pcadapt outliers
+common_pcadapt_outliers = read_csv('pcadapt_outliers_q0.05.csv') 
+
+##baypass outliers
+
+##LFMM outliers
+
+# Fst sliding window ------------------------------------------------------
+
+
