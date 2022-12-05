@@ -64,7 +64,7 @@ stickle_CHR_reorder = function(data){
                                             'chr_Y', 
                                             'chr_M', 
                                             'chr_Un'))
-  data$CHR = as.character(data$CHR)
+  # data$CHR = as.character(data$CHR)
   return(data)
   
 }
