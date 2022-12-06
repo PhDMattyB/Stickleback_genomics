@@ -1033,20 +1033,35 @@ WC_Fst_clean_all = read_csv('WC_Fst_clean.csv') %>%
   stickle_CHR_reorder() %>% 
   dist_cal()
 
+# WC_Fst_clean_all %>% 
+#   filter( value == 'Outlier') %>% 
+#   group_by(CHR) %>% 
+#   summarise(n_outlier = n()) %>% 
+#   View()
+
 ## pcadapt outliers
 common_pcadapt_outliers = read_csv('pcadapt_outliers_q0.05.csv') %>% 
   rename(SNP = snp, 
          CHR = chromosome, 
          POS = physical_pos)
 
+# common_pcadapt_outliers %>% 
+#   group_by(CHR) %>% 
+#   summarise(n_outlier = n()) %>% 
+#   View()
+
+
 
 inner_join(WC_Fst_clean_outs, 
            common_pcadapt_outliers, 
           by = c('CHR', 
                  'SNP', 
-                 'POS'))
+                 'POS')) %>% 
+  group_by(CHR) %>% 
+  summarise(n_outlier = n()) %>% 
+  view()
 
-inner_join(WC_Fst_clean_all, 
+FST_all_pcadapt_snps = inner_join(WC_Fst_clean_all, 
            common_pcadapt_outliers, 
            by = c('CHR', 
                   'SNP', 
