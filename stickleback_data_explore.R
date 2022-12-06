@@ -814,9 +814,30 @@ GTS_CSWY_per_chrom = GTS_CSWY_Fst %>%
        title = 'D)')+
   theme(panel.grid.major = element_blank(), 
         panel.grid.minor = element_blank(),
+        axis.title = element_blank(), 
+        axis.text = element_blank(), 
+        axis.ticks = element_blank(),
+        strip.background = element_rect(fill = 'white'), 
+        strip.text = element_text(color = 'black'))
+
+WC_per_chrom = WC_Fst %>% 
+  ggplot()+
+  geom_density(aes(x = FST_zero), 
+               col = '#ef233c', 
+               fill = '#ef233c')+
+  geom_density(data = WC_top_dist, 
+               aes(x = FST_zero),
+               col = '#000000',
+               fill = '#000000')+
+  facet_grid(~CHR)+
+  labs(x = 'Fst', 
+       y = 'Density', 
+       title = 'E)')+
+  theme(panel.grid.major = element_blank(), 
+        panel.grid.minor = element_blank(),
         axis.title.x = element_text(size = 14), 
         axis.text.x = element_text(size = 8, 
-                                 angle = 90), 
+                                   angle = 90), 
         axis.text.y = element_blank(), 
         axis.title.y = element_blank(), 
         axis.ticks = element_blank(),
@@ -824,7 +845,7 @@ GTS_CSWY_per_chrom = GTS_CSWY_Fst %>%
         strip.text = element_text(color = 'black'))
 
 
-per_chrom_combo = ASHN_per_chrom/MYV_per_chrom/SKR_per_chrom/GTS_CSWY_per_chrom
+per_chrom_combo = ASHN_per_chrom/MYV_per_chrom/SKR_per_chrom/GTS_CSWY_per_chrom/WC_per_chrom
 
 
 
@@ -837,7 +858,7 @@ ggsave(file = 'stickleback_FST_Distribution_per_chrome.tiff',
        height = 15)
 
 
-
+##
 # Fst manhattan set up ----------------------------------------------------
 
 
