@@ -1086,11 +1086,13 @@ Three_analysis_outs = inner_join(FST_outs_LFMM,
                   'SNP', 
                   'POS'))
 
-Three_analysis_outs %>% 
-  group_by(CHR) %>% 
-  summarise(n_outs = n(), 
-            Fst_chr = mean(FST_zero)) %>% 
-  View()
+# Three_analysis_outs %>% 
+#   group_by(CHR) %>% 
+#   summarise(n_outs = n(), 
+#             Fst_chr = mean(FST_zero)) %>% 
+#   View()
+
+# Three_analysis_outs %>% write_csv('Outliers_FST_pcadapt_LFMM.csv')
 
 # %>% 
 #   group_by(CHR) %>% 
