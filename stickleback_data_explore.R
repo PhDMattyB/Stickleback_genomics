@@ -1051,14 +1051,15 @@ common_pcadapt_outliers = read_csv('pcadapt_outliers_q0.05.csv') %>%
 
 
 
-inner_join(WC_Fst_clean_outs, 
+FST_out_pcadapt = inner_join(WC_Fst_clean_outs, 
            common_pcadapt_outliers, 
           by = c('CHR', 
                  'SNP', 
-                 'POS')) %>% 
-  group_by(CHR) %>% 
-  summarise(n_outlier = n()) %>% 
-  view()
+                 'POS')) 
+# %>% 
+#   group_by(CHR) %>% 
+#   summarise(n_outlier = n()) %>% 
+#   view()
 
 FST_all_pcadapt_snps = inner_join(WC_Fst_clean_all, 
            common_pcadapt_outliers, 
@@ -1072,12 +1073,35 @@ FST_all_pcadapt_snps = inner_join(WC_Fst_clean_all,
 ##LFMM outliers
 
 # lfmm_outliers = read.vcfR("C:/Stickleback_Genomic/vcf_filter/lfmm.SNPs.vcf")
-
 LFMM_outliers = read_table2('LFMM_Temp_Outlier.map', 
                             col_name = c('CHR', 
                                          'SNP', 
                                          'GENE_POS', 
                                          'POS'))
+
+FST_outs_LFMM = inner_join(WC_Fst_clean_outs, 
+           LFMM_outliers, 
+           by = c('CHR', 
+                  'SNP', 
+                  'POS'))
+
+
+## Damn only 33 outliers from all three analyses
+Three_analysis_outs = inner_join(FST_outs_LFMM, 
+           common_pcadapt_outliers, 
+           by = c('CHR', 
+                  'SNP', 
+                  'POS'))
+
+Three_analysis_outs %>% 
+  group_by(CHR) %>% 
+  summarise(n_outs = n()) %>% 
+  View()
+
+# %>% 
+#   group_by(CHR) %>% 
+#   summarise(n_outlier = n()) %>% 
+#   view()
 
 # ASHN_MYV_FST_outliers = inner_join(ASHN_Fst_clean, 
 #                                  MYV_Fst_clean, 
@@ -1137,6 +1161,10 @@ LFMM_outliers = read_table2('LFMM_Temp_Outlier.map',
 #          SNP, 
 #          POS, 
 #          starts_with('FST_zero'))
+
+
+# LFMM Manhattan plot -----------------------------------------------------
+
 
 
 # Fst sliding window ------------------------------------------------------
