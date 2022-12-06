@@ -1005,22 +1005,22 @@ ggsave(file = 'stickleback_FST_manhattan_plot.tiff',
 # Outlier overlap ---------------------------------------------------------
 
 ## per population FST outliers
-ASHN_Fst_clean = read_csv('ASHN_Fst_clean.csv') %>% 
-  stickle_CHR_reorder() %>% 
-  dist_cal() %>% 
-  filter(value == 'Outlier')
-MYV_Fst_clean = read_csv('MYV_Fst_clean.csv') %>% 
-  stickle_CHR_reorder() %>% 
-  dist_cal()%>% 
-  filter(value == 'Outlier')
-SKR_Fst_clean = read_csv('SKR_Fst_clean.csv') %>% 
-  stickle_CHR_reorder() %>% 
-  dist_cal()%>% 
-  filter(value == 'Outlier')
-GTS_CSWY_Fst_clean = read_csv('GTS_CSWY_Fst_clean.csv') %>% 
-  stickle_CHR_reorder() %>% 
-  dist_cal()%>% 
-  filter(value == 'Outlier')
+# ASHN_Fst_clean = read_csv('ASHN_Fst_clean.csv') %>% 
+#   stickle_CHR_reorder() %>% 
+#   dist_cal() %>% 
+#   filter(value == 'Outlier')
+# MYV_Fst_clean = read_csv('MYV_Fst_clean.csv') %>% 
+#   stickle_CHR_reorder() %>% 
+#   dist_cal()%>% 
+#   filter(value == 'Outlier')
+# SKR_Fst_clean = read_csv('SKR_Fst_clean.csv') %>% 
+#   stickle_CHR_reorder() %>% 
+#   dist_cal()%>% 
+#   filter(value == 'Outlier')
+# GTS_CSWY_Fst_clean = read_csv('GTS_CSWY_Fst_clean.csv') %>% 
+#   stickle_CHR_reorder() %>% 
+#   dist_cal()%>% 
+#   filter(value == 'Outlier')
 
 ##Common FST outliers
 WC_Fst_clean_outs = read_csv('WC_Fst_clean.csv') %>% 
@@ -1088,7 +1088,8 @@ Three_analysis_outs = inner_join(FST_outs_LFMM,
 
 Three_analysis_outs %>% 
   group_by(CHR) %>% 
-  summarise(n_outs = n()) %>% 
+  summarise(n_outs = n(), 
+            Fst_chr = mean(FST_zero)) %>% 
   View()
 
 # %>% 
