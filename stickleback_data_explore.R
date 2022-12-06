@@ -1028,15 +1028,14 @@ WC_Fst_clean_outs = read_csv('WC_Fst_clean.csv') %>%
   dist_cal()%>% 
   filter(value == 'Outlier')
 
+# WC_Fst_clean_outs %>% 
+#   group_by(CHR) %>% 
+#   summarise(n_outs = n()) %>% 
+#   View()
+# # 
 WC_Fst_clean_all = read_csv('WC_Fst_clean.csv') %>% 
   stickle_CHR_reorder() %>% 
   dist_cal()
-
-# WC_Fst_clean_all %>% 
-#   filter( value == 'Outlier') %>% 
-#   group_by(CHR) %>% 
-#   summarise(n_outlier = n()) %>% 
-#   View()
 
 ## pcadapt outliers
 common_pcadapt_outliers = read_csv('pcadapt_outliers_q0.05.csv') %>% 
@@ -1048,7 +1047,6 @@ common_pcadapt_outliers = read_csv('pcadapt_outliers_q0.05.csv') %>%
 #   group_by(CHR) %>% 
 #   summarise(n_outlier = n()) %>% 
 #   View()
-
 
 
 FST_out_pcadapt = inner_join(WC_Fst_clean_outs, 
@@ -1066,12 +1064,7 @@ FST_all_pcadapt_snps = inner_join(WC_Fst_clean_all,
            by = c('CHR', 
                   'SNP', 
                   'POS'))
-
-
-##baypass outliers
-
 ##LFMM outliers
-
 # lfmm_outliers = read.vcfR("C:/Stickleback_Genomic/vcf_filter/lfmm.SNPs.vcf")
 LFMM_outliers = read_table2('LFMM_Temp_Outlier.map', 
                             col_name = c('CHR', 
