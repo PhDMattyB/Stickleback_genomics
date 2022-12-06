@@ -911,20 +911,20 @@ axisdf = axis_df(GTS_CSWY_Fst_clean)
 axisdf = axis_df(WC_Fst_clean)
 
 non_outs = 
-  WC_Fst_clean %>% 
+  # WC_Fst_clean %>% 
   # ASHN_Fst_clean %>%
-  # MYV_Fst_clean %>% 
-  # SKR_Fst_clean %>% 
-  # GTS_CSWY_Fst_clean %>%
+  # MYV_Fst_clean %>%
+  # SKR_Fst_clean %>%
+  GTS_CSWY_Fst_clean %>%
   filter(value == 'Neutral') 
 
 ## Get the outliers
 outs = 
-  WC_Fst_clean %>% 
+  # WC_Fst_clean %>% 
   # ASHN_Fst_clean %>%
-  # MYV_Fst_clean %>% 
-  # SKR_Fst_clean %>% 
-  # GTS_CSWY_Fst_clean %>%
+  # MYV_Fst_clean %>%
+  # SKR_Fst_clean %>%
+  GTS_CSWY_Fst_clean %>%
   filter(value == 'Outlier') 
 
 
@@ -971,7 +971,7 @@ SKR_Fst_manhattan = Fst_manhattan(non_outs = non_outs,
                                   out_col = '#5f0f40', 
                                   plot_letter = 'C)')
 
-GTS_CSWY_Fst_manhattan = Fst_manhattan(non_outs = non_outs, 
+GTS_CSWY_Fst_manhattan = Fst_manhattan(non_outs = non_outs,
               outs = outs, 
               axisdf = axisdf, 
               xval = BPcum, 
@@ -981,7 +981,7 @@ GTS_CSWY_Fst_manhattan = Fst_manhattan(non_outs = non_outs,
               plot_letter = 'D)')
 
 
-Fst_man_combo = (ASHN_Fst_manhattan|MYV_Fst_manhattan)/(SKR_Fst_manhattan|GTS_CSWY_Fst_manhattan)
+Fst_man_combo = (ASHN_Fst_manhattan|MYV_Fst_manhattan)/(SKR_Fst_manhattan|GTS_CSWY_Fst_manhattan)|WC_Fst_manhattan
 
 
 ## ggsave that plot
@@ -993,9 +993,6 @@ ggsave(file = 'stickleback_FST_manhattan_plot.tiff',
        units = 'cm', 
        width = 30, 
        height = 20)
-
-
-
 
 
 
