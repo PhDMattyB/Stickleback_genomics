@@ -561,9 +561,22 @@ SKR_Fst = read_tsv('SKR_Fst_values.fst')%>%
 GTS_CSWY_Fst = read_tsv('GTS_CSWY_Fst_values.fst')%>% 
   na.omit() %>%  ##pull out na's
   mutate(FST_zero = if_else(FST < 0, 0, FST))
+WC_Fst = read_tsv('Warm_Cold_Fst.fst') %>% 
+  na.omit() %>% 
+  mutate(FST_zero = if_else(FST < 0, 0, FST))
 
-
+##
 # FST outliers ------------------------------------------------------------
+
+WC_top_dist = WC_Fst[WC_Fst$FST_zero > quantile(WC_Fst$FST_zero, 
+                                                      prob = 1-5/100),]
+
+# ASHN_top_dist %>% write_csv('ASHN_FST_Outliers.csv')
+WC_top_dist %>% 
+  # group_by(CHR) %>% 
+  summarise(min_fst = min(FST_zero), 
+            max_fst = max(FST_zero), 
+            mean_fst = mean(FST_zero)) 
 
 
 ## snps that are the top 5% fst distribution
@@ -686,7 +699,26 @@ GTS_CSWY_Fst_dist_plot = GTS_CSWY_Fst %>%
         axis.title = element_text(size = 14), 
         axis.text = element_text(size = 12))
 
-Fst_dist_combo = (ASHN_Fst_dist_plot|MYV_Fst_dist_plot)/(SKR_Fst_dist_plot|GTS_CSWY_Fst_dist_plot)
+
+WC_Fst_dist_plot = WC_Fst %>% 
+  ggplot()+
+  geom_density(aes(x = FST_zero), 
+               col = '#ef233c', 
+               fill = '#ef233c')+
+  geom_density(data = WC_top_dist, 
+               aes(x = FST_zero),
+               col = '#000000',
+               fill = '#000000')+
+  labs(x = 'Fst', 
+       y = 'Density', 
+       title = 'E)')+
+  theme(panel.grid.major = element_blank(), 
+        panel.grid.minor = element_blank(),
+        axis.title = element_text(size = 14), 
+        axis.text = element_text(size = 12))
+
+
+Fst_dist_combo = (ASHN_Fst_dist_plot|MYV_Fst_dist_plot)/(SKR_Fst_dist_plot|GTS_CSWY_Fst_dist_plot) | WC_Fst_dist_plot 
 
 ggsave(file = 'stickleback_FST_Distribution_plots.tiff', 
        path = 'C:/Stickleback_Genomic/Figures/', 
