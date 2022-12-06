@@ -14,6 +14,7 @@ library(qvalue)
 library(tidyverse)
 library(umap)
 library(vcfR)
+library(Rcpp)
 
 # 
 theme_set(theme_bw())
@@ -1070,8 +1071,13 @@ FST_all_pcadapt_snps = inner_join(WC_Fst_clean_all,
 
 ##LFMM outliers
 
-lfmm_outliers = read.vcfR("C:/Stickleback_Genomic/vcf_filter/lfmm.SNPs.vcf")
+# lfmm_outliers = read.vcfR("C:/Stickleback_Genomic/vcf_filter/lfmm.SNPs.vcf")
 
+LFMM_outliers = read_table2('LFMM_Temp_Outlier.map', 
+                            col_name = c('CHR', 
+                                         'SNP', 
+                                         'GENE_POS', 
+                                         'POS'))
 
 # ASHN_MYV_FST_outliers = inner_join(ASHN_Fst_clean, 
 #                                  MYV_Fst_clean, 
