@@ -854,8 +854,8 @@ ggsave(file = 'stickleback_FST_Distribution_per_chrome.tiff',
        plot = per_chrom_combo, 
        dpi = 'retina', 
        units = 'cm', 
-       width = 30.0, 
-       height = 15)
+       width = 40.0, 
+       height = 20)
 
 
 ##
