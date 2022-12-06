@@ -865,31 +865,10 @@ ggsave(file = 'stickleback_FST_Distribution_per_chrome.tiff',
 # intersect(ASHN_Fst$SNP, 
 #           ASHN_top_dist$SNP) %>% as_tibble()
 
-Fst_manhatan_format = function(Fst_data, Fst_outliers){
-  Neutral_snps = anti_join(Fst_data, 
-                               Fst_outliers)
-  ## Need to remove outliers from this dataset
-  labs1 = rep('Neutral', 
-                      nrow(Neutral_snps)) %>% 
-    as_tibble()
-  
-  Fst_neutral = bind_cols(Neutral_snps, 
-                               labs1)
-  
-  
-  labs2 = rep('Outlier', 
-                      nrow(Fst_outliers)) %>% 
-    as_tibble()
-  
-  Fst_outliers = bind_cols(Fst_outliers, 
-                            labs2)
-  
-  
-  Fst_clean = bind_rows(Fst_neutral, 
-                             Fst_outliers)
-  
-  
-}
+
+WC_Fst_clean = Fst_manhatan_format(WC_Fst, 
+                                   WC_top_dist) %>% 
+  write_csv('WC_Fst_clean.csv')
 
 ASHN_Fst_clean = Fst_manhatan_format(ASHN_Fst, 
                                      ASHN_top_dist) %>% 
@@ -921,25 +900,30 @@ SKR_Fst_clean = read_csv('SKR_Fst_clean.csv') %>%
 GTS_CSWY_Fst_clean = read_csv('GTS_CSWY_Fst_clean.csv') %>% 
   stickle_CHR_reorder() %>% 
   dist_cal()
-
+WC_Fst_clean = read_csv('WC_Fst_clean.csv') %>% 
+  stickle_CHR_reorder() %>% 
+  dist_cal()
   ## calculate the center of the chromosome
 axisdf = axis_df(ASHN_Fst_clean)
 axisdf = axis_df(MYV_Fst_clean)
 axisdf = axis_df(SKR_Fst_clean)
 axisdf = axis_df(GTS_CSWY_Fst_clean)
+axisdf = axis_df(WC_Fst_clean)
 
 non_outs = 
+  WC_Fst_clean %>% 
   # ASHN_Fst_clean %>%
   # MYV_Fst_clean %>% 
-  SKR_Fst_clean %>% 
+  # SKR_Fst_clean %>% 
   # GTS_CSWY_Fst_clean %>%
   filter(value == 'Neutral') 
 
 ## Get the outliers
 outs = 
+  WC_Fst_clean %>% 
   # ASHN_Fst_clean %>%
   # MYV_Fst_clean %>% 
-  SKR_Fst_clean %>% 
+  # SKR_Fst_clean %>% 
   # GTS_CSWY_Fst_clean %>%
   filter(value == 'Outlier') 
 
@@ -948,6 +932,17 @@ outs =
 ## MYV colour = #d62828
 ## SKR colour = #5f0f40
 ## GTS_CSWY colour = #264653
+## WC colour = #ef233c
+
+WC_Fst_manhattan = Fst_manhattan(non_outs = non_outs, 
+                                 outs = outs, 
+                                 axisdf = axisdf, 
+                                 xval = BPcum, 
+                                 yval = FST_zero, 
+                                 chr = non_outs$CHR, 
+                                 out_col = '#ef233c', 
+                                 plot_letter = 'E)')
+
 
 ASHN_Fst_manhattan = Fst_manhattan(non_outs = non_outs, 
                                        outs = outs, 
