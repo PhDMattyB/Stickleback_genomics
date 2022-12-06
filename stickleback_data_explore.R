@@ -517,14 +517,14 @@ ped_ids = bind_cols(ped_ids,
 ## GTS vs CSWY
 
 ped_ids %>% 
-  filter(population %in% c('GTS', 
-                         'CSWY')) %>%
+  filter(type %in% c('Warm', 
+                         'Cold')) %>%
   select(X1, 
          X2, 
          type) %>% 
   rename(`#population` = 1, 
          individual_id = 2) %>% 
-  write_tsv('GTS_CSWY_Fst_grouping.txt')
+  write_tsv('Warm_cold_Fst_grouping.txt')
 
 ## Holy fuck!! Make sure to use the actual family and individual
 ## identifiers in the fucking ped file. WOW
@@ -539,14 +539,14 @@ ped_ids %>%
 ## identifiers
 
 ped_ids %>% 
-  filter(population %in% c('GTS', 
-                           'CSWY')) %>%
+  filter(type %in% c('Warm', 
+                           'Cold')) %>%
   # rename(`#population` = population) %>%
   select(1:2) %>% 
-  write_tsv('GTS_CSWY_Fst_keep.txt', 
+  write_tsv('Warm_Cold_Fst_keep.txt', 
             col_names = F)
 
-
+##
 # FST analysis ------------------------------------------------------------
 
 ASHN_Fst = read_tsv('ASHN_Fst_values.fst') %>% 
