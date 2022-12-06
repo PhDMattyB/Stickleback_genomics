@@ -13,6 +13,7 @@ library(LEA)
 library(qvalue)
 library(tidyverse)
 library(umap)
+library(vcfR)
 
 # 
 theme_set(theme_bw())
@@ -485,9 +486,6 @@ umap_fit = pc_data %>%
 
 
 ##
-# rda analysis ------------------------------------------------------------
-
-
 # Fst set up Plink ---------------------------------------------------------------
 
 identifiers = read_csv('stickleback_identifiers.csv')
@@ -1072,6 +1070,8 @@ FST_all_pcadapt_snps = inner_join(WC_Fst_clean_all,
 
 ##LFMM outliers
 
+lfmm_outliers = read.vcfR("C:/Stickleback_Genomic/vcf_filter/lfmm.SNPs.vcf")
+
 
 # ASHN_MYV_FST_outliers = inner_join(ASHN_Fst_clean, 
 #                                  MYV_Fst_clean, 
@@ -1134,5 +1134,9 @@ FST_all_pcadapt_snps = inner_join(WC_Fst_clean_all,
 
 
 # Fst sliding window ------------------------------------------------------
+
+
+# af-vapeR ----------------------------------------------------------------
+
 
 
