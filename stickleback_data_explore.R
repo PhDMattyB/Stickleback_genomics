@@ -991,7 +991,7 @@ ggsave(file = 'stickleback_FST_manhattan_plot.tiff',
        plot = Fst_man_combo, 
        dpi = 'retina', 
        units = 'cm', 
-       width = 30, 
+       width = 40, 
        height = 20)
 
 
@@ -1022,25 +1022,63 @@ GTS_CSWY_Fst_clean = read_csv('GTS_CSWY_Fst_clean.csv') %>%
   stickle_CHR_reorder() %>% 
   dist_cal()%>% 
   filter(value == 'Outlier')
+WC_Fst_clean = read_csv('WC_Fst_clean.csv') %>% 
+  stickle_CHR_reorder() %>% 
+  dist_cal()%>% 
+  filter(value == 'Outlier')
+
+
+ASHN_MYV_FST_outliers = inner_join(ASHN_Fst_clean, 
+                                 MYV_Fst_clean, 
+                                 by = c('CHR', 
+                                        'SNP', 
+                                        'POS'))
+
+ASHN_SKR_FST_outliers = inner_join(ASHN_Fst_clean, 
+                                   SKR_Fst_clean, 
+                                   by = c('CHR', 
+                                          'SNP', 
+                                          'POS'))
+
+MYV_SKR_FST_outliers = inner_join(MYV_Fst_clean, 
+                                   SKR_Fst_clean, 
+                                   by = c('CHR', 
+                                          'SNP', 
+                                          'POS'))
+
+
+ASHN_GTSCSWY_FST_outliers = inner_join(ASHN_Fst_clean, 
+                                   GTS_CSWY_Fst_clean, 
+                                   by = c('CHR', 
+                                          'SNP', 
+                                          'POS'))
+MYV_GTSCSWY_FST_outliers = inner_join(MYV_Fst_clean, 
+                                       GTS_CSWY_Fst_clean, 
+                                       by = c('CHR', 
+                                              'SNP', 
+                                              'POS'))
+SKR_GTSCSWY_FST_outliers = inner_join(SKR_Fst_clean, 
+                                       GTS_CSWY_Fst_clean, 
+                                       by = c('CHR', 
+                                              'SNP', 
+                                              'POS'))
 
 
 common_FST_outliers = inner_join(ASHN_Fst_clean, 
            MYV_Fst_clean, 
            by = c('CHR', 
                   'SNP', 
-                  'POS'))
-common_FST_outliers = inner_join(common_FST_outliers, 
-                                 SKR_Fst_clean, 
-                                 by = c('CHR', 
-                                        'SNP', 
-                                        'POS'))
-common_FST_outliers = inner_join(common_FST_outliers, 
-                                 GTS_CSWY_Fst_clean, 
-                                 by = c('CHR', 
-                                        'SNP', 
-                                        'POS'))
-
-
+                  'POS')) %>% 
+  inner_join(., 
+             SKR_Fst_clean, 
+             by = c('CHR', 
+                    'SNP', 
+                    'POS')) %>% 
+  inner_join(., 
+             GTS_CSWY_Fst_clean, 
+             by = c('CHR', 
+                    'SNP', 
+                    'POS'))
 
 ## pcadapt outliers
 common_pcadapt_outliers = read_csv('pcadapt_outliers_q0.05.csv') 
