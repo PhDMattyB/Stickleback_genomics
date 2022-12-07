@@ -89,7 +89,7 @@ axis_df = function(data){
 }
 
 
-## not ready yet
+
 Fst_manhattan = function(non_outs, 
                          outs, 
                          axisdf,

@@ -10,6 +10,7 @@
 library(pcadapt)
 library(viridis)
 library(LEA)
+library(reshape2)
 library(qvalue)
 library(tidyverse)
 library(umap)
@@ -19,9 +20,9 @@ library(Rcpp)
 # 
 theme_set(theme_bw())
 
-# pcadapt analysis --------------------------------------------------------
-
 setwd('C:/Stickleback_Genomic/vcf_filter/')
+
+# pcadapt analysis --------------------------------------------------------
 
 stickle_pcadapt = read.pcadapt('stickleback_maf0.05_ldpruned_filtered.bed', 
                                type = 'bed')
@@ -326,10 +327,6 @@ ggsave(file = 'stickleback_manhattan_plot.tiff',
 
 # snmf analysis -----------------------------------------------------------
 setwd('C:/Stickleback_Genomic/vcf_filter/')
-
-library(LEA)
-library(viridis)
-library(reshape2)
 
 convert = ped2geno('stickleback_maf0.05_ldpruned_filtered.ped',
                    'stickleback_data.geno')
@@ -1033,9 +1030,9 @@ WC_Fst_clean_outs = read_csv('WC_Fst_clean.csv') %>%
 #   summarise(n_outs = n()) %>% 
 #   View()
 # # 
-WC_Fst_clean_all = read_csv('WC_Fst_clean.csv') %>% 
-  stickle_CHR_reorder() %>% 
-  dist_cal()
+# WC_Fst_clean_all = read_csv('WC_Fst_clean.csv') %>% 
+#   stickle_CHR_reorder() %>% 
+#   dist_cal()
 
 ## pcadapt outliers
 common_pcadapt_outliers = read_csv('pcadapt_outliers_q0.05.csv') %>% 
@@ -1059,11 +1056,11 @@ FST_out_pcadapt = inner_join(WC_Fst_clean_outs,
 #   summarise(n_outlier = n()) %>% 
 #   view()
 
-FST_all_pcadapt_snps = inner_join(WC_Fst_clean_all, 
-           common_pcadapt_outliers, 
-           by = c('CHR', 
-                  'SNP', 
-                  'POS'))
+# FST_all_pcadapt_snps = inner_join(WC_Fst_clean_all, 
+#            common_pcadapt_outliers, 
+#            by = c('CHR', 
+#                   'SNP', 
+#                   'POS'))
 ##LFMM outliers
 # lfmm_outliers = read.vcfR("C:/Stickleback_Genomic/vcf_filter/lfmm.SNPs.vcf")
 LFMM_outliers = read_table2('LFMM_Temp_Outlier.map', 
@@ -1078,6 +1075,11 @@ FST_outs_LFMM = inner_join(WC_Fst_clean_outs,
                   'SNP', 
                   'POS'))
 
+LFMM_pcadapt = inner_join(common_pcadapt_outliers, 
+                           LFMM_outliers, 
+                           by = c('CHR', 
+                                  'SNP', 
+                                  'POS'))
 
 ## Damn only 33 outliers from all three analyses
 Three_analysis_outs = inner_join(FST_outs_LFMM, 
@@ -1086,10 +1088,10 @@ Three_analysis_outs = inner_join(FST_outs_LFMM,
                   'SNP', 
                   'POS'))
 
-# Three_analysis_outs %>% 
-#   group_by(CHR) %>% 
-#   summarise(n_outs = n(), 
-#             Fst_chr = mean(FST_zero)) %>% 
+# Three_analysis_outs %>%
+#   group_by(CHR) %>%
+#   summarise(n_outs = n(),
+#             Fst_chr = mean(FST_zero)) %>%
 #   View()
 
 # Three_analysis_outs %>% write_csv('Outliers_FST_pcadapt_LFMM.csv')
@@ -1159,9 +1161,39 @@ Three_analysis_outs = inner_join(FST_outs_LFMM,
 #          starts_with('FST_zero'))
 
 
+# LFMM Analysis -----------------------------------------------------------
+
+convert = geno2lfmm("stickleback_data.geno", 
+                    'stickleback_lfmm.lfmm')
+
+
+temp_lfmm = lfmm( "stickleback_lfmm.lfmm", 
+                "temp.env", 
+                K = 5, 
+                repetitions = 5, 
+                project = "new")
+
+
 # LFMM Manhattan plot -----------------------------------------------------
 
+LFMM_outliers = read_table2('LFMM_Temp_Outlier.map', 
+                            col_name = c('CHR', 
+                                         'SNP', 
+                                         'GENE_POS', 
+                                         'POS')) %>% 
+  stickle_CHR_reorder() %>% 
+  dist_cal()
 
+# WC_Fst_clean_all = read_csv('WC_Fst_clean.csv') %>%
+#   stickle_CHR_reorder() %>%
+#   dist_cal()
+
+
+LFMM_Neutral_snps = anti_join(WC_Fst_clean_all, 
+          LFMM_outliers, 
+          by = c('CHR', 
+                 'SNP', 
+                 'POS'))
 
 # Fst sliding window ------------------------------------------------------
 
