@@ -1176,6 +1176,7 @@ temp_lfmm = lfmm( "stickleback_lfmm.lfmm",
 
 # LFMM Manhattan plot -----------------------------------------------------
 
+## Need to run this on the computer cluster
 LFMM_outliers = read_table2('LFMM_Temp_Outlier.map', 
                             col_name = c('CHR', 
                                          'SNP', 
