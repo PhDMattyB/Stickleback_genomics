@@ -1160,6 +1160,8 @@ Three_analysis_outs = inner_join(FST_outs_LFMM,
 #          POS, 
 #          starts_with('FST_zero'))
 
+# Fst sliding window ------------------------------------------------------
+
 
 # LFMM Analysis -----------------------------------------------------------
 
@@ -1195,8 +1197,6 @@ LFMM_Neutral_snps = anti_join(WC_Fst_clean_all,
           by = c('CHR', 
                  'SNP', 
                  'POS'))
-
-# Fst sliding window ------------------------------------------------------
 
 
 # af-vapeR ----------------------------------------------------------------
