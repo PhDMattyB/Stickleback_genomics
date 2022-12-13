@@ -16,6 +16,7 @@ library(tidyverse)
 library(umap)
 library(vcfR)
 library(Rcpp)
+library(windowscanr)
 
 # 
 theme_set(theme_bw())
@@ -1162,7 +1163,48 @@ Three_analysis_outs = inner_join(FST_outs_LFMM,
 
 # Fst sliding window ------------------------------------------------------
 
+## per population FST outliers
+# ASHN_Fst_clean = read_csv('ASHN_Fst_clean.csv') %>%
+#   stickle_CHR_reorder() %>%
+# dist_cal() 
+# MYV_Fst_clean = read_csv('MYV_Fst_clean.csv') %>%
+#   stickle_CHR_reorder() %>%
+#   dist_cal()
+# SKR_Fst_clean = read_csv('SKR_Fst_clean.csv') %>%
+#   stickle_CHR_reorder() %>%
+#   dist_cal()
+GTS_CSWY_Fst_clean = read_csv('GTS_CSWY_Fst_clean.csv') %>%
+  stickle_CHR_reorder() %>%
+  dist_cal()
 
+##Common FST outliers
+# WC_Fst_clean_all = read_csv('WC_Fst_clean.csv') %>%
+#   stickle_CHR_reorder() %>%
+#   dist_cal()
+
+## sliding window analysis for 50Kb windows
+## with 1Kb overlap between windows
+fst_position = winScan(x = GTS_CSWY_Fst_clean, 
+                       groups = 'CHR', 
+                       position = 'POS',
+                       values = 'FST', 
+                       win_size = 50000, 
+                       win_step = 49000, 
+                       funs = c('mean', 'sd'))
+
+fst_position = fst_position %>%
+  as_tibble() %>% 
+  filter(FST_n >= 3)
+## Write the txt file for each window size. 
+## Need to compare the different window sizes to see which one
+## is the most appropriate. 
+## small window size == greater chance for false positives
+## large window size == less chance to find differences
+
+write_tsv(fst_position, 
+          'GTS_CSWY_Fst_50Kb_3obs_window.txt')
+
+##
 # LFMM Analysis -----------------------------------------------------------
 
 convert = geno2lfmm("stickleback_data.geno", 
