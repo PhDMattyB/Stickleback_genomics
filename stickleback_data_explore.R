@@ -1225,8 +1225,27 @@ GTS_CSWY_50kb = read_tsv('GTS_CSWY_Fst_50Kb_3obs_window.txt')
 #                                              prob = 1-5/100),]
 top5 = GTS_CSWY_50kb[GTS_CSWY_50kb$FST_mean > quantile(GTS_CSWY_50kb$FST_mean, 
                                              prob = 1-5/100),]
-write_csv(top5, 
-          'GTS_CSWY_50Kb_Fst_outlier.csv')
+# write_csv(top5, 
+#           'GTS_CSWY_50Kb_Fst_outlier.csv')
+
+
+WC_top5 = read_csv('WC_50Kb_Fst_outlier.csv')
+ASHN_top5 = read_csv('ASHN_50Kb_Fst_outlier.csv')
+MYV_top5 = read_csv('MYV_50Kb_Fst_outlier.csv')
+SKR_top5 = read_csv('SKR_50Kb_Fst_outlier.csv')
+GTS_CSWY_top5 = read_csv('GTS_CSWY_50Kb_Fst_outlier.csv')
+
+## no overlap??
+intersect(SKR_top5, 
+          GTS_CSWY_top5, 
+          by = c('CHR', 
+                 'win_mid'))
+
+
+# FST 50kb region manhattan plot ------------------------------------------
+
+
+
 
 # LFMM Analysis -----------------------------------------------------------
 
