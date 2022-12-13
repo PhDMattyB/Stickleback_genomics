@@ -138,9 +138,80 @@ Fst_manhattan = function(non_outs,
 }
 
 
+# Sliding window functions ------------------------------------------------
+
+
 Mb_Conversion = function(data){
   data %>% 
     group_by(AC_CHR) %>% 
     mutate(win_mid_mb = win_mid/1000000)
+}
+
+SW_dist_cal = function(data){
+  data %>% 
+    group_by(CHR) %>% 
+    summarise(chr_len = max(win_mid)) %>% 
+    mutate(total = cumsum(chr_len)-chr_len) %>% 
+    dplyr::select(-chr_len) %>% 
+    left_join(data, ., by = c('CHR'='CHR')) %>%
+    arrange(CHR, 
+            win_mid) %>% 
+    mutate(BPcum = win_mid + total) 
+}
+
+
+SW_axis_df = function(data){
+  data %>% 
+    group_by(CHR) %>% 
+    summarize(center=(max(BPcum) + min(BPcum))/2 )  
+}
+
+
+
+SW_Fst_manhattan = function(non_outs, 
+                         outs, 
+                         axisdf,
+                         xval, 
+                         yval, 
+                         chr, 
+                         out_col = '', 
+                         plot_letter = ''){
+  ggplot(non_outs, 
+         aes(x = {{xval}}, 
+             y = {{yval}}))+
+    # plot the non outliers in grey
+    geom_point(aes(color = as.factor(chr)), 
+               alpha = 0.8, 
+               size = 1.3)+
+    ## alternate colors per chromosome
+    scale_color_manual(values = rep(c("grey", "dimgrey"), 39))+
+    ## plot the outliers on top of everything
+    ## currently digging this hot pink colour
+    geom_point(data = outs,
+               col = out_col,
+               alpha=0.8, 
+               size=1.3)+
+    scale_x_continuous(label = axisdf$CHR, 
+                       breaks = axisdf$center)+
+    scale_y_continuous(expand = c(0, 0), 
+                       limits = c(0,1.0))+
+    # geom_hline(yintercept = 0.00043, 
+    #            linetype = 2, 
+    #            col = 'Black')+
+    # ylim(0,1.0)+
+    # scale_y_reverse(expand = c(0, 0))+
+    # remove space between plot area and x axis
+    labs(x = 'Cumulative base pair', 
+         y = 'Fst', 
+         title = plot_letter)+
+    theme(legend.position="none",
+          # panel.border = element_blank(),
+          panel.grid.major.x = element_blank(),
+          panel.grid.minor.x = element_blank(), 
+          axis.text.x = element_text(size = 9, 
+                                     angle = 90), 
+          axis.title = element_text(size = 14),
+          axis.title.x = element_blank(),
+          axis.text.y = element_text(size = 12))
 }
 

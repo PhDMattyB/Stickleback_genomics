@@ -1229,21 +1229,61 @@ top5 = GTS_CSWY_50kb[GTS_CSWY_50kb$FST_mean > quantile(GTS_CSWY_50kb$FST_mean,
 #           'GTS_CSWY_50Kb_Fst_outlier.csv')
 
 
-WC_top5 = read_csv('WC_50Kb_Fst_outlier.csv')
-ASHN_top5 = read_csv('ASHN_50Kb_Fst_outlier.csv')
-MYV_top5 = read_csv('MYV_50Kb_Fst_outlier.csv')
-SKR_top5 = read_csv('SKR_50Kb_Fst_outlier.csv')
-GTS_CSWY_top5 = read_csv('GTS_CSWY_50Kb_Fst_outlier.csv')
-
-## no overlap??
-intersect(SKR_top5, 
-          GTS_CSWY_top5, 
-          by = c('CHR', 
-                 'win_mid'))
-
 
 # FST 50kb region manhattan plot ------------------------------------------
+WC_top5 = read_csv('WC_50Kb_Fst_outlier.csv')
+WC_50kb = read_tsv('WC_Fst_50Kb_3obs_window.txt')
+WC_50kb_neutral = anti_join(WC_50kb, 
+          WC_top5)
 
+ASHN_50kb = read_tsv('ASHN_Fst_50Kb_3obs_window.txt')
+ASHN_top5 = read_csv('ASHN_50Kb_Fst_outlier.csv')
+ASHN_50_neutral = anti_join(ASHN_50kb, 
+                            ASHN_top5)
+
+MYV_50kb = read_tsv('MYV_Fst_50Kb_3obs_window.txt')
+MYV_top5 = read_csv('MYV_50Kb_Fst_outlier.csv')
+MYV_50_neutral = anti_join(MYV_50kb, 
+                            MYV_top5)
+
+SKR_50kb = read_tsv('SKR_Fst_50Kb_3obs_window.txt')
+SKR_top5 = read_csv('SKR_50Kb_Fst_outlier.csv')
+SKR_50_neutral = anti_join(SKR_50kb, 
+                            SKR_top5)
+
+
+GTS_CSWY_top5 = read_csv('GTS_CSWY_50Kb_Fst_outlier.csv')
+GTS_CSWY_50kb = read_tsv('GTS_CSWY_Fst_50Kb_3obs_window.txt')
+GTS_CSWY_50_neutral = anti_join(GTS_CSWY_50kb, 
+                            GTS_CSWY_top5)
+
+ggplot(data = WC_50kb_neutral, 
+         aes(x = win_mid,
+             y = FST_mean, 
+             group = CHR)) +
+  geom_point(col = 'grey49')+
+    geom_point(data = WC_top5, 
+               aes(x = win_mid, 
+                   y = FST_mean, 
+                   group = CHR), 
+               col = '#ef233c')+
+  facet_grid(~ CHR, 
+             scales = 'free')+
+  labs(x = 'Chromosomal position', 
+       y = 'Fst')+
+  ylim(0.00, 1.00)+
+  theme(panel.grid = element_blank(), 
+        # axis.text.x = element_blank(),
+        axis.text.x = element_text(size = 9,
+                                   angle = 90,
+                                   hjust = 1),
+        axis.ticks.x = element_blank(),
+        strip.text = element_text(face = 'bold',
+                                  size = 10),
+        strip.background = element_rect(fill = 'white',
+                                        colour = 'black'), 
+        plot.title = element_text(size = 12,
+                                  face = 'bold'))
 
 
 
