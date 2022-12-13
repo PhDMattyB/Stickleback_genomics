@@ -1253,8 +1253,9 @@ GTS_CSWY_25kb %>%
 
 
 WC_25_top5 %>% 
-  filter(FST_mean >= 0.018, 
-         CHR == 'chr_XIII') %>% 
+  filter(FST_mean >= 0.04) %>% 
+  # filter(FST_mean >= 0.018, 
+  #        CHR == 'chr_XIX') %>% 
   View()
 
 WC_25_top5 = read_csv('WC_25Kb_Fst_outlier.csv') 
