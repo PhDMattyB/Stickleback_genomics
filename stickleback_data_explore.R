@@ -1231,31 +1231,81 @@ top5 = GTS_CSWY_50kb[GTS_CSWY_50kb$FST_mean > quantile(GTS_CSWY_50kb$FST_mean,
 
 
 # FST 50kb region manhattan plot ------------------------------------------
-WC_top5 = read_csv('WC_50Kb_Fst_outlier.csv')
-WC_50kb = read_tsv('WC_Fst_50Kb_3obs_window.txt')
+WC_top5 = read_csv('WC_50Kb_Fst_outlier.csv') %>% 
+  stickle_CHR_reorder() %>% 
+  SW_dist_cal()
+WC_50kb = read_tsv('WC_Fst_50Kb_3obs_window.txt') %>% 
+  stickle_CHR_reorder() %>% 
+  SW_dist_cal()
 WC_50kb_neutral = anti_join(WC_50kb, 
-          WC_top5)
+          WC_top5) %>% 
+  stickle_CHR_reorder() %>% 
+  SW_dist_cal()
+WC_axis_df = axis_df(WC_50kb_neutral)
 
-ASHN_50kb = read_tsv('ASHN_Fst_50Kb_3obs_window.txt')
-ASHN_top5 = read_csv('ASHN_50Kb_Fst_outlier.csv')
+WC_region_man = Fst_manhattan(non_outs = WC_50kb_neutral, 
+                              outs = WC_top5, 
+                              axisdf = WC_axis_df, 
+                              xval = BPcum, 
+                              yval = FST_mean, 
+                              chr = WC_50kb_neutral$CHR,
+                              out_col = '#ef233c', 
+                              plot_letter = 'E)')
+
+
+ASHN_50kb = read_tsv('ASHN_Fst_50Kb_3obs_window.txt') %>% 
+  stickle_CHR_reorder() %>% 
+  SW_dist_cal()
+ASHN_top5 = read_csv('ASHN_50Kb_Fst_outlier.csv')%>% 
+  stickle_CHR_reorder() %>% 
+  SW_dist_cal()
 ASHN_50_neutral = anti_join(ASHN_50kb, 
-                            ASHN_top5)
+                            ASHN_top5)%>% 
+  stickle_CHR_reorder() %>% 
+  SW_dist_cal()
+ASHN_axis_df = axis_df(ASHN_50kb)
 
-MYV_50kb = read_tsv('MYV_Fst_50Kb_3obs_window.txt')
-MYV_top5 = read_csv('MYV_50Kb_Fst_outlier.csv')
+MYV_50kb = read_tsv('MYV_Fst_50Kb_3obs_window.txt') %>% 
+  stickle_CHR_reorder() %>% 
+  SW_dist_cal()
+MYV_top5 = read_csv('MYV_50Kb_Fst_outlier.csv')%>% 
+  stickle_CHR_reorder() %>% 
+  SW_dist_cal()
 MYV_50_neutral = anti_join(MYV_50kb, 
-                            MYV_top5)
+                            MYV_top5)%>% 
+  stickle_CHR_reorder() %>% 
+  SW_dist_cal()
+MYV_axis_df = axis_df(MYV_50kb)
 
-SKR_50kb = read_tsv('SKR_Fst_50Kb_3obs_window.txt')
-SKR_top5 = read_csv('SKR_50Kb_Fst_outlier.csv')
+SKR_50kb = read_tsv('SKR_Fst_50Kb_3obs_window.txt') %>% 
+  stickle_CHR_reorder() %>% 
+  SW_dist_cal()
+SKR_top5 = read_csv('SKR_50Kb_Fst_outlier.csv')%>% 
+  stickle_CHR_reorder() %>% 
+  SW_dist_cal()
 SKR_50_neutral = anti_join(SKR_50kb, 
-                            SKR_top5)
+                            SKR_top5)%>% 
+  stickle_CHR_reorder() %>% 
+  SW_dist_cal()
+SKR_axis_df = axis_df(SKR_50kb)
 
 
-GTS_CSWY_top5 = read_csv('GTS_CSWY_50Kb_Fst_outlier.csv')
-GTS_CSWY_50kb = read_tsv('GTS_CSWY_Fst_50Kb_3obs_window.txt')
+GTS_CSWY_top5 = read_csv('GTS_CSWY_50Kb_Fst_outlier.csv')%>% 
+  stickle_CHR_reorder() %>% 
+  SW_dist_cal()
+GTS_CSWY_50kb = read_tsv('GTS_CSWY_Fst_50Kb_3obs_window.txt') %>% 
+  stickle_CHR_reorder() %>% 
+  SW_dist_cal()
 GTS_CSWY_50_neutral = anti_join(GTS_CSWY_50kb, 
-                            GTS_CSWY_top5)
+                            GTS_CSWY_top5)%>% 
+  stickle_CHR_reorder() %>% 
+  SW_dist_cal()
+GTS_CSWY_axis_df = axis_df(GTS_CSWY_50kb)
+
+
+
+
+## use new functions to make the manhattan plot? 
 
 ggplot(data = WC_50kb_neutral, 
          aes(x = win_mid,
