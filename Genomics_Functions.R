@@ -136,3 +136,11 @@ Fst_manhattan = function(non_outs,
           axis.title.x = element_blank(),
           axis.text.y = element_text(size = 12))
 }
+
+
+Mb_Conversion = function(data){
+  data %>% 
+    group_by(AC_CHR) %>% 
+    mutate(win_mid_mb = win_mid/1000000)
+}
+
