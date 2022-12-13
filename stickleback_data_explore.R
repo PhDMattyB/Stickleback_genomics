@@ -1210,10 +1210,23 @@ write_tsv(fst_position,
 # FST outliers 50Kb regions ------------------------------------------------
 ## already filtered for the FST_n containing at least 3 observations
 WC_50kb = read_tsv('WC_Fst_50Kb_3obs_window.txt')
+ASHN_50kb = read_tsv('ASHN_Fst_50Kb_3obs_window.txt')
+MYV_50kb = read_tsv('MYV_Fst_50Kb_3obs_window.txt')
+SKR_50kb = read_tsv('SKR_Fst_50Kb_3obs_window.txt')
+GTS_CSWY_50kb = read_tsv('GTS_CSWY_Fst_50Kb_3obs_window.txt')
 
-
-
-
+# top5 = WC_50kb[WC_50kb$FST_mean > quantile(WC_50kb$FST_mean, 
+#                                      prob = 1-5/100),]
+# top5 = ASHN_50kb[ASHN_50kb$FST_mean > quantile(ASHN_50kb$FST_mean, 
+#                                            prob = 1-5/100),]
+# top5 = MYV_50kb[MYV_50kb$FST_mean > quantile(MYV_50kb$FST_mean, 
+#                                                prob = 1-5/100),]
+# top5 = SKR_50kb[SKR_50kb$FST_mean > quantile(SKR_50kb$FST_mean, 
+#                                              prob = 1-5/100),]
+top5 = GTS_CSWY_50kb[GTS_CSWY_50kb$FST_mean > quantile(GTS_CSWY_50kb$FST_mean, 
+                                             prob = 1-5/100),]
+write_csv(top5, 
+          'GTS_CSWY_50Kb_Fst_outlier.csv')
 
 # LFMM Analysis -----------------------------------------------------------
 
