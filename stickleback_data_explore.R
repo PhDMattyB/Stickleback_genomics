@@ -1205,6 +1205,16 @@ write_tsv(fst_position,
           'GTS_CSWY_Fst_50Kb_3obs_window.txt')
 
 ##
+
+
+# FST outliers 50Kb regions ------------------------------------------------
+## already filtered for the FST_n containing at least 3 observations
+WC_50kb = read_tsv('WC_Fst_50Kb_3obs_window.txt')
+
+
+
+
+
 # LFMM Analysis -----------------------------------------------------------
 
 convert = geno2lfmm("stickleback_data.geno", 
