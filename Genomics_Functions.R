@@ -165,5 +165,4 @@ SW_top_5_outliers = function(data){
  
    data[data$FST_mean > quantile(data$FST_mean, 
                                 prob = 1-5/100),]
-  data
 }
