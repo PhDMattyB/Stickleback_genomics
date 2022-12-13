@@ -1166,43 +1166,66 @@ Three_analysis_outs = inner_join(FST_outs_LFMM,
 ## per population FST outliers
 # ASHN_Fst_clean = read_csv('ASHN_Fst_clean.csv') %>%
 #   stickle_CHR_reorder() %>%
-# dist_cal() 
-# MYV_Fst_clean = read_csv('MYV_Fst_clean.csv') %>%
-#   stickle_CHR_reorder() %>%
-#   dist_cal()
+# dist_cal()
+MYV_Fst_clean = read_csv('MYV_Fst_clean.csv') %>%
+  stickle_CHR_reorder() %>%
+  dist_cal()
 # SKR_Fst_clean = read_csv('SKR_Fst_clean.csv') %>%
 #   stickle_CHR_reorder() %>%
 #   dist_cal()
-GTS_CSWY_Fst_clean = read_csv('GTS_CSWY_Fst_clean.csv') %>%
-  stickle_CHR_reorder() %>%
-  dist_cal()
+# GTS_CSWY_Fst_clean = read_csv('GTS_CSWY_Fst_clean.csv') %>%
+#   stickle_CHR_reorder() %>%
+#   dist_cal()
 
 ##Common FST outliers
 # WC_Fst_clean_all = read_csv('WC_Fst_clean.csv') %>%
 #   stickle_CHR_reorder() %>%
 #   dist_cal()
 
-## sliding window analysis for 50Kb windows
-## with 1Kb overlap between windows
-fst_position = winScan(x = GTS_CSWY_Fst_clean, 
+## 25kb
+fst_25_position = winScan(x = MYV_Fst_clean, 
                        groups = 'CHR', 
                        position = 'POS',
                        values = 'FST', 
-                       win_size = 50000, 
-                       win_step = 49000, 
+                       win_size = 25000, 
+                       win_step = 24999, 
                        funs = c('mean', 'sd'))
 
-fst_position = fst_position %>%
+fst_25_position = fst_25_position %>%
   as_tibble() %>% 
-  filter(FST_n >= 3)
+  filter(FST_n >= 3) %>% 
+  write_tsv('MYV_Fst_25kb_3obs_window.txt')
 ## Write the txt file for each window size. 
 ## Need to compare the different window sizes to see which one
 ## is the most appropriate. 
 ## small window size == greater chance for false positives
 ## large window size == less chance to find differences
 
-write_tsv(fst_position, 
-          'GTS_CSWY_Fst_50Kb_3obs_window.txt')
+# write_tsv(fst_25_position, 
+#           'MYV_Fst_25Kb_3obs_window.txt')
+# 
+
+## sliding window analysis for 50Kb windows
+## with 1Kb overlap between windows
+# fst_position = winScan(x = GTS_CSWY_Fst_clean, 
+#                        groups = 'CHR', 
+#                        position = 'POS',
+#                        values = 'FST', 
+#                        win_size = 50000, 
+#                        win_step = 49000, 
+#                        funs = c('mean', 'sd'))
+# 
+# fst_position = fst_position %>%
+#   as_tibble() %>% 
+#   filter(FST_n >= 3)
+# ## Write the txt file for each window size. 
+# ## Need to compare the different window sizes to see which one
+# ## is the most appropriate. 
+# ## small window size == greater chance for false positives
+# ## large window size == less chance to find differences
+# 
+# write_tsv(fst_position, 
+#           'GTS_CSWY_Fst_50Kb_3obs_window.txt')
 
 ##
 
@@ -1214,7 +1237,8 @@ ASHN_50kb = read_tsv('ASHN_Fst_50Kb_3obs_window.txt')
 MYV_50kb = read_tsv('MYV_Fst_50Kb_3obs_window.txt')
 SKR_50kb = read_tsv('SKR_Fst_50Kb_3obs_window.txt')
 GTS_CSWY_50kb = read_tsv('GTS_CSWY_Fst_50Kb_3obs_window.txt')
-
+WC_25kb = read_tsv('WC_Fst_25Kb_3obs_window.txt')
+ASHN_25kb = read_tsv('ASHN_Fst_25Kb_3obs_window.txt')
 # top5 = WC_50kb[WC_50kb$FST_mean > quantile(WC_50kb$FST_mean, 
 #                                      prob = 1-5/100),]
 # top5 = ASHN_50kb[ASHN_50kb$FST_mean > quantile(ASHN_50kb$FST_mean, 
@@ -1223,11 +1247,62 @@ GTS_CSWY_50kb = read_tsv('GTS_CSWY_Fst_50Kb_3obs_window.txt')
 #                                                prob = 1-5/100),]
 # top5 = SKR_50kb[SKR_50kb$FST_mean > quantile(SKR_50kb$FST_mean, 
 #                                              prob = 1-5/100),]
-top5 = GTS_CSWY_50kb[GTS_CSWY_50kb$FST_mean > quantile(GTS_CSWY_50kb$FST_mean, 
-                                             prob = 1-5/100),]
-# write_csv(top5, 
-#           'GTS_CSWY_50Kb_Fst_outlier.csv')
 
+ASHN_25kb %>% 
+  SW_top_5_outliers() %>% 
+  write_csv('ASHN_25Kb_Fst_outlier.csv')
+
+
+
+# FST 25kb manhattan plot -------------------------------------------------
+
+WC_25_top5 = read_csv('WC_25Kb_Fst_outlier.csv') 
+WC_25kb = read_tsv('WC_Fst_25Kb_3obs_window.txt') 
+
+WC_25_window = Fst_manhatan_format(Fst_data = WC_50kb, 
+                                   Fst_outliers = WC_25_top5) %>% 
+  stickle_CHR_reorder() %>% 
+  SW_dist_cal()
+WC_25_axis_df = axis_df(WC_25_window)
+
+outs = WC_25_window %>% 
+  filter(value == 'Outlier')
+neutral = WC_25_window %>% 
+  filter(value == 'Neutral')
+
+
+WC_25_region_man = Fst_manhattan(non_outs = neutral, 
+                              outs = outs, 
+                              axisdf = WC_25_axis_df, 
+                              xval = BPcum, 
+                              yval = FST_mean, 
+                              chr = neutral$CHR,
+                              out_col = '#ef233c', 
+                              plot_letter = 'E)')
+
+ASHN_25_top5 = read_csv('ASHN_25Kb_Fst_outlier.csv') 
+ASHN_25kb = read_tsv('ASHN_Fst_25Kb_3obs_window.txt') 
+
+ASHN_25_window = Fst_manhatan_format(Fst_data = ASHN_50kb, 
+                                   Fst_outliers = ASHN_25_top5) %>% 
+  stickle_CHR_reorder() %>% 
+  SW_dist_cal()
+ASHN_25_axis_df = axis_df(ASHN_25_window)
+
+outs = ASHN_25_window %>% 
+  filter(value == 'Outlier')
+neutral = ASHN_25_window %>% 
+  filter(value == 'Neutral')
+
+
+ASHN_25_region_man = Fst_manhattan(non_outs = neutral, 
+                                 outs = outs, 
+                                 axisdf = ASHN_25_axis_df, 
+                                 xval = BPcum, 
+                                 yval = FST_mean, 
+                                 chr = neutral$CHR,
+                                 out_col = '#06d6a0', 
+                                 plot_letter = 'A)')
 
 
 # FST 50kb region manhattan plot ------------------------------------------
@@ -1283,78 +1358,88 @@ ASHN_region_man = Fst_manhattan(non_outs = neutral,
 
 
 
-MYV_50kb = read_tsv('MYV_Fst_50Kb_3obs_window.txt') %>% 
+MYV_50kb = read_tsv('MYV_Fst_50Kb_3obs_window.txt')
+MYV_top5 = read_csv('MYV_50Kb_Fst_outlier.csv')
+MYV_window_df = Fst_manhatan_format(Fst_data = MYV_50kb, 
+                                    Fst_outliers = MYV_top5) %>% 
   stickle_CHR_reorder() %>% 
   SW_dist_cal()
-MYV_top5 = read_csv('MYV_50Kb_Fst_outlier.csv')%>% 
+MYV_axis_df = axis_df(MYV_window_df)
+outs = MYV_window_df %>% 
+  filter(value == 'Outlier')
+neutral = MYV_window_df %>% 
+  filter(value == 'Neutral')
+
+MYV_region_man = Fst_manhattan(non_outs = neutral, 
+                                outs = outs, 
+                                axisdf = MYV_axis_df, 
+                                xval = BPcum, 
+                                yval = FST_mean, 
+                                chr = neutral$CHR,
+                                out_col = '#d62828', 
+                                plot_letter = 'B)')
+
+
+SKR_50kb = read_tsv('SKR_Fst_50Kb_3obs_window.txt') 
+SKR_top5 = read_csv('SKR_50Kb_Fst_outlier.csv')
+SKR_window_df = Fst_manhatan_format(Fst_data = SKR_50kb, 
+                                    Fst_outliers = SKR_top5) %>% 
   stickle_CHR_reorder() %>% 
   SW_dist_cal()
-MYV_50_neutral = anti_join(MYV_50kb, 
-                            MYV_top5)%>% 
+SKR_axis_df = axis_df(SKR_window_df)
+outs = SKR_window_df %>% 
+  filter(value == 'Outlier')
+neutral = SKR_window_df %>% 
+  filter(value == 'Neutral')
+SKR_region_man = Fst_manhattan(non_outs = neutral, 
+                               outs = outs, 
+                               axisdf = MYV_axis_df, 
+                               xval = BPcum, 
+                               yval = FST_mean, 
+                               chr = neutral$CHR,
+                               out_col = '#5f0f40', 
+                               plot_letter = 'C)')
+
+
+GTS_CSWY_top5 = read_csv('GTS_CSWY_50Kb_Fst_outlier.csv')
+GTS_CSWY_50kb = read_tsv('GTS_CSWY_Fst_50Kb_3obs_window.txt') 
+GTS_CSWY_window_df = Fst_manhatan_format(Fst_data = GTS_CSWY_50kb, 
+                                         Fst_outliers = GTS_CSWY_top5) %>% 
   stickle_CHR_reorder() %>% 
   SW_dist_cal()
-MYV_axis_df = axis_df(MYV_50kb)
 
-SKR_50kb = read_tsv('SKR_Fst_50Kb_3obs_window.txt') %>% 
-  stickle_CHR_reorder() %>% 
-  SW_dist_cal()
-SKR_top5 = read_csv('SKR_50Kb_Fst_outlier.csv')%>% 
-  stickle_CHR_reorder() %>% 
-  SW_dist_cal()
-SKR_50_neutral = anti_join(SKR_50kb, 
-                            SKR_top5)%>% 
-  stickle_CHR_reorder() %>% 
-  SW_dist_cal()
-SKR_axis_df = axis_df(SKR_50kb)
+GTS_CSWY_axis_df = axis_df(GTS_CSWY_window_df)
 
+outs = GTS_CSWY_window_df %>% 
+  filter(value == 'Outlier')
+neutral = GTS_CSWY_window_df %>% 
+  filter(value == 'Neutral')
 
-GTS_CSWY_top5 = read_csv('GTS_CSWY_50Kb_Fst_outlier.csv')%>% 
-  stickle_CHR_reorder() %>% 
-  SW_dist_cal()
-GTS_CSWY_50kb = read_tsv('GTS_CSWY_Fst_50Kb_3obs_window.txt') %>% 
-  stickle_CHR_reorder() %>% 
-  SW_dist_cal()
-GTS_CSWY_50_neutral = anti_join(GTS_CSWY_50kb, 
-                            GTS_CSWY_top5)%>% 
-  stickle_CHR_reorder() %>% 
-  SW_dist_cal()
-GTS_CSWY_axis_df = axis_df(GTS_CSWY_50kb)
+GTS_CSWY_region_man = Fst_manhattan(non_outs = neutral, 
+                               outs = outs, 
+                               axisdf = GTS_CSWY_axis_df, 
+                               xval = BPcum, 
+                               yval = FST_mean, 
+                               chr = neutral$CHR,
+                               out_col = '#264653', 
+                               plot_letter = 'D)')
 
 
+Fst_region_combo = (ASHN_region_man|MYV_region_man)/(SKR_region_man|GTS_CSWY_region_man)|WC_region_man
 
 
-## use new functions to make the manhattan plot? 
+## ggsave that plot
 
-ggplot(data = WC_50kb_neutral, 
-         aes(x = win_mid,
-             y = FST_mean, 
-             group = CHR)) +
-  geom_point(col = 'grey49')+
-    geom_point(data = WC_top5, 
-               aes(x = win_mid, 
-                   y = FST_mean, 
-                   group = CHR), 
-               col = '#ef233c')+
-  facet_grid(~ CHR, 
-             scales = 'free')+
-  labs(x = 'Chromosomal position', 
-       y = 'Fst')+
-  ylim(0.00, 1.00)+
-  theme(panel.grid = element_blank(), 
-        # axis.text.x = element_blank(),
-        axis.text.x = element_text(size = 9,
-                                   angle = 90,
-                                   hjust = 1),
-        axis.ticks.x = element_blank(),
-        strip.text = element_text(face = 'bold',
-                                  size = 10),
-        strip.background = element_rect(fill = 'white',
-                                        colour = 'black'), 
-        plot.title = element_text(size = 12,
-                                  face = 'bold'))
+ggsave(file = 'stickleback_FST_50KB_manhattan_plot.tiff', 
+       path = 'C:/Stickleback_Genomic/Figures/', 
+       plot = Fst_region_combo, 
+       dpi = 'retina', 
+       units = 'cm', 
+       width = 40, 
+       height = 20)
 
 
-
+##
 # LFMM Analysis -----------------------------------------------------------
 
 convert = geno2lfmm("stickleback_data.geno", 

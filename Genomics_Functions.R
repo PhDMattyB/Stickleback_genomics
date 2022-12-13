@@ -138,6 +138,7 @@ Fst_manhattan = function(non_outs,
 }
 
 
+
 # Sliding window functions ------------------------------------------------
 
 
@@ -159,3 +160,10 @@ SW_dist_cal = function(data){
     mutate(BPcum = win_mid + total) 
 }
 
+
+SW_top_5_outliers = function(data){
+ 
+   data[data$FST_mean > quantile(data$FST_mean, 
+                                prob = 1-5/100),]
+  data
+}
