@@ -1259,11 +1259,50 @@ ASHN_50kb = read_tsv('ASHN_Fst_50Kb_3obs_window.txt') %>%
 ASHN_top5 = read_csv('ASHN_50Kb_Fst_outlier.csv')%>% 
   stickle_CHR_reorder() %>% 
   SW_dist_cal()
-ASHN_50_neutral = anti_join(ASHN_50kb, 
-                            ASHN_top5)%>% 
-  stickle_CHR_reorder() %>% 
-  SW_dist_cal()
+ASHN_50kb_neutral = anti_join(ASHN_50kb, 
+                            ASHN_top5)
 ASHN_axis_df = axis_df(ASHN_50kb)
+ASHN_region_man = Fst_manhattan(non_outs = ASHN_50kb_neutral, 
+                              outs = ASHN_top5, 
+                              axisdf = ASHN_axis_df, 
+                              xval = BPcum, 
+                              yval = FST_mean, 
+                              chr = ASHN_50kb_neutral$CHR,
+                              out_col = '#06d6a0', 
+                              plot_letter = 'A)')
+
+
+ggplot(ASHN_50kb_neutral, 
+       aes(x = BPcum, 
+           y = FST_mean))+
+  # plot the non outliers in grey
+  geom_point(aes(color = as.factor(ASHN_50kb_neutral$CHR)), 
+             alpha = 0.8, 
+             size = 1.3)+
+  ## alternate colors per chromosome
+  scale_color_manual(values = rep(c("grey", "dimgrey"), 39))+
+  ## plot the outliers on top of everything
+  ## currently digging this hot pink colour
+  # geom_point(data = ASHN_top5,
+  #            col = '#06d6a0',
+  #            alpha=0.8, 
+  #            size=1.3)+
+  scale_x_continuous(label = ASHN_axis_df$CHR, 
+                     breaks = ASHN_axis_df$center)+
+  scale_y_continuous(expand = c(0, 0), 
+                     limits = c(0,1.0))+
+  labs(x = 'Cumulative base pair', 
+       y = 'Fst', 
+       title = 'A)')+
+  theme(legend.position="none",
+        # panel.border = element_blank(),
+        panel.grid.major.x = element_blank(),
+        panel.grid.minor.x = element_blank(), 
+        axis.text.x = element_text(size = 9, 
+                                   angle = 90), 
+        axis.title = element_text(size = 14),
+        axis.title.x = element_blank(),
+        axis.text.y = element_text(size = 12))
 
 MYV_50kb = read_tsv('MYV_Fst_50Kb_3obs_window.txt') %>% 
   stickle_CHR_reorder() %>% 
