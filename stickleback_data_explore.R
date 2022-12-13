@@ -1249,6 +1249,19 @@ GTS_CSWY_25kb %>%
 
 
 
+# Fst 25kb outlier overlap ------------------------------------------------
+WC_25_top5 = read_csv('WC_25Kb_Fst_outlier.csv') 
+MYV_25_top5 = read_csv('MYV_25Kb_Fst_outlier.csv') 
+ASHN_25_top5 = read_csv('ASHN_25Kb_Fst_outlier.csv') 
+SKR_25_top5 = read_csv('SKR_25Kb_Fst_outlier.csv') 
+GTS_CSWY_25_top5 = read_csv('GTS_CSWY_25Kb_Fst_outlier.csv') 
+
+intersect(GTS_CSWY_25_top5,
+          SKR_25_top5, 
+          by = c('CHR',
+                 'win_mid'))
+
+
 # FST 25kb manhattan plot -------------------------------------------------
 
 
@@ -1309,6 +1322,7 @@ ASHN_25_region_man = Fst_manhattan(non_outs = neutral,
 
 
 MYV_25_top5 = read_csv('MYV_25Kb_Fst_outlier.csv') 
+
 MYV_25kb = read_tsv('MYV_Fst_25Kb_3obs_window.txt') 
 
 MYV_25_window = Fst_manhatan_format(Fst_data = MYV_25kb, 
@@ -1331,8 +1345,6 @@ MYV_25_region_man = Fst_manhattan(non_outs = neutral,
                                    chr = neutral$CHR,
                                    out_col = '#d62828', 
                                    plot_letter = 'B)')
-
-
 
 SKR_25_top5 = read_csv('SKR_25Kb_Fst_outlier.csv') 
 SKR_25kb = read_tsv('SKR_Fst_25Kb_3obs_window.txt') 
