@@ -1090,6 +1090,14 @@ Three_analysis_outs = inner_join(FST_outs_LFMM,
                   'SNP', 
                   'POS'))
 
+Three_analysis_outs %>% 
+  select(CHR, 
+         SNP, 
+         POS, 
+         FST_zero) %>% 
+  arrange(CHR) %>% 
+  View()
+
 # Three_analysis_outs %>%
 #   group_by(CHR) %>%
 #   summarise(n_outs = n(),
