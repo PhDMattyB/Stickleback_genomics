@@ -1096,6 +1096,9 @@ Three_analysis_outs %>%
          POS, 
          FST_zero) %>% 
   arrange(CHR) %>% 
+  filter(FST_zero >= 0.04) %>% 
+  # group_by(CHR) %>% 
+  # summarise(n = n()) %>% 
   View()
 
 # Three_analysis_outs %>%
