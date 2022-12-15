@@ -23,6 +23,7 @@ theme_set(theme_bw())
 
 setwd('C:/Stickleback_Genomic/vcf_filter/')
 
+##
 # pcadapt analysis --------------------------------------------------------
 
 stickle_pcadapt = read.pcadapt('stickleback_maf0.05_ldpruned_filtered.bed', 
@@ -1232,16 +1233,15 @@ fst_25_position = fst_25_position %>%
 
 # FST outliers 50Kb regions ------------------------------------------------
 ## already filtered for the FST_n containing at least 3 observations
-WC_50kb = read_tsv('WC_Fst_50Kb_3obs_window.txt')
-ASHN_50kb = read_tsv('ASHN_Fst_50Kb_3obs_window.txt')
-MYV_50kb = read_tsv('MYV_Fst_50Kb_3obs_window.txt')
-SKR_50kb = read_tsv('SKR_Fst_50Kb_3obs_window.txt')
-GTS_CSWY_50kb = read_tsv('GTS_CSWY_Fst_50Kb_3obs_window.txt')
-WC_25kb = read_tsv('WC_Fst_25Kb_3obs_window.txt')
+# WC_50kb = read_tsv('WC_Fst_50Kb_3obs_window.txt')
+# ASHN_50kb = read_tsv('ASHN_Fst_50Kb_3obs_window.txt')
+# MYV_50kb = read_tsv('MYV_Fst_50Kb_3obs_window.txt')
+# SKR_50kb = read_tsv('SKR_Fst_50Kb_3obs_window.txt')
+# GTS_CSWY_50kb = read_tsv('GTS_CSWY_Fst_50Kb_3obs_window.txt')
+# WC_25kb = read_tsv('WC_Fst_25Kb_3obs_window.txt')
 ASHN_25kb = read_tsv('ASHN_Fst_25Kb_3obs_window.txt')
 MYV_25kb = read_tsv('MYV_Fst_25Kb_3obs_window.txt')
 SKR_25kb = read_tsv('SKR_Fst_25Kb_3obs_window.txt')
-
 GTS_CSWY_25kb = read_tsv('GTS_CSWY_Fst_25Kb_3obs_window.txt')
 GTS_CSWY_25kb %>% 
   SW_top_5_outliers() %>% 
