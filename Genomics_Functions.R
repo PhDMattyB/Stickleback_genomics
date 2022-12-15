@@ -138,6 +138,28 @@ Fst_manhattan = function(non_outs,
 }
 
 
+# this function takes a .gff or .gff3 file and creates a tibble
+# arguments:
+# filename -  the name of the gff file
+# lead_skip - this argument specifies the
+# chromosome - the chromosome to subset from the full gff, default is 'all' and no subset is performed.
+read_gff = function(filename, lead_skip = 9, chromosome = "all"){
+  #CAM - personally I would pass a vector of names to the read_tsv as opposed to renaming in the pipe (this could be an argument too).
+  colnames = c("chr", "source", "feature", "start", "end", "score", "strand", "frame", "attribute" )
+  #read in the raw file with readr
+  gff = read_tsv(filename, col_names = colnames, skip = lead_skip) %>%
+    filter(feature %in% c('gene', 'CDS')) %>%
+    arrange(start, end) %>% 
+    mutate(mid = start + (end-start)/2) ## arrange each gene by its start and end points on each chromosome
+  #subset if user changed the chromosome argument
+  if(chromosome != "all"){
+    sub_gff = gff %>% filter(chr == chromosome)
+    return(sub_gff)
+  }
+  #if the default chr arg was not changed, return full gff
+  return(gff)
+}
+
 
 # Sliding window functions ------------------------------------------------
 
