@@ -1277,8 +1277,8 @@ intersect(GTS_CSWY_25_top5,
 
 
 WC_25_top5 %>% 
-  # filter(FST_mean >= 0.04) %>%
-  filter(FST_mean >= 0.03) %>% 
+  filter(FST_mean >= 0.04) %>%
+  # filter(FST_mean >= 0.03) %>% 
   # filter(FST_mean >= 0.018, 
   #        CHR == 'chr_XIX') %>% 
   View()
