@@ -994,12 +994,6 @@ ggsave(file = 'stickleback_FST_manhattan_plot.tiff',
 
 
 
-# Outlier - FST colocalization --------------------------------------------
-## Need to figure out if pcadapt, lfmm, and baypass outliers
-## colocalize to high FST snps
-
-
-
 
 # Outlier overlap ---------------------------------------------------------
 
