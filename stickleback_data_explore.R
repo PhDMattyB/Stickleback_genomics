@@ -1760,35 +1760,37 @@ popmap = read_tsv('Stickleback_afvaper_popmap_dup.txt',
                   col_names = F) %>% 
   as.data.frame()
 
-# popmap = popmap %>% 
-#   mutate(X3 = X1) %>% 
-#   as_tibble() %>% 
-#   dplyr::select(X1, 
-#                 X3, 
+# popmap = popmap %>%
+#   mutate(X3 = X1) %>%
+#   as_tibble() %>%
+#   dplyr::select(X1,
+#                 X3,
 #                 X2)
 # 
-# popmap$X4 <- paste0(popmap$X1, 
-#                     "_", 
+# popmap$X4 <- paste0(popmap$X1,
+#                     "_",
 #                     popmap$X3)
 # 
-# popmap %>% 
-#   select(X4, 
-#          X2) %>% 
-#   write_tsv('Stickleback_afvaper_popmap_dup.txt')
+# popmap %>%
+#   select(X4,
+#          X2) %>%
+#   write_tsv('Stickleback_afvaper_popmap_dup.txt', 
+#             col_names = F)
 
 
 # unique(popmap[,2])
 
 vector_list <- list(c("Warm","Cold"))
+names(vector_list) <- c("Cold")
 
 
 # Set our window size
-window_snps = 200
+window_snps = 50
 
 # Calculate Allele Frequency Change Vector Matrices
 AF_input <- calc_AF_vectors(vcf = chr1_vcf,
                             window_size = window_snps,
                             popmap = popmap,
                             vectors = vector_list,
-                            n_cores = 4,
+                            n_cores = 1,
                             data_type = "vcf")
