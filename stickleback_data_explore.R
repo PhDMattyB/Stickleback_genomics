@@ -1599,9 +1599,68 @@ library(afvaper)
 
 ## need to create a popmap file
 ## which has individual id then the ecotype id
-read_table2('stickle_filtered_chr_fix.ped', 
+popmap = read_table2('stickle_filtered_chr_fix.ped', 
          col_names = F) %>% 
   dplyr::select(1:2)
+
+View(popmap)
+
+popmap1 = popmap %>% 
+  slice(1:16) %>% 
+  separate(col = X1, 
+           into = c('garbage', 
+                    'Morph'), 
+           sep = '-') %>% 
+  separate(col = Morph, 
+           into = c('Morph', 
+                    'garbage'), 
+           sep = '_') %>% 
+  dplyr::select(Morph, 
+                X2)
+
+popmap2 = popmap %>% 
+  slice(17:86) %>% 
+  separate(col = X1, 
+           into = c('Garbage', 
+                    'Morph'), 
+           sep = '-') %>% 
+  separate(col = Morph, 
+           into = c('Morph', 
+                    'garbage'), 
+           sep = '_') %>% 
+  dplyr::select(Morph, 
+                X2) 
+
+popmap3 = popmap %>% 
+  slice(87:109) %>% 
+  separate(col = X1, 
+           into = c('garbage', 
+                    'Morph', 
+                    'garbage2'), 
+           sep = '_') %>% 
+  dplyr::select(Morph, 
+                X2)
+
+popmap = bind_rows(popmap1, 
+                   popmap2, 
+                   popmap3)
+
+popmap = mutate(.data = popmap,
+                      Ecotype = as.factor(case_when(
+                        Morph == 'ASHNC' ~ 'Cold',
+                        Morph == 'ASHNW' ~ 'Warm',
+                        Morph == 'CSWY' ~ 'Cold',
+                        Morph == 'GTS' ~ 'Warm',
+                        Morph == 'MYVC' ~ 'Cold',
+                        Morph == 'MYVW' ~ 'Warm',
+                        Morph == 'SKRC' ~ 'Cold',
+                        Morph == 'SKRW' ~ 'Warm'))) %>% 
+  dplyr::select(X2, 
+                Ecotype)
+
+write_tsv(popmap, 
+          'Stickleback_afvaper_popmap.txt', 
+          col_names = F)
 
 
 ## Need to split the genomic data for each individual chromosome
