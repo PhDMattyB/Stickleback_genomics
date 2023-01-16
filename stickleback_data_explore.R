@@ -1652,11 +1652,17 @@ Chr_convert(data = stickle_map) %>%
 ## second we need to read in the fasta file to determine
 ## the number of null parameters to calculate per chromosome
 
-chr_size = stickle_map %>% 
-  group_by(Chromosome) %>% 
+chr_size = Chr_convert(data = stickle_map) %>% 
+  dplyr::select(chr_num, 
+                SNP, 
+                Genetic_pos, 
+                Physical_pos) %>% 
+  # stickle_map %>% 
+  group_by(chr_num) %>% 
   summarize(min_BP = min(Physical_pos), 
             max_BP = max(Physical_pos)) %>% 
   mutate(chr_size = max_BP - min_BP) %>% 
+  rename(Chromosome = chr_num) %>% 
   dplyr::select(Chromosome, 
                 chr_size)
 
@@ -1668,4 +1674,6 @@ chr_perms = data.frame(chr = chr_size$Chromosome,
 
 # This gives us approximately 100000 null perms in total, 
 ##distributed across the genome according to relative size of chromosomes...
-chr_perms
+chr_perms %>% 
+  as_tibble() %>% 
+  arrange(chr)
