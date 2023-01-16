@@ -1589,7 +1589,7 @@ LFMM_Neutral_snps = anti_join(WC_Fst_clean_all,
 
 
 # af-vapeR ----------------------------------------------------------------
-library(remotes)
+# library(remotes)
 # remotes::install_github("JimWhiting91/afvaper")
 library(afvaper)
 library(vcfR)
@@ -1604,7 +1604,30 @@ library(seqinr)
 ## second we need to read in the fasta file to determine
 ## the number of null parameters to calculate per chromosome
 
-stickle_fasta = read.fasta('Stickleback_Filtered_Fasta.fa')
+## Fuck the fasta, you just need two columns for the chromosome and the size
+## of the chromosome. Just use the map file and calculate chromosome size. 
+
+stickle_map = read_tsv('stickleback_maf0.05_ldpruned_filtered.map', 
+                       col_names = c('Chromosome', 
+                                     'SNP', 
+                                     'Genetic_pos', 
+                                     'Physical_pos'))
 
 
+chr_size = stickle_map %>% 
+  group_by(Chromosome) %>% 
+  summarize(min_BP = min(Physical_pos), 
+            max_BP = max(Physical_pos)) %>% 
+  mutate(chr_size = max_BP - min_BP) %>% 
+  dplyr::select(Chromosome, 
+                chr_size)
 
+total_perms = 100000  
+
+chr_props = chr_size$chr_size/sum(chr_size$chr_size)
+chr_perms = data.frame(chr = chr_size$Chromosome, 
+                       perms = round(chr_props * total_perms))
+
+# This gives us approximately 100000 null perms in total, 
+##distributed across the genome according to relative size of chromosomes...
+chr_perms
