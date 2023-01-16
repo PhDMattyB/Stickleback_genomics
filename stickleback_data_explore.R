@@ -1744,3 +1744,51 @@ chr_perms %>%
   as_tibble() %>% 
   arrange(chr) %>% 
   write_tsv('Stickleback_Chromosome_sizes.txt')
+
+
+
+
+
+# afvaper try chr1 --------------------------------------------------------
+
+chr1_vcf = read.vcfR('stickle_filtered_1.vcf')
+
+## individual ids got duplicated in the per chr vcfs somehow
+chr1_vcf@gt
+
+popmap = read_tsv('Stickleback_afvaper_popmap_dup.txt', 
+                  col_names = F) %>% 
+  as.data.frame()
+
+# popmap = popmap %>% 
+#   mutate(X3 = X1) %>% 
+#   as_tibble() %>% 
+#   dplyr::select(X1, 
+#                 X3, 
+#                 X2)
+# 
+# popmap$X4 <- paste0(popmap$X1, 
+#                     "_", 
+#                     popmap$X3)
+# 
+# popmap %>% 
+#   select(X4, 
+#          X2) %>% 
+#   write_tsv('Stickleback_afvaper_popmap_dup.txt')
+
+
+# unique(popmap[,2])
+
+vector_list <- list(c("Warm","Cold"))
+
+
+# Set our window size
+window_snps = 200
+
+# Calculate Allele Frequency Change Vector Matrices
+AF_input <- calc_AF_vectors(vcf = chr1_vcf,
+                            window_size = window_snps,
+                            popmap = popmap,
+                            vectors = vector_list,
+                            n_cores = 4,
+                            data_type = "vcf")
