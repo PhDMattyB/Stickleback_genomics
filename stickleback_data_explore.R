@@ -188,12 +188,12 @@ stickleback_pca = stickle_plot %>%
   # group_by(population) %>% 
   ggplot(aes(x = PC1, 
              y = PC2))+
-  # geom_point(aes(col = Location),
-  #            size = 2)+
-  geom_point(aes(col = population),
+  geom_point(aes(col = Location),
              size = 2)+
-  scale_color_manual(values = cold_warm_cols)+
-  # scale_color_manual(values = location_cols)+
+  # geom_point(aes(col = population),
+  #            size = 2)+
+  # scale_color_manual(values = cold_warm_cols)+
+  scale_color_manual(values = location_cols)+
   theme(panel.grid.major = element_blank(),
         panel.grid.minor = element_blank(), 
         axis.title = element_text(size = 15), 
@@ -1589,6 +1589,22 @@ LFMM_Neutral_snps = anti_join(WC_Fst_clean_all,
 
 
 # af-vapeR ----------------------------------------------------------------
+library(remotes)
+# remotes::install_github("JimWhiting91/afvaper")
+library(afvaper)
+library(vcfR)
+library(seqinr)
+
+## couple of things. 
+
+## Need to split the genomic data for each individual chromosome
+## and then output that as a vcf file for use in plink
+
+
+## second we need to read in the fasta file to determine
+## the number of null parameters to calculate per chromosome
+
+stickle_fasta = read.fasta('Stickleback_Filtered_Fasta.fa')
 
 
 
