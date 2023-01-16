@@ -1676,4 +1676,5 @@ chr_perms = data.frame(chr = chr_size$Chromosome,
 ##distributed across the genome according to relative size of chromosomes...
 chr_perms %>% 
   as_tibble() %>% 
-  arrange(chr)
+  arrange(chr) %>% 
+  write_tsv('Stickleback_Chromosome_sizes.txt')
