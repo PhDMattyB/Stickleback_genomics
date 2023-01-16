@@ -1589,13 +1589,20 @@ LFMM_Neutral_snps = anti_join(WC_Fst_clean_all,
 
 
 # af-vapeR ----------------------------------------------------------------
+
+setwd('C:/Stickleback_Genomic/afvaper')
+
 # library(remotes)
 # remotes::install_github("JimWhiting91/afvaper")
 library(afvaper)
-library(vcfR)
-library(seqinr)
 
-## couple of things. 
+
+## need to create a popmap file
+## which has individual id then the ecotype id
+read_table2('stickle_filtered_chr_fix.ped', 
+         col_names = F) %>% 
+  dplyr::select(1:2)
+
 
 ## Need to split the genomic data for each individual chromosome
 ## and then output that as a vcf file for use in plink
