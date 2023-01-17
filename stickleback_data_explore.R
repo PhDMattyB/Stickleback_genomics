@@ -1738,7 +1738,8 @@ chr_size = read_tsv('stickle_filtered_chr_fix.map',
   dplyr::select(Chromosome, 
                 chr_size)
 
-total_perms = 100000  
+total_perms = 100000 
+total_perms = 10000
 
 chr_props = chr_size$chr_size/sum(chr_size$chr_size)
 chr_perms = data.frame(chr = chr_size$Chromosome, 
@@ -1748,8 +1749,8 @@ chr_perms = data.frame(chr = chr_size$Chromosome,
 ##distributed across the genome according to relative size of chromosomes...
 chr_perms %>% 
   as_tibble() %>% 
-  arrange(chr) %>% 
-  write_tsv('Stickleback_Chromosome_sizes.txt')
+  arrange(chr) %>%
+  write_tsv('Stickleback_Chromosome_sizes_100000.txt')
 
 
 
