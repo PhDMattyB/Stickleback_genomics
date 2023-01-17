@@ -1801,9 +1801,24 @@ input_vectors = list(pair1 = c("Warm1", "Cold1"),
 window_snps = 50
 
 # Calculate Allele Frequency Change Vector Matrices
-AF_input <- calc_AF_vectors(vcf = chr1_vcf,
+AF_input = calc_AF_vectors(vcf = chr1_vcf,
                             window_size = window_snps,
                             popmap = popmap,
                             vectors = input_vectors,
                             n_cores = 1,
                             data_type = "vcf")
+
+
+
+
+# How many permutations to run
+null_perm_N = 1000
+
+# Calculate Allele Frequency Change Vector Matrices
+null_input = calc_AF_vectors(vcf = chr1_vcf,
+                              window_size = window_snps,
+                              popmap = popmap,
+                              vectors = input_vectors,
+                              n_cores = 1,
+                              null_perms = null_perm_N,
+                              data_type = "vcf")
