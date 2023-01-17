@@ -1603,7 +1603,7 @@ popmap = read_table2('stickle_filtered_chr_fix.ped',
          col_names = F) %>% 
   dplyr::select(1:2)
 
-View(popmap)
+# View(popmap)
 
 popmap1 = popmap %>% 
   slice(1:16) %>% 
@@ -1647,14 +1647,14 @@ popmap = bind_rows(popmap1,
 
 popmap = mutate(.data = popmap,
                       Ecotype = as.factor(case_when(
-                        Morph == 'ASHNC' ~ 'Cold',
-                        Morph == 'ASHNW' ~ 'Warm',
-                        Morph == 'CSWY' ~ 'Cold',
-                        Morph == 'GTS' ~ 'Warm',
-                        Morph == 'MYVC' ~ 'Cold',
-                        Morph == 'MYVW' ~ 'Warm',
-                        Morph == 'SKRC' ~ 'Cold',
-                        Morph == 'SKRW' ~ 'Warm'))) %>% 
+                        Morph == 'ASHNC' ~ 'Cold2',
+                        Morph == 'ASHNW' ~ 'Warm2',
+                        Morph == 'CSWY' ~ 'Cold4',
+                        Morph == 'GTS' ~ 'Warm4',
+                        Morph == 'MYVC' ~ 'Cold1',
+                        Morph == 'MYVW' ~ 'Warm1',
+                        Morph == 'SKRC' ~ 'Cold3',
+                        Morph == 'SKRW' ~ 'Warm3'))) %>% 
   dplyr::select(X2, 
                 Ecotype)
 
