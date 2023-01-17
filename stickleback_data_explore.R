@@ -1718,17 +1718,23 @@ Chr_convert(data = stickle_map) %>%
 ## second we need to read in the fasta file to determine
 ## the number of null parameters to calculate per chromosome
 
-chr_size = Chr_convert(data = stickle_map) %>% 
-  dplyr::select(chr_num, 
-                SNP, 
-                Genetic_pos, 
-                Physical_pos) %>% 
+
+chr_size = read_tsv('stickle_filtered_chr_fix.map', 
+                    col_names = c('Chromosome', 
+                                  'SNP', 
+                                  'Genetic_pos', 
+                                  'Physical_pos')) %>% 
+# Chr_convert(data = stickle_map) %>% 
+#   dplyr::select(chr_num, 
+#                 SNP, 
+#                 Genetic_pos, 
+#                 Physical_pos) %>% 
   # stickle_map %>% 
-  group_by(chr_num) %>% 
+  group_by(Chromosome) %>% 
   summarize(min_BP = min(Physical_pos), 
             max_BP = max(Physical_pos)) %>% 
   mutate(chr_size = max_BP - min_BP) %>% 
-  rename(Chromosome = chr_num) %>% 
+  # rename(Chromosome = chr_num) %>% 
   dplyr::select(Chromosome, 
                 chr_size)
 
@@ -1822,3 +1828,6 @@ null_input = calc_AF_vectors(vcf = chr1_vcf,
                               n_cores = 1,
                               null_perms = null_perm_N,
                               data_type = "vcf")
+
+
+chr_perms = read_tsv('Stickleback_Chromosome_sizes.txt')
