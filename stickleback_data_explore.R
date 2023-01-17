@@ -1774,9 +1774,9 @@ popmap = read_tsv('Stickleback_afvaper_popmap_dup.txt',
 # popmap %>%
 #   select(X4,
 #          X2) %>%
-#   write_tsv('Stickleback_afvaper_popmap_dup.txt', 
+#   write_tsv('Stickleback_afvaper_popmap_dup.txt',
 #             col_names = F)
-
+# 
 
 # unique(popmap[,2])
 
@@ -1785,9 +1785,16 @@ popmap = read_tsv('Stickleback_afvaper_popmap_dup.txt',
 ## need to set each population as having a warm cold pairing for 
 ## the analysis to actually identify alleles that are parallel among
 ## all 4 axes/population pairs. 
+# 
+# input_vectors = list(pair1 = c("C1", "W1"),
+#                      pair2 = c("C2", "W2"),
+#                      pair3 = c("C3", "W3"),
+#                      pair4 = c("C4", "W4"))
 
-vector_list <- list(c("Warm","Cold"))
-names(vector_list) <- c("Cold")
+input_vectors = list(pair1 = c("Warm1", "Cold1"),
+                     pair2 = c("Warm2", "Cold2"),
+                     pair3 = c("Warm3", "Cold3"),
+                     pair4 = c("Warm4", "Cold4"))
 
 
 # Set our window size
@@ -1797,6 +1804,6 @@ window_snps = 50
 AF_input <- calc_AF_vectors(vcf = chr1_vcf,
                             window_size = window_snps,
                             popmap = popmap,
-                            vectors = vector_list,
+                            vectors = input_vectors,
                             n_cores = 1,
                             data_type = "vcf")
