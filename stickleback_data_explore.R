@@ -1780,6 +1780,12 @@ popmap = read_tsv('Stickleback_afvaper_popmap_dup.txt',
 
 # unique(popmap[,2])
 
+## Need to restructure the vector list into Warm1-cold1, 
+## warm2-cold2 etc... with only a single pair it wont work, we 
+## need to set each population as having a warm cold pairing for 
+## the analysis to actually identify alleles that are parallel among
+## all 4 axes/population pairs. 
+
 vector_list <- list(c("Warm","Cold"))
 names(vector_list) <- c("Cold")
 
