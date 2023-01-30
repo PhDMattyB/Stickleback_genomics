@@ -21,7 +21,21 @@ library(windowscanr)
 # 
 theme_set(theme_bw())
 
-setwd('C:/Stickleback_Genomic/vcf_filter/')
+# setwd('C:/Stickleback_Genomic/vcf_filter/')
+setwd('Parsons_Postdoc/Stickleback_Genomic/vcf_filter/')
+
+
+# Cross_Numbers -----------------------------------------------------------
+
+setwd('~/Parsons_Postdoc/Experiment')
+
+cross_num = read_csv('Fish_Cross_Numbers_30.11.22.csv')
+
+cross_num %>% 
+  group_by(`P (m/f)`) %>% 
+  summarize(totalw = sum(totalw), 
+            totalc = sum(totalc))
+
 
 ##
 # pcadapt analysis --------------------------------------------------------
