@@ -9,7 +9,7 @@
 
 library(pcadapt)
 library(viridis)
-library(LEA)
+# library(LEA)
 library(reshape2)
 library(qvalue)
 library(tidyverse)
@@ -27,7 +27,7 @@ setwd('Parsons_Postdoc/Stickleback_Genomic/vcf_filter/')
 
 # Cross_Numbers -----------------------------------------------------------
 
-setwd('~/Parsons_Postdoc/Experiment')
+setwd('~/Parsons_Postdoc/Experiment1')
 
 cross_num = read_csv('Fish_Cross_Numbers_30.11.22.csv')
 
@@ -36,6 +36,15 @@ cross_num %>%
   summarize(totalw = sum(totalw), 
             totalc = sum(totalc))
 
+cross_num %>% 
+  filter(`P (m/f)`  == 'mwmw') %>% 
+  dplyr::select(1:2, 
+                totalw, 
+                totalc) %>% 
+  group_by(Cross) %>% 
+  summarise(totalw = sum(totalw), 
+            totalc = sum(totalc)) %>% 
+  View()
 
 ##
 # pcadapt analysis --------------------------------------------------------
