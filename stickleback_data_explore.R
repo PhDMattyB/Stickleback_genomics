@@ -33,11 +33,15 @@ cross_num = read_csv('Fish_Cross_Numbers_30.11.22.csv')
 
 cross_num %>% 
   group_by(`P (m/f)`) %>% 
+  filter(`P (m/f)` %in% c('acac', 
+                          'awaw', 
+                          'mcmc', 
+                          'mwmw')) %>% 
   summarize(totalw = sum(totalw), 
             totalc = sum(totalc))
 
 cross_num %>% 
-  filter(`P (m/f)`  == 'mwmw') %>% 
+  filter(`P (m/f)`  == 'mcmc') %>% 
   dplyr::select(1:2, 
                 totalw, 
                 totalc) %>% 
