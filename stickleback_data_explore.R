@@ -22,9 +22,9 @@ library(windowscanr)
 theme_set(theme_bw())
 
 # setwd('C:/Stickleback_Genomic/vcf_filter/')
-setwd('Parsons_Postdoc/Stickleback_Genomic/vcf_filter/')
+setwd('~/Parsons_Postdoc/Stickleback_Genomic/vcf_filter/')
 
-
+##
 # Cross_Numbers -----------------------------------------------------------
 
 setwd('~/Parsons_Postdoc/Experiment1')
@@ -1604,9 +1604,9 @@ LFMM_outliers = read_table2('LFMM_Temp_Outlier.map',
   stickle_CHR_reorder() %>% 
   dist_cal()
 
-# WC_Fst_clean_all = read_csv('WC_Fst_clean.csv') %>%
-#   stickle_CHR_reorder() %>%
-#   dist_cal()
+WC_Fst_clean_all = read_csv('WC_Fst_clean.csv') %>%
+  stickle_CHR_reorder() %>%
+  dist_cal()
 
 
 LFMM_Neutral_snps = anti_join(WC_Fst_clean_all, 
@@ -1614,6 +1614,9 @@ LFMM_Neutral_snps = anti_join(WC_Fst_clean_all,
           by = c('CHR', 
                  'SNP', 
                  'POS'))
+
+
+LFMM_outliers = read_csv('~/Parsons_Postdoc/Stickleback_Genomic/lfmm/Stickleback_LFMM_temperature_qvalues.csv')
 
 
 # af-vapeR ----------------------------------------------------------------
