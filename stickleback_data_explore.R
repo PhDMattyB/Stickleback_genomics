@@ -41,7 +41,8 @@ cross_num %>%
             totalc = sum(totalc))
 
 cross_num %>% 
-  filter(`P (m/f)`  == 'mcmc') %>% 
+  # filter(`P (m/f)`  == 'mcmc') %>% 
+  filter(`P (m/f)` == 'awaw') %>% 
   dplyr::select(1:2, 
                 totalw, 
                 totalc) %>% 
