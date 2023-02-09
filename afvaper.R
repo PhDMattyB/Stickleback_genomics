@@ -6,8 +6,9 @@ library(gtools)
 library(readr)
 
 
-setwd('~/Documents/afvaper')
+# setwd('~/Documents/afvaper')
 # setwd('~/Documents/afvaper/no_chr23/')
+setwd('~/Parsons_Postdoc/Stickleback_Genomic/afvaper/')
 ##
 # afvaper single chromosome -----------------------------------------------
 ## single chromosome
@@ -78,7 +79,7 @@ input_vectors = list(pair1 = c("Warm1", "Cold1"),
 all_chr_res <- lapply(1:23,function(i){
   
   # First read in the VCF
-  list_vcf_files = list.files(path = "~/Documents/afvaper/afvaper_chrs")
+  list_vcf_files = list.files(path = "~/Parsons_Postdoc/Stickleback_Genomic/afvaper/afvaper_chrs/")
   # list_vcf_files = list.files(path = "~/Documents/afvaper/no_chr23/")
   list_vcf_files = mixedsort(list_vcf_files)
   chr_vcf <- read.vcfR(list_vcf_files[i])
