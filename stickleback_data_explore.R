@@ -1605,40 +1605,18 @@ temp_lfmm = lfmm( "stickleback_lfmm.lfmm",
 
 # LFMM Manhattan plot -----------------------------------------------------
 
-map_test = read_tsv('stickleback_clean_ped.map', 
-                    col_names = F)
-ped_test = read_table2('stickleback_clean_ped.ped', 
-                    col_names = F)
-
-convert = ped2geno('stickleback_clean_ped.ped', 
-                   'stickleback_data.geno')
-
-
-convert = geno2lfmm("stickleback_data.geno", 
-                    'stickleback_lfmm.lfmm')
-
-
-
-## Need to run this on the computer cluster
-LFMM_outliers = read_table2('LFMM_Temp_Outlier.map', 
-                            col_name = c('CHR', 
-                                         'SNP', 
-                                         'GENE_POS', 
-                                         'POS')) %>% 
-  stickle_CHR_reorder() %>% 
-  dist_cal()
-
-# WC_Fst_clean_all = read_csv('WC_Fst_clean.csv') %>%
-#   stickle_CHR_reorder() %>%
-#   dist_cal()
-
-
-# LFMM_Neutral_snps = anti_join(WC_Fst_clean_all, 
-#           LFMM_outliers, 
-#           by = c('CHR', 
-#                  'SNP', 
-#                  'POS'))
+# map_test = read_tsv('stickleback_clean_ped.map', 
+#                     col_names = F)
+# ped_test = read_table2('stickleback_clean_ped.ped', 
+#                     col_names = F)
 # 
+# convert = ped2geno('stickleback_clean_ped.ped', 
+#                    'stickleback_data.geno')
+# 
+# 
+# convert = geno2lfmm("stickleback_data.geno", 
+#                     'stickleback_lfmm.lfmm')
+# # 
 
 LFMM_data = read_csv('~/Parsons_Postdoc/Stickleback_Genomic/lfmm/Stickleback_LFMM_temperature_qvalues.csv')
 
