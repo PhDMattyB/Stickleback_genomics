@@ -1632,8 +1632,51 @@ LFMM_data = bind_cols(map_test,
   stickle_CHR_reorder() %>% 
   dist_cal()
 
+LFMM_axis_df = axis_df(LFMM_data)
 
+non_outs = LFMM_data %>% 
+  filter(qvalue >= 0.01) %>% 
+  mutate(qvalue_trans = -log10(qvalue))
 
+outs = LFMM_data %>% 
+  filter(qvalue < 0.01) %>% 
+  mutate(qvalue_trans = -log10(qvalue))
+
+ggplot(non_outs, 
+       aes(x = BPcum, 
+           y = qvalue_trans))+
+  # plot the non outliers in grey
+  geom_point(aes(color = as.factor(CHR)), 
+             alpha = 0.8, 
+             size = 1.3)+
+  ## alternate colors per chromosome
+  scale_color_manual(values = rep(c("grey", "dimgrey"), 39))+
+  ## plot the outliers on top of everything
+  ## currently digging this hot pink colour
+  geom_point(data = outs,
+             col = '#2a9d8f',
+             alpha=0.8, 
+             size=1.3)+
+  scale_x_continuous(label = axisdf$CHR, 
+                     breaks = axisdf$center)+
+  scale_y_continuous(expand = c(0, 0))+
+  # geom_hline(yintercept = 0.00043, 
+  #            linetype = 2, 
+  #            col = 'Black')+
+  # ylim(0,1.0)+
+  # scale_y_reverse(expand = c(0, 0))+
+  # remove space between plot area and x axis
+  labs(x = 'Cumulative base pair', 
+       y = '-log(qvalue)')+
+  theme(legend.position="none",
+        # panel.border = element_blank(),
+        panel.grid.major.x = element_blank(),
+        panel.grid.minor.x = element_blank(), 
+        axis.text.x = element_text(size = 9, 
+                                   angle = 90), 
+        axis.title = element_text(size = 14),
+        axis.title.x = element_blank(),
+        axis.text.y = element_text(size = 12))
 ##
 # af-vapeR ----------------------------------------------------------------
 
