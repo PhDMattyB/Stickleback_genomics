@@ -9,7 +9,7 @@
 
 library(pcadapt)
 library(viridis)
-# library(LEA)
+library(LEA)
 library(reshape2)
 library(qvalue)
 library(tidyverse)
@@ -25,6 +25,16 @@ theme_set(theme_bw())
 setwd('~/Parsons_Postdoc/Stickleback_Genomic/vcf_filter/')
 
 ##
+
+# Tagging Exp 1 -----------------------------------------------------------
+setwd('~/Parsons_Postdoc/Experiment1/')
+
+read_csv('Experiment1_Elastomer_Tagging.csv') %>% 
+  group_by(Population,
+           tagid) %>% 
+  distinct(.keep_all = T)
+
+
 # Cross_Numbers -----------------------------------------------------------
 
 setwd('~/Parsons_Postdoc/Experiment1')
@@ -515,6 +525,9 @@ umap_fit = pc_data %>%
 
 ##
 # Fst set up Plink ---------------------------------------------------------------
+
+ped_test = read_table2('stickleback_maf0.05_ldpruned_filtered.ped', 
+            col_names = F)
 
 identifiers = read_csv('stickleback_identifiers.csv')
 identifiers = mutate(.data = identifiers,
@@ -1582,9 +1595,6 @@ ggsave(file = 'stickleback_FST_50KB_manhattan_plot.tiff',
 ##
 # LFMM Analysis -----------------------------------------------------------
 
-convert = geno2lfmm("stickleback_data.geno", 
-                    'stickleback_lfmm.lfmm')
-
 
 temp_lfmm = lfmm( "stickleback_lfmm.lfmm", 
                 "temp.env", 
@@ -1595,6 +1605,20 @@ temp_lfmm = lfmm( "stickleback_lfmm.lfmm",
 
 # LFMM Manhattan plot -----------------------------------------------------
 
+map_test = read_tsv('stickleback_clean_ped.map', 
+                    col_names = F)
+ped_test = read_table2('stickleback_clean_ped.ped', 
+                    col_names = F)
+
+convert = ped2geno('stickleback_clean_ped.ped', 
+                   'stickleback_data.geno')
+
+
+convert = geno2lfmm("stickleback_data.geno", 
+                    'stickleback_lfmm.lfmm')
+
+
+
 ## Need to run this on the computer cluster
 LFMM_outliers = read_table2('LFMM_Temp_Outlier.map', 
                             col_name = c('CHR', 
@@ -1604,21 +1628,35 @@ LFMM_outliers = read_table2('LFMM_Temp_Outlier.map',
   stickle_CHR_reorder() %>% 
   dist_cal()
 
-WC_Fst_clean_all = read_csv('WC_Fst_clean.csv') %>%
-  stickle_CHR_reorder() %>%
+# WC_Fst_clean_all = read_csv('WC_Fst_clean.csv') %>%
+#   stickle_CHR_reorder() %>%
+#   dist_cal()
+
+
+# LFMM_Neutral_snps = anti_join(WC_Fst_clean_all, 
+#           LFMM_outliers, 
+#           by = c('CHR', 
+#                  'SNP', 
+#                  'POS'))
+# 
+
+LFMM_data = read_csv('~/Parsons_Postdoc/Stickleback_Genomic/lfmm/Stickleback_LFMM_temperature_qvalues.csv')
+
+map_test = read_tsv('stickleback_clean_ped.map', 
+                    col_names = c('CHR', 
+                                  'SNP', 
+                                  'Genetic_pos', 
+                                  'POS')) 
+
+LFMM_data = bind_cols(map_test, 
+                      LFMM_data) %>% 
+  rename(qvalue = value) %>% 
+  stickle_CHR_reorder() %>% 
   dist_cal()
 
 
-LFMM_Neutral_snps = anti_join(WC_Fst_clean_all, 
-          LFMM_outliers, 
-          by = c('CHR', 
-                 'SNP', 
-                 'POS'))
 
-
-LFMM_outliers = read_csv('~/Parsons_Postdoc/Stickleback_Genomic/lfmm/Stickleback_LFMM_temperature_qvalues.csv')
-
-
+##
 # af-vapeR ----------------------------------------------------------------
 
 setwd('C:/Stickleback_Genomic/afvaper')
