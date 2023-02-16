@@ -1642,7 +1642,44 @@ outs = LFMM_data %>%
   filter(qvalue < 0.01) %>% 
   mutate(qvalue_trans = -log10(qvalue))
 
-ggplot(non_outs, 
+LFMM_Raw_qvalues = ggplot(non_outs, 
+       aes(x = BPcum, 
+           y = qvalue))+
+  # plot the non outliers in grey
+  geom_point(aes(color = as.factor(CHR)), 
+             alpha = 0.8, 
+             size = 1.3)+
+  ## alternate colors per chromosome
+  scale_color_manual(values = rep(c("grey", "dimgrey"), 39))+
+  ## plot the outliers on top of everything
+  ## currently digging this hot pink colour
+  geom_point(data = outs,
+             col = '#f72585',
+             alpha=0.8, 
+             size=1.3)+
+  scale_x_continuous(label = LFMM_axis_df$CHR, 
+                     breaks = LFMM_axis_df$center)+
+  # scale_y_continuous(expand = c(0, 0))+
+  # geom_hline(yintercept = 0.00043, 
+  #            linetype = 2, 
+  #            col = 'Black')+
+  # ylim(0,1.0)+
+  scale_y_reverse(expand = c(0, 0))+
+  # remove space between plot area and x axis
+  labs(x = 'Cumulative base pair', 
+       y = 'Raw qvalues')+
+  theme(legend.position="none",
+        # panel.border = element_blank(),
+        panel.grid.major.x = element_blank(),
+        panel.grid.minor.x = element_blank(), 
+        axis.text.x = element_text(size = 9, 
+                                   angle = 90), 
+        axis.title = element_text(size = 14),
+        axis.title.x = element_blank(),
+        axis.text.y = element_text(size = 12))
+
+
+LFMM_qvalue_logged = ggplot(non_outs, 
        aes(x = BPcum, 
            y = qvalue_trans))+
   # plot the non outliers in grey
@@ -1654,11 +1691,11 @@ ggplot(non_outs,
   ## plot the outliers on top of everything
   ## currently digging this hot pink colour
   geom_point(data = outs,
-             col = '#2a9d8f',
+             col = '#f72585',
              alpha=0.8, 
-             size=1.3)+
-  scale_x_continuous(label = axisdf$CHR, 
-                     breaks = axisdf$center)+
+             size=3)+
+  scale_x_continuous(label = LFMM_axis_df$CHR, 
+                     breaks = LFMM_axis_df$center)+
   scale_y_continuous(expand = c(0, 0))+
   # geom_hline(yintercept = 0.00043, 
   #            linetype = 2, 
@@ -1677,6 +1714,19 @@ ggplot(non_outs,
         axis.title = element_text(size = 14),
         axis.title.x = element_blank(),
         axis.text.y = element_text(size = 12))
+
+ggsave('~/Parsons_Postdoc/Stickleback_Genomic/Figures/LFMM_temp_log_qvalues.tiff', 
+       plot = LFMM_qvalue_logged, 
+       dpi = 'retina', 
+       width = 10, 
+       height = 5)
+
+ggsave('~/Parsons_Postdoc/Stickleback_Genomic/Figures/LFMM_temp_raw_qvalues.tiff', 
+       plot = LFMM_Raw_qvalues, 
+       dpi = 'retina', 
+       width = 20, 
+       height = 10)
+
 ##
 # af-vapeR ----------------------------------------------------------------
 
