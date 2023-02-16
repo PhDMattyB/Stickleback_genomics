@@ -1100,30 +1100,33 @@ FST_out_pcadapt = inner_join(WC_Fst_clean_outs,
 #                   'POS'))
 ##LFMM outliers
 # lfmm_outliers = read.vcfR("C:/Stickleback_Genomic/vcf_filter/lfmm.SNPs.vcf")
-LFMM_outliers = read_table2('LFMM_Temp_Outlier.map', 
-                            col_name = c('CHR', 
-                                         'SNP', 
-                                         'GENE_POS', 
-                                         'POS'))
+
+LFMM_Outliers = read_csv('LFMM_Mapped_Full_Data.csv') %>% 
+  filter(qvalue <= 0.01) %>% 
+  mutate(qvalue_trans = -log10(qvalue))
+
 
 FST_outs_LFMM = inner_join(WC_Fst_clean_outs, 
-           LFMM_outliers, 
+           LFMM_Outliers, 
            by = c('CHR', 
                   'SNP', 
                   'POS'))
 
 LFMM_pcadapt = inner_join(common_pcadapt_outliers, 
-                           LFMM_outliers, 
+                           LFMM_Outliers, 
                            by = c('CHR', 
                                   'SNP', 
                                   'POS'))
 
+# View(LFMM_pcadapt)
+
 ## Damn only 33 outliers from all three analyses
 Three_analysis_outs = inner_join(FST_outs_LFMM, 
-           common_pcadapt_outliers, 
+           common_pcadapt_outliers,
            by = c('CHR', 
                   'SNP', 
                   'POS'))
+## two common outliers on chromosome 8 and 19
 
 Three_analysis_outs %>% 
   select(CHR, 
@@ -1135,6 +1138,9 @@ Three_analysis_outs %>%
   # group_by(CHR) %>% 
   # summarise(n = n()) %>% 
   View()
+
+## NEED TO MAKE SURE THE CHROMOSOME ORDER FROM AFVAPER LINES 
+## UP TO THESE CHROMOSOMES
 
 # Three_analysis_outs %>%
 #   group_by(CHR) %>%
@@ -1742,6 +1748,9 @@ LFMM_data = bind_cols(map_test,
   rename(qvalue = value) %>% 
   stickle_CHR_reorder() %>% 
   dist_cal()
+
+# write_csv(LFMM_data, 
+#           'LFMM_Mapped_Full_Data.csv')
 
 WC_Fst = read_tsv('Warm_Cold_Fst.fst') %>% 
   na.omit() %>% 
