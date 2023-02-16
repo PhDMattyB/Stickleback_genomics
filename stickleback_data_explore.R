@@ -1772,7 +1772,7 @@ LFMM_FST = ggplot(non_outs,
              alpha = 0.8, 
              size = 1.3)+
   ## alternate colors per chromosome
-  scale_color_manual(values = rep(c("grey", "dimgrey"), 39))+
+  scale_color_manual(values = rep(c("grey", "dimgrey"), 23))+
   ## plot the outliers on top of everything
   ## currently digging this hot pink colour
   geom_point(data = outs,
@@ -1782,7 +1782,7 @@ LFMM_FST = ggplot(non_outs,
   scale_x_continuous(label = LFMM_FST_axis_df$CHR, 
                      breaks = LFMM_FST_axis_df$center)+
   scale_y_continuous(expand = c(0, 0), 
-                     limits = c(0, 1.0))+
+                     limits = c(0, 0.25))+
   # geom_hline(yintercept = 0.00043, 
   #            linetype = 2, 
   #            col = 'Black')+
@@ -1801,6 +1801,16 @@ LFMM_FST = ggplot(non_outs,
         axis.title.x = element_blank(),
         axis.text.y = element_text(size = 12))
 
+
+outs %>% 
+  filter(FST_zero > 0.15) %>% 
+  View()
+
+ggsave('~/Parsons_Postdoc/Stickleback_Genomic/Figures/LFMM_temp_FST.tiff', 
+       plot = LFMM_FST, 
+       dpi = 'retina', 
+       width = 10, 
+       height = 5)
 
 ##
 # af-vapeR ----------------------------------------------------------------
