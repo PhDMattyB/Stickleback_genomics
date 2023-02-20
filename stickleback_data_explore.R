@@ -1994,15 +1994,33 @@ chr_perms %>%
 # afvaper results ---------------------------------------------------------
 
 setwd('~/Parsons_Postdoc/Stickleback_Genomic/afvaper/afvaper results/')
-
 eig1_10snps = read_csv('afvaper_eigenvector1_results.csv')
 
 View(eig1_10snps)
 
+eig2_10snps = read_csv('afvaper_eigenvector2_results.csv')
+
+View(eig2_10snps)
+
+
 eig1_50snps = read_csv('afvaper_eigenvector1_results_50snp_window.csv')
+eig2_50snps = read_csv('afvaper_eigenvector2_results_50snp_window.csv')
 
 View(eig1_50snps)
+View(eig2_50snps)
 
+map = read_tsv('stickle_filtered_chr_fix.map', 
+               col_names = c('CHR',
+                             'SNP', 
+                             'Genetic_pos', 
+                             'Physical_pos'))
+
+
+
+# eig1_50snps = read_csv('afvaper_eigenvector1_results_50snp_window.csv')
+# 
+# View(eig1_50snps)
+# 
 # afvaper try chr1 --------------------------------------------------------
 
 chr1_vcf = read.vcfR('stickle_filtered_1.vcf')
