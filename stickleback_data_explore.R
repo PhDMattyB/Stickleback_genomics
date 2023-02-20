@@ -2015,7 +2015,11 @@ map = read_tsv('stickle_filtered_chr_fix.map',
                              'Genetic_pos', 
                              'Physical_pos'))
 
-
+map %>% 
+  # group_by(CHR) %>% 
+  distinct(CHR, 
+           .keep_all = T) %>% 
+  View()
 
 # eig1_50snps = read_csv('afvaper_eigenvector1_results_50snp_window.csv')
 # 
