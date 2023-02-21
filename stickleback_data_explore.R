@@ -367,35 +367,30 @@ ggsave(file = 'stickleback_manhattan_plot.tiff',
 
 
 
-# Filter ped and map per population ---------------------------------------
-
-ped = read_table2('stickleback_maf0.05_ldpruned_filtered.ped')
-
 # pcadapt MYV -------------------------------------------------------------
 
-  stickle_pcadapt = read.pcadapt('stickleback_maf0.05_ldpruned_filtered.bed', 
+MYVN_pcadapt = read.pcadapt('MYVN_SNPS.bed', 
                                  type = 'bed')
 
-stickle_pca = pcadapt::pcadapt(stickle_pcadapt, 
+MYVN_pca = pcadapt::pcadapt(MYVN_pcadapt, 
                                K = 10, 
                                method = 'mahalanobis', 
                                min.maf = 0.01)
 
-plot(stickle_pca, 
+plot(MYVN_pca, 
      option = 'screeplot', 
      K = 10)
 
-## looks like k = 4 is the best k based on pcadapt
 
 # plot(stickle_pca, option = "scores")
 
-summary(stickle_pca)
+summary(MYVN_pca)
 ## percent variation explained by the three significant axes
-stickle_pca$singular.values
-sum(stickle_pca$singular.values)
-(0.2810947/1.463374)*100
-(0.2188855/1.463374)*100
-(0.1589348/1.463374)*100
+MYVN_pca$singular.values
+sum(MYVN_pca$singular.values)
+(0.3486600/2.250287)*100
+(0.2720142/2.250287)*100
+(0.2398655/2.250287)*100
 ## singular values should have already been square root transformed
 
 # (sqrt(0.2810947)/1.463374)*100
@@ -403,9 +398,7 @@ sum(stickle_pca$singular.values)
 # (sqrt(0.1589348)/1.463374)*100
 
 
-stickle_pca$scores
-
-stickle_scores = as_tibble(stickle_pca$scores) %>%
+MYVN_scores = as_tibble(MYVN_pca$scores) %>%
   rename(PC1 = 1,
          PC2 = 2,
          PC3 = 3,
@@ -416,160 +409,26 @@ stickle_scores = as_tibble(stickle_pca$scores) %>%
                 PC3,
                 PC4,
                 PC5) %>%
-  write_csv('pcadapt_stickle_pc_scores.csv')
+  write_csv('MYVN_pc_scores.csv')
 
-stickle_plot = read_csv('pcadapt_stickle_pc_scores.csv')
+MYVN_plot = read_csv('MYVN_pc_scores.csv')
 
-identifiers = read_csv('stickleback_identifiers.csv')
-# identifiers = read_table2('stickleback_maf0.05-ldpruned_nomissing.fam', 
-#          col_names = F) %>% 
-#   dplyr::select(X1, 
-#                 X2) %>% 
-#   rename(population = X1, 
-#          individual_id = X2) %>% 
-#   separate(col = population, 
-#            into = c('garbage', 
-#                 'population'), 
-#            sep = '-') %>% 
-#   separate(col = garbage, 
-#             into = c('garbage', 
-#                    'temp_pop'), 
-#             sep = 'Sample_')
-# ## going to need to separate into two data frames and 
-# ## then bring them back together due to sample name issues
-# 
-# id_one = identifiers %>% 
-#   slice(1:86) %>% 
-#   select(population, 
-#          individual_id) %>% 
-#   separate(col = population, 
-#            into = c('population', 
-#                     'garbage'), 
-#            sep = '_') %>% 
-#   slice(1:16) %>% 
-#   # separate(individual_id, 
-#   #          into = c('garbage', 
-#   #                   'individual_id'), 
-#   #          sep = 'Sample_') %>% View() 
-#   select(population, 
-#          individual_id)
-# 
-# id_three = identifiers %>% 
-#   slice(17:86) %>% 
-#   select(population, 
-#          individual_id) %>% 
-#   separate(col = population, 
-#            into = c('population', 
-#                     'garbage'), 
-#            sep = '_') %>% 
-#   # slice(1:16) %>% 
-#   separate(individual_id,
-#            into = c('garbage',
-#                     'individual_id'),
-#            sep = 'Sample_') %>%
-#   select(population, 
-#          individual_id)
-# 
-# id_two = identifiers %>% 
-#   slice(87:109) %>% 
-#   select(temp_pop, 
-#          individual_id) %>% 
-#   separate(col = temp_pop, 
-#            into = c('population', 
-#                     'garbage1', 
-#                     'garbage2'), 
-#            sep = '_') %>% 
-#   separate(col = individual_id, 
-#            into = c('garbage', 
-#                     'individual_id'), 
-#            sep = 'Sample_') %>% 
-#   select(population, 
-#          individual_id)
-# 
-# identifiers = bind_rows(id_one,
-#                         id_three,
-#                         id_two)
-
-# identifiers %>% write_csv('stickleback_identifiers.csv')
-
-stickle_plot = bind_cols(identifiers, 
-                         stickle_plot)
-
-stickle_plot = mutate(.data = stickle_plot,
-                      Location = as.factor(case_when(
-                        population == 'ASHNC' ~ 'ASH',
-                        population == 'ASHNW' ~ 'ASH',
-                        population == 'CSWY' ~ 'CSWY',
-                        population == 'GTS' ~ 'GTS',
-                        population == 'MYVC' ~ 'MYV',
-                        population == 'MYVW' ~ 'MYV',
-                        population == 'SKRC' ~ 'SKR',
-                        population == 'SKRW' ~ 'SKR')))
+identifiers = read_csv('stickleback_identifiers.csv') %>% 
+  filter(population %in% c('MYVC', 
+                           'MYVW'))
 
 
+MYVN_plot = bind_cols(identifiers, 
+                         MYVN_plot)
 
 ##
-# pca plot MYV----------------------------------------------------------------
 
-theme_set(theme_bw())
-
-cold_warm_cols = c('#264653',
-                            '#e63946', 
-                            '#386641', 
-                            '#6a994e', 
-                            '#457b9d', 
-                            '#e76f51',
-                            '#6d6875', 
-                            '#c1121f')
-                            
-
-location_cols = c('#06d6a0',
-                           '#264653',
-                           '#219ebc',
-                           '#d62828',
-                           '#5f0f40')
-                           
-
-stickleback_pca = stickle_plot %>%
-  # arrange(population) %>% 
-  # group_by(population) %>% 
-  ggplot(aes(x = PC1, 
-             y = PC2))+
-  geom_point(aes(col = Location),
-             size = 2)+
-  # geom_point(aes(col = population),
-  #            size = 2)+
-  # scale_color_manual(values = cold_warm_cols)+
-  scale_color_manual(values = location_cols)+
-  theme(panel.grid.major = element_blank(),
-        panel.grid.minor = element_blank(), 
-        axis.title = element_text(size = 15), 
-        axis.text = element_text(size = 15), 
-        axis.ticks = element_line(size = 1), 
-        plot.title = element_text(size = 15, 
-                                  hjust = 0), 
-        legend.text = element_text(size = 12),
-        legend.title = element_text(size = 14)) +
-  labs(x = 'Principal component 1 (19.21%)',
-       y = 'Principal component 2 (14.96%)', 
-       col = 'Populations')
-
-ggsave(file = 'stickleback_pca_cold_warm_split.tiff', 
-       path = 'C:/Stickleback_Genomic/Figures/', 
-       plot = stickleback_pca, 
-       dpi = 'retina', 
-       units = 'cm', 
-       width = 20.0, 
-       height = 13)
-
-
-##
 # pcadapt outliers MYV --------------------------------------------------------
 
-plot(stickle_pca, 
+plot(MYVN_pca, 
      option = 'manhattan')
 
-snp_pvalues = stickle_pca$pvalues %>% 
+snp_pvalues = MYVN_pca$pvalues %>% 
   as_tibble() %>% 
   rename(pvalues = value)
 
@@ -619,11 +478,11 @@ axisdf = dist_cal %>%
 #   filter(qvalues < 0.05)
 
 non_outs = dist_cal %>% 
-  filter(qvalues >= 0.05) %>% 
+  filter(qvalues >= 0.01) %>% 
   mutate(logqval = -log(qvalues))
 ## Get the outliers
 outs = dist_cal %>% 
-  filter(qvalues < 0.05) %>% 
+  filter(qvalues < 0.01) %>% 
   mutate(logqval = -log(qvalues))
 
 # outs %>% write_csv('pcadapt_outliers_q0.05.csv')
