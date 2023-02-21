@@ -888,11 +888,15 @@ ped_ids %>%
 ## identifiers
 
 ped_ids %>% 
-  filter(type %in% c('Warm', 
-                           'Cold')) %>%
-  # rename(`#population` = population) %>%
-  select(1:2) %>% 
-  write_tsv('Warm_Cold_Fst_keep.txt', 
+  filter(population %in% c('GTS', 
+                           'CSWY')) %>% 
+  # filter(type %in% c('Warm', 
+  #                          'Cold')) %>%
+  dplyr::select(population, 
+                X1) %>% 
+  rename(`#population` = population, 
+         individual_ID = X1) %>% 
+  write_tsv('GTS_CSWY_keep.txt', 
             col_names = F)
 
 ##
