@@ -2004,10 +2004,10 @@ View(eig2_10snps)
 
 
 eig1_50snps = read_csv('afvaper_eigenvector1_results_50snp_window.csv')
-eig2_50snps = read_csv('afvaper_eigenvector2_results_50snp_window.csv')
+# eig2_50snps = read_csv('afvaper_eigenvector2_results_50snp_window.csv')
 
 View(eig1_50snps)
-View(eig2_50snps)
+# View(eig2_50snps)
 
 map = read_tsv('stickle_filtered_chr_fix.map', 
                col_names = c('CHR',
@@ -2101,3 +2101,19 @@ null_input = calc_AF_vectors(vcf = chr1_vcf,
 
 
 chr_perms = read_tsv('Stickleback_Chromosome_sizes.txt')
+
+
+
+
+# Gene overlap ------------------------------------------------------------
+
+setwd('~/Parsons_Postdoc/Stickleback_Genomic/')
+
+afvaper_genes = read_tsv('afvapor_parallel_allele_freq_genes.txt') %>% 
+  rename(Stickleback_Combo_Genes = 1)
+
+all_other_genes = read_tsv('Stickleback_Combo_Genes.txt')
+
+## Well shit, that didn't work at all
+inner_join(afvaper_genes, 
+           all_other_genes)
