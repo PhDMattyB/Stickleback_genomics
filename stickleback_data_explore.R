@@ -487,6 +487,12 @@ outs = dist_cal %>%
 
 # outs %>% write_csv('pcadapt_outliers_q0.05.csv')
 
+location_cols = c('#06d6a0',
+                           '#264653',
+                           '#219ebc',
+                           '#d62828',
+                           '#5f0f40')
+                           
 
 pcadapt_man = ggplot(non_outs, 
                      aes(x = BPcum, 
@@ -500,7 +506,7 @@ pcadapt_man = ggplot(non_outs,
   ## plot the outliers on top of everything
   ## currently digging this hot pink colour
   geom_point(data = outs,
-             col = '#8C0F26',
+             col = '#d62828',
              alpha=0.8, 
              size=1.3)+
   scale_x_continuous(label = axisdf$chromosome, 
@@ -724,15 +730,15 @@ ped_ids = bind_cols(ped_ids,
 ## SKRW vs SKRC
 ## GTS vs CSWY
 
-ped_ids %>% 
-  filter(type %in% c('Warm', 
-                         'Cold')) %>%
-  select(X1, 
-         X2, 
-         type) %>% 
-  rename(`#population` = 1, 
-         individual_id = 2) %>% 
-  write_tsv('Warm_cold_Fst_grouping.txt')
+# ped_ids %>% 
+#   filter(type %in% c('Warm', 
+#                          'Cold')) %>%
+#   select(X1, 
+#          X2, 
+#          type) %>% 
+#   rename(`#population` = 1, 
+#          individual_id = 2) %>% 
+#   write_tsv('Warm_cold_Fst_grouping.txt')
 
 ## Holy fuck!! Make sure to use the actual family and individual
 ## identifiers in the fucking ped file. WOW
@@ -745,6 +751,19 @@ ped_ids %>%
 ## populations out. 
 ## the --keep file needs to be a text file with family and individual
 ## identifiers
+
+# temp = read_tsv('temp.env', 
+#                 col_names = 'temp')
+# 
+# ped_ids = bind_cols(ped_ids, 
+#                     temp)
+
+# ped_ids %>% 
+#   filter(population %in% c('GTS', 
+#                            'CSWY')) %>% 
+#   dplyr::select(temp) %>% 
+#   write_tsv('GTS_CSWY_temp_var.env', 
+#             col_names = F)
 
 ped_ids %>% 
   filter(population %in% c('GTS', 
