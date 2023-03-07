@@ -494,7 +494,7 @@ location_cols = c('#06d6a0',
                            '#5f0f40')
                            
 
-pcadapt_man = ggplot(non_outs, 
+MYV_pcadapt_man = ggplot(non_outs, 
                      aes(x = BPcum, 
                          y = logqval))+
   # plot the non outliers in grey
@@ -526,7 +526,7 @@ pcadapt_man = ggplot(non_outs,
         axis.title.x = element_blank(),
         axis.text.y = element_text(size = 12))
 
-pcadapt_man
+MYV_pcadapt_man
 ## ggsave that plot
 
 ggsave(file = 'stickleback_manhattan_plot.tiff', 
