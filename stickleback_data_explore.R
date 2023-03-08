@@ -2101,6 +2101,16 @@ write_tsv(popmap,
           col_names = F)
 
 
+fam_file = read_table2('strickle_No_GTS_CSWY_chr_fix.fam', 
+                       col_names = F) %>% 
+  dplyr::select(X1, X2)
+
+popmap_file = read_tsv('Stickleback_afvaper_round2_popmap.txt', 
+                       col_names = F)
+
+
+popmap_file$X1==fam_file$X1
+
 ## Need to split the genomic data for each individual chromosome
 ## and then output that as a vcf file for use in plink
 
