@@ -37,6 +37,36 @@ Fst_manhatan_format = function(Fst_data, Fst_outliers){
   
 }
 
+Chr_convert = function(data){
+  data = mutate(.data = data,
+                chr_num = as.factor(case_when(
+                  Chromosome == 'chr_I' ~ '1',
+                  Chromosome == 'chr_II' ~ '2',
+                  Chromosome == 'chr_III' ~ '3',
+                  Chromosome == 'chr_IV' ~ '4',
+                  Chromosome == 'chr_IX' ~ '5',
+                  Chromosome == 'chr_M' ~ '6',
+                  Chromosome == 'chr_Un' ~ '7',
+                  Chromosome == 'chr_V' ~ '8',
+                  Chromosome == 'chr_VI' ~ '9',
+                  Chromosome == 'chr_VII' ~ '10',
+                  Chromosome == 'chr_VIII' ~ '11',
+                  Chromosome == 'chr_X' ~ '12',
+                  Chromosome == 'chr_XI' ~ '13',
+                  Chromosome == 'chr_XII' ~ '14',
+                  Chromosome == 'chr_XIII' ~ '15',
+                  Chromosome == 'chr_XIV' ~ '16',
+                  Chromosome == 'chr_XIX' ~ '17',
+                  Chromosome == 'chr_XV' ~ '18',
+                  Chromosome == 'chr_XVI' ~ '19',
+                  Chromosome == 'chr_XVII' ~ '20',
+                  Chromosome == 'chr_XVIII' ~ '21',
+                  Chromosome == 'chr_XX' ~ '22',
+                  Chromosome == 'chr_XXI' ~ '23',
+                  Chromosome == 'chr_Y' ~ '24')))
+  return(data)  
+}
+
 
 stickle_CHR_reorder = function(data){
   data$CHR <- factor(data$CHR, 

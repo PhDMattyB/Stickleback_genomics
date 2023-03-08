@@ -766,15 +766,21 @@ ped_ids = bind_cols(ped_ids,
 #             col_names = F)
 
 ped_ids %>% 
-  filter(population %in% c('GTS', 
-                           'CSWY')) %>% 
+  filter(population %in% c('MYVC', 
+                           'MYVW', 
+                           'ASHNC', 
+                           'ASHNW', 
+                           'SKRC', 
+                           'SKRW')) %>% 
+  # filter(population %in% c('GTS', 
+  #                          'CSWY')) %>% 
   # filter(type %in% c('Warm', 
   #                          'Cold')) %>%
   dplyr::select(X1, 
                 X2) %>% 
   # rename(`#population` = population, 
          # individual_ID = X1) %>% 
-  write_tsv('GTS_CSWY_keep.txt', 
+  write_tsv('Warm_Cold_No_GTS_CSWY_keep.txt', 
             col_names = F)
 
 ##
@@ -2016,7 +2022,7 @@ ggsave('~/Parsons_Postdoc/Stickleback_Genomic/Figures/LFMM_temp_FST.tiff',
 ##
 # af-vapeR ----------------------------------------------------------------
 
-setwd('C:/Stickleback_Genomic/afvaper')
+setwd('~/Parsons_Postdoc/Stickleback_Genomic/afvaper/')
 
 # library(remotes)
 # remotes::install_github("JimWhiting91/afvaper")
@@ -2096,35 +2102,6 @@ write_tsv(popmap,
 ## custom chromosome names to straight numbers to be used in a forloop
 ## that way we always have an index of the what the chromosomes mean
 
-Chr_convert = function(data){
-  data = mutate(.data = data,
-                chr_num = as.factor(case_when(
-                  Chromosome == 'chr_I' ~ '1',
-                  Chromosome == 'chr_II' ~ '2',
-                  Chromosome == 'chr_III' ~ '3',
-                  Chromosome == 'chr_IV' ~ '4',
-                  Chromosome == 'chr_IX' ~ '5',
-                  Chromosome == 'chr_M' ~ '6',
-                  Chromosome == 'chr_Un' ~ '7',
-                  Chromosome == 'chr_V' ~ '8',
-                  Chromosome == 'chr_VI' ~ '9',
-                  Chromosome == 'chr_VII' ~ '10',
-                  Chromosome == 'chr_VIII' ~ '11',
-                  Chromosome == 'chr_X' ~ '12',
-                  Chromosome == 'chr_XI' ~ '13',
-                  Chromosome == 'chr_XII' ~ '14',
-                  Chromosome == 'chr_XIII' ~ '15',
-                  Chromosome == 'chr_XIV' ~ '16',
-                  Chromosome == 'chr_XIX' ~ '17',
-                  Chromosome == 'chr_XV' ~ '18',
-                  Chromosome == 'chr_XVI' ~ '19',
-                  Chromosome == 'chr_XVII' ~ '20',
-                  Chromosome == 'chr_XVIII' ~ '21',
-                  Chromosome == 'chr_XX' ~ '22',
-                  Chromosome == 'chr_XXI' ~ '23',
-                  Chromosome == 'chr_Y' ~ '24')))
-  return(data)  
-}
 
 stickle_map = read_tsv('stickleback_maf0.05_ldpruned_filtered.map', 
                        col_names = c('Chromosome', 
