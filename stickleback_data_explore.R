@@ -2075,14 +2075,20 @@ popmap3 = popmap %>%
 
 popmap = bind_rows(popmap1, 
                    popmap2, 
-                   popmap3)
+                   popmap3) %>% 
+  filter(Morph %in% c('MYVC', 
+                      'MYVW', 
+                      'ASHNC', 
+                      'ASHNW', 
+                      'SKRC', 
+                      'SKRW'))
 
 popmap = mutate(.data = popmap,
                       Ecotype = as.factor(case_when(
                         Morph == 'ASHNC' ~ 'Cold2',
                         Morph == 'ASHNW' ~ 'Warm2',
-                        Morph == 'CSWY' ~ 'Cold4',
-                        Morph == 'GTS' ~ 'Warm4',
+                        # Morph == 'CSWY' ~ 'Cold4',
+                        # Morph == 'GTS' ~ 'Warm4',
                         Morph == 'MYVC' ~ 'Cold1',
                         Morph == 'MYVW' ~ 'Warm1',
                         Morph == 'SKRC' ~ 'Cold3',
@@ -2091,7 +2097,7 @@ popmap = mutate(.data = popmap,
                 Ecotype)
 
 write_tsv(popmap, 
-          'Stickleback_afvaper_popmap.txt', 
+          'Stickleback_afvaper_round2_popmap.txt', 
           col_names = F)
 
 
@@ -2103,7 +2109,13 @@ write_tsv(popmap,
 ## that way we always have an index of the what the chromosomes mean
 
 
-stickle_map = read_tsv('stickleback_maf0.05_ldpruned_filtered.map', 
+# stickle_map = read_tsv('stickleback_maf0.05_ldpruned_filtered.map', 
+#                        col_names = c('Chromosome', 
+#                                      'SNP', 
+#                                      'Genetic_pos', 
+#                                      'Physical_pos'))
+
+stickle_map = read_tsv('stickleback_No_GTS_CSWY.map', 
                        col_names = c('Chromosome', 
                                      'SNP', 
                                      'Genetic_pos', 
@@ -2114,7 +2126,7 @@ Chr_convert(data = stickle_map) %>%
                 SNP, 
                 Genetic_pos, 
                 Physical_pos) %>% 
-  write_tsv('strickle_filtered_chr_fix.map', 
+  write_tsv('strickle_No_GTS_CSWY_chr_fix.map', 
             col_names = F)
   
 
