@@ -2357,7 +2357,7 @@ LFMM_FST_data %>%
              y = FST_zero))+
   geom_point()
 
-# afvaper lfmm overlap ----------------------------------------------------
+# afvaper outlier overlap ----------------------------------------------------
 
 afvaper_results = read_csv('afvaper_round2_eigenvector1_results_50snp_window.csv')
 
