@@ -2425,7 +2425,11 @@ ggplot(data = LFMM_neutral_xxi,
   geom_vline(xintercept = 11370710, 
              col = '#e63946')+
   geom_vline(xintercept = 11574024, 
-             col = '#e63946')
+             col = '#e63946') +
+  labs(x = 'Physical position', 
+       y = 'FST')+
+  theme_bw()+
+  theme(panel.grid = element_blank())
 
 #
 # Gene overlap ------------------------------------------------------------
