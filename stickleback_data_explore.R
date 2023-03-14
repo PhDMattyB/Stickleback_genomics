@@ -2404,11 +2404,11 @@ LFMM_FST_data %>%
 
 LFMM_outs_xxi = LFMM_FST_data %>% 
 filter(CHR == 'chr_XXI') %>% 
-filter(qvalue <= 0.01)
+filter(qvalue <= 0.05)
 
 LFMM_neutral_xxi = LFMM_FST_data %>% 
   filter(CHR == 'chr_XXI', 
-         qvalue > 0.01)
+         qvalue > 0.05)
 
 ggplot(data = LFMM_neutral_xxi, 
        aes(x = POS, 
