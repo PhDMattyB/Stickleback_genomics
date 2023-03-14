@@ -2185,13 +2185,13 @@ chr_perms %>%
 # afvaper results ---------------------------------------------------------
 
 setwd('~/Parsons_Postdoc/Stickleback_Genomic/afvaper/afvaper results/')
-eig1_10snps = read_csv('afvaper_eigenvector1_results.csv')
-
-View(eig1_10snps)
-
-eig2_10snps = read_csv('afvaper_eigenvector2_results.csv')
-
-View(eig2_10snps)
+# eig1_10snps = read_csv('afvaper_eigenvector1_results.csv')
+# 
+# View(eig1_10snps)
+# 
+# eig2_10snps = read_csv('afvaper_eigenvector2_results.csv')
+# 
+# View(eig2_10snps)
 
 
 eig1_50snps = read_csv('afvaper_eigenvector1_results_50snp_window.csv')
@@ -2294,6 +2294,84 @@ null_input = calc_AF_vectors(vcf = chr1_vcf,
 chr_perms = read_tsv('Stickleback_Chromosome_sizes.txt')
 
 
+
+# afvaper round2 results --------------------------------------------------
+
+afvaper_results = read_csv('afvaper_round2_eigenvector1_results_50snp_window.csv')
+LFMM_data = read_csv('~/Parsons_Postdoc/Stickleback_Genomic/lfmm/Stickleback_LFMM_temperature_qvalues.csv')
+
+map_test = read_tsv('stickleback_clean_ped.map', 
+                    col_names = c('CHR', 
+                                  'SNP', 
+                                  'Genetic_pos', 
+                                  'POS')) 
+
+LFMM_data = bind_cols(map_test, 
+                      LFMM_data) %>% 
+  rename(qvalue = value) %>% 
+  stickle_CHR_reorder() %>% 
+  dist_cal()
+
+# write_csv(LFMM_data, 
+#           'LFMM_Mapped_Full_Data.csv')
+
+WC_Fst = read_tsv('Warm_Cold_Fst.fst') %>% 
+  na.omit() %>% 
+  mutate(FST_zero = if_else(FST < 0, 0, FST))
+
+LFMM_FST_data = inner_join(WC_Fst, 
+                           LFMM_data, 
+                           by = c('CHR', 
+                                  'SNP', 
+                                  'POS'))
+
+LFMM_FST_data %>% 
+  
+
+
+# afvaper lfmm overlap ----------------------------------------------------
+
+
+LFMM_data = read_csv('~/Parsons_Postdoc/Stickleback_Genomic/lfmm/Stickleback_LFMM_temperature_qvalues.csv')
+
+map_test = read_tsv('stickleback_clean_ped.map', 
+                    col_names = c('CHR', 
+                                  'SNP', 
+                                  'Genetic_pos', 
+                                  'POS')) 
+
+LFMM_data = bind_cols(map_test, 
+                      LFMM_data) %>% 
+  rename(qvalue = value) %>% 
+  stickle_CHR_reorder() %>% 
+  dist_cal()
+
+# write_csv(LFMM_data, 
+#           'LFMM_Mapped_Full_Data.csv')
+
+WC_Fst = read_tsv('Warm_Cold_Fst.fst') %>% 
+  na.omit() %>% 
+  mutate(FST_zero = if_else(FST < 0, 0, FST))
+
+LFMM_FST_data = inner_join(WC_Fst, 
+                           LFMM_data, 
+                           by = c('CHR', 
+                                  'SNP', 
+                                  'POS'))
+
+LFMM_FST_data %>% 
+  filter(CHR == 'chr_XXI', 
+         POS >= 11044262, 
+         POS <= 11574042) %>% View() 
+  filter(qvalue <= 0.01)
+
+LFMM_FST_data %>% 
+  filter(CHR == 'chr_XXI', 
+         POS >= 11044262, 
+         POS <= 11574042) %>% 
+  ggplot(aes(x = POS, 
+             y = FST_zero))+
+  geom_point()
 
 
 # Gene overlap ------------------------------------------------------------
