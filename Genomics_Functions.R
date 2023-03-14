@@ -265,3 +265,33 @@ SW_top_5_outliers = function(data){
    data[data$FST_mean > quantile(data$FST_mean, 
                                 prob = 1-5/100),]
 }
+
+
+
+# Create tped -------------------------------------------------------------
+
+Create_tped = function(ped, map){
+  ## Obtaining a vector of names for each individual
+  message('Creating vector of individual names')
+  indiv_names = ped %>% 
+    # filter(FamilyID != 'GDL') %>%
+    select(IndividualID) %>% 
+    t() %>% 
+    as_tibble() %>% 
+    row_to_names(row_number = 1) %>% 
+    names()
+  
+  message('Merging ped and map files')
+  ped %>% 
+    # filter(FamilyID != 'GDL') %>%
+    select(contains('AX-')) %>% 
+    t() %>% 
+    as_tibble() %>% 
+    rename_all(funs(c(indiv_names))) %>% 
+    bind_cols(map) %>% 
+    select(Chromosome, 
+           MarkerID, 
+           Genetic_dist, 
+           Physical_dist, 
+           everything())
+}
