@@ -2325,12 +2325,40 @@ LFMM_FST_data = inner_join(WC_Fst,
                                   'SNP', 
                                   'POS'))
 
-LFMM_FST_data %>% 
-  
 
+LFMM_FST_data %>% 
+  filter(CHR == 'chr_XXI', 
+         POS >= 11044262, 
+         POS <= 11213805) %>% 
+  arrange(FST_zero) %>% 
+  View()
+
+LFMM_FST_data %>% 
+  filter(CHR == 'chr_XXI', 
+         POS >= 11044262, 
+         POS <= 11213805) %>% 
+  ggplot(aes(x = POS, 
+             y = FST_zero))+
+  geom_point()
+
+
+LFMM_FST_data %>% 
+  filter(CHR == 'chr_XXI', 
+         POS >= 11370710, 
+         POS <= 11574024) %>% 
+  arrange(FST_zero) %>% 
+  View()
+LFMM_FST_data %>% 
+  filter(CHR == 'chr_XXI', 
+         POS >= 11370710, 
+         POS <= 11574024) %>% 
+  ggplot(aes(x = POS, 
+             y = FST_zero))+
+  geom_point()
 
 # afvaper lfmm overlap ----------------------------------------------------
 
+afvaper_results = read_csv('afvaper_round2_eigenvector1_results_50snp_window.csv')
 
 LFMM_data = read_csv('~/Parsons_Postdoc/Stickleback_Genomic/lfmm/Stickleback_LFMM_temperature_qvalues.csv')
 
@@ -2374,6 +2402,32 @@ LFMM_FST_data %>%
   geom_point()
 
 
+LFMM_outs_xxi = LFMM_FST_data %>% 
+filter(CHR == 'chr_XXI') %>% 
+filter(qvalue <= 0.01)
+
+LFMM_neutral_xxi = LFMM_FST_data %>% 
+  filter(CHR == 'chr_XXI', 
+         qvalue > 0.01)
+
+ggplot(data = LFMM_neutral_xxi, 
+       aes(x = POS, 
+           y = FST_zero))+
+  geom_point() +
+  geom_point(data = LFMM_outs_xxi, 
+             aes(x = POS, 
+                 y = FST_zero), 
+             col = '#f72585') +
+  geom_vline(xintercept = 11044262, 
+             col = '#e63946')+
+  geom_vline(xintercept = 11213805, 
+             col = '#e63946')+
+  geom_vline(xintercept = 11370710, 
+             col = '#e63946')+
+  geom_vline(xintercept = 11574024, 
+             col = '#e63946')
+
+#
 # Gene overlap ------------------------------------------------------------
 
 setwd('~/Parsons_Postdoc/Stickleback_Genomic/')
