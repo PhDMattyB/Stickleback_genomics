@@ -283,6 +283,7 @@ map = read_tsv('stickleback_maf0.05_ldpruned_filtered.map',
 final_df = bind_cols(snp_vals, 
           map)
 
+final_df %>% write_csv('pcadapt_qvalues_all_snps.csv')
 
 ## calculate cumulative base pair per chromosome
 dist_cal = final_df %>% 
@@ -2381,11 +2382,30 @@ WC_Fst = read_tsv('Warm_Cold_Fst.fst') %>%
   na.omit() %>% 
   mutate(FST_zero = if_else(FST < 0, 0, FST))
 
+pcadapt_outliers = read_csv('pcadapt_qvalues_all_snps.csv') %>% 
+  rename(CHR = chromosome, 
+         SNP = snp, 
+         POS = physical_pos) %>% 
+  inner_join(., 
+            WC_Fst, 
+            by = c('CHR', 
+                   'SNP', 
+                   'POS')) %>% 
+  filter(qvalues <= 0.01) %>% 
+  filter(CHR == 'chr_XXI')
+
 LFMM_FST_data = inner_join(WC_Fst, 
                            LFMM_data, 
                            by = c('CHR', 
                                   'SNP', 
                                   'POS'))
+
+WC_Fst_outs = read_csv('WC_Fst_clean.csv') %>% 
+  stickle_CHR_reorder() %>% 
+  dist_cal() %>% 
+  filter(CHR == 'chr_XXI', 
+         value == 'Outlier', 
+         FST_zero >= 0.10)
 
 LFMM_FST_data %>% 
   filter(CHR == 'chr_XXI', 
@@ -2401,7 +2421,6 @@ LFMM_FST_data %>%
              y = FST_zero))+
   geom_point()
 
-
 LFMM_outs_xxi = LFMM_FST_data %>% 
 filter(CHR == 'chr_XXI') %>% 
 filter(qvalue <= 0.05)
@@ -2414,10 +2433,18 @@ ggplot(data = LFMM_neutral_xxi,
        aes(x = POS, 
            y = FST_zero))+
   geom_point() +
+  geom_point(data = WC_Fst_outs, 
+             aes(x = POS, 
+                 y = FST_zero), 
+             col = '#3a86ff')+
   geom_point(data = LFMM_outs_xxi, 
              aes(x = POS, 
                  y = FST_zero), 
              col = '#f72585') +
+  geom_point(data = pcadapt_outliers, 
+             aes(x = POS, 
+                 y = FST_zero), 
+             col = '#e07a5f')+
   geom_vline(xintercept = 11044262, 
              col = '#e63946')+
   geom_vline(xintercept = 11213805, 
