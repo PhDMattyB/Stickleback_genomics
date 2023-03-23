@@ -30,3 +30,5 @@ snp_loc = stickle_map %>%
 ## This is really not working and R keep aborting
 # stickle_ped = read_table2('stickleback_maf0.05_ldpruned_filtered.ped') %>% 
 #   dplyr::select(1:13)
+
+
