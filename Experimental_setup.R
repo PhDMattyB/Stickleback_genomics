@@ -34,6 +34,12 @@ low_food_amount = treatment_data %>%
             avg_length = mean(Length)) %>% 
   mutate(low_food_amount = avg_weight*0.02)
 
+treatment_data %>% 
+  filter(Treatment == 'Low Food') %>% 
+  group_by(Population, 
+           Rep) %>% 
+  summarize(Number = n())
+
 
 high_food_amount = treatment_data %>% 
   # filter(Treatment == 'High Food', 
@@ -44,3 +50,12 @@ high_food_amount = treatment_data %>%
   summarize(avg_weight = mean(Weight), 
             avg_length = mean(Length)) %>% 
   mutate(low_food_amount = avg_weight*0.3)
+
+treatment_data %>% 
+  filter(Treatment == 'High Food') %>% 
+  group_by(Population, 
+           Rep) %>% 
+  summarize(Number = n())
+
+
+
