@@ -10,6 +10,8 @@
 
 setwd('~/Parsons_Postdoc/Experiment1/')
 
+setwd('~/Parsons_Postdoc/Experiment1/')
+
 library(tidyverse)
 
 treatment_data = read_csv('Experiment1_setup_data.csv')

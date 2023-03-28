@@ -26,6 +26,8 @@ setwd('~/Parsons_Postdoc/Stickleback_Genomic/vcf_filter/')
 
 ##
 
+
+
 # Tagging Exp 1 -----------------------------------------------------------
 setwd('~/Parsons_Postdoc/Experiment1/')
 
