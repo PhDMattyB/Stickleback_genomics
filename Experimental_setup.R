@@ -25,18 +25,22 @@ treatment_data = read_csv('Experiment1_setup_data.csv')
 
 
 low_food_amount = treatment_data %>% 
-  filter(Treatment == 'Low Food', 
-         Population == 'ACAC') %>% 
-  group_by(Rep)%>% 
+  # filter(Treatment == 'Low Food', 
+  #        Population == 'ACAC') %>% 
+  filter(Treatment == 'Low Food') %>% 
+  group_by(Population, 
+           Rep)%>% 
   summarize(avg_weight = mean(Weight), 
             avg_length = mean(Length)) %>% 
   mutate(low_food_amount = avg_weight*0.02)
 
 
 high_food_amount = treatment_data %>% 
-  filter(Treatment == 'High Food', 
-         Population == 'ACAC') %>% 
-  group_by(Rep)%>% 
+  # filter(Treatment == 'High Food', 
+  #        Population == 'ACAC') %>% 
+  filter(Treatment == 'High Food') %>% 
+  group_by(Population, 
+           Rep)%>% 
   summarize(avg_weight = mean(Weight), 
             avg_length = mean(Length)) %>% 
   mutate(low_food_amount = avg_weight*0.3)
