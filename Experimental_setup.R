@@ -20,7 +20,7 @@ treatment_data = read_csv('Experiment1_setup_data.csv')
 # Warm side ---------------------------------------------------------------
 
 
-low_food_amount = treatment_data %>% 
+low_food_warm = treatment_data %>% 
   # filter(Treatment == 'Low Food', 
   #        Population == 'ACAC') %>% 
   filter(Treatment == 'Low Food', 
@@ -39,7 +39,7 @@ treatment_data %>%
   summarize(Number = n())
 
 
-high_food_amount = treatment_data %>% 
+high_food_warm = treatment_data %>% 
   # filter(Treatment == 'High Food', 
   #        Population == 'ACAC') %>% 
   filter(Treatment == 'High Food', 
@@ -62,7 +62,7 @@ treatment_data %>%
 # Cold side ---------------------------------------------------------------
 
 
-low_food_amount = treatment_data %>% 
+low_food_cold = treatment_data %>% 
   # filter(Treatment == 'Low Food', 
   #        Population == 'ACAC') %>% 
   filter(Treatment == 'Low Food', 
@@ -81,7 +81,7 @@ treatment_data %>%
   summarize(Number = n())
 
 
-high_food_amount = treatment_data %>% 
+high_food_cold = treatment_data %>% 
   # filter(Treatment == 'High Food', 
   #        Population == 'ACAC') %>% 
   filter(Treatment == 'High Food', 
