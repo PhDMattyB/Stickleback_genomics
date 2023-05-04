@@ -17,7 +17,7 @@ library(tidyverse)
 treatment_data = read_csv('Experiment1_setup_data.csv')
 
 
-# Warm side ---------------------------------------------------------------
+# Warm side Initial---------------------------------------------------------------
 
 
 low_food_warm = treatment_data %>% 
@@ -58,7 +58,30 @@ treatment_data %>%
   summarize(Number = n())
 
 
+# Warm side final ---------------------------------------------------------
 
+
+Final_data = read_csv('Experiment1_Sampling_Good.csv')
+
+high_food_warm_final = Final_data %>% 
+  # filter(Treatment == 'High Food', 
+  #        Population == 'ACAC') %>% 
+  filter(Treatment == 'High Food', 
+         Temp == '18') %>% 
+  group_by(Pop, 
+           Rep)%>% 
+  summarize(avg_weight_final = mean(Weight), 
+            avg_length_final = mean(Length))
+
+low_food_warm_final = Final_data %>% 
+  # filter(Treatment == 'Low Food', 
+  #        Population == 'ACAC') %>% 
+  filter(Treatment == 'Low Food', 
+         Temp == '18') %>% 
+  group_by(Pop, 
+           Rep)%>% 
+  summarize(avg_weight_final = mean(Weight), 
+            avg_length_final = mean(Length))
 # Cold side ---------------------------------------------------------------
 
 
