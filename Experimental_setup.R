@@ -82,6 +82,17 @@ low_food_warm_final = Final_data %>%
            Rep)%>% 
   summarize(avg_weight_final = mean(Weight), 
             avg_length_final = mean(Length))
+
+
+# Warm Data Comparison ----------------------------------------------------
+
+high_food_warm
+high_food_warm_final
+
+
+
+low_food_warm
+low_food_warm_final
 # Cold side ---------------------------------------------------------------
 
 
