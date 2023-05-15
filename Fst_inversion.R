@@ -43,15 +43,19 @@ ped_ids = bind_cols(ped_ids,
 ## Need to split based on GTS vs SKRC, 
 ## Need to split based on GTS cs ASHNC
 
+## Need to split based on CSWY vs MYVW
+## Need to split based on CSWY vs SKRW
+## Need to split based on CSWY vs ASHNW
+
 ped_ids %>%
-  filter(population %in% c('GTS',
-                         'ASHNC')) %>%
+  filter(population %in% c('CSWY',
+                         'ASHNW')) %>%
   select(X1,
          X2,
          type) %>%
   rename(`#population` = 1,
          individual_id = 2) %>%
-  write_tsv('GTS_ASHNC_Fst_grouping.txt')
+  write_tsv('CSWY_ASHNW_Fst_grouping.txt')
 
 
 ## Need to make a ped and map file for each of these comparisons
@@ -63,8 +67,8 @@ ped_ids %>%
 
 
 ped_ids %>% 
-  filter(population %in% c('GTS', 
-                           'ASHNC')) %>% 
+  filter(population %in% c('CSWY', 
+                           'ASHNW')) %>% 
   # filter(population %in% c('GTS', 
   #                          'CSWY')) %>% 
   # filter(type %in% c('Warm', 
@@ -73,7 +77,14 @@ ped_ids %>%
                 X2) %>% 
   # rename(`#population` = population, 
   # individual_ID = X1) %>% 
-  write_tsv('GTS_ASHNC_keep.txt', 
+  write_tsv('CSWY_ASHNW_keep.txt', 
             col_names = F)
 
 ##
+
+
+# GTS vs cold pops FST ---------------------------------------------------------------
+
+
+
+
