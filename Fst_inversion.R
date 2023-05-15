@@ -144,4 +144,59 @@ Fst_manhattan(non_outs = GTS_SKRC,
 
 # CSWY vs warm pops FST ---------------------------------------------------
 
+CSWY_MYVW = read_tsv('CSWY_MYVW_FST.fst') %>% 
+  na.omit() %>%  ##pull out na's
+  mutate(FST_zero = if_else(FST < 0, 0, FST))%>% 
+  stickle_CHR_reorder() %>% 
+  dist_cal()
+
+CSWY_SKRW = read_tsv('CSWY_SKRW_FST.fst') %>% 
+  na.omit() %>%  ##pull out na's
+  mutate(FST_zero = if_else(FST < 0, 0, FST))%>% 
+  stickle_CHR_reorder() %>% 
+  dist_cal()
+
+CSWY_ASHNW = read_tsv('CSWY_ASHNW_FST.fst') %>% 
+  na.omit() %>%  ##pull out na's
+  mutate(FST_zero = if_else(FST < 0, 0, FST))%>% 
+  stickle_CHR_reorder() %>% 
+  dist_cal()
+
+axisdf_MYVW = axis_df(CSWY_MYVW)
+axisdf_SKRW = axis_df(CSWY_SKRW)
+axisdf_ASHNW = axis_df(CSWY_ASHNW)
+
+CSWY_MYVW_outs = CSWY_MYVW[CSWY_MYVW$FST_zero > quantile(CSWY_MYVW$FST_zero, 
+                                                      prob = 1-5/100),]
+
+CSWY_SKRW_outs = CSWY_SKRW[CSWY_SKRW$FST_zero > quantile(CSWY_SKRW$FST_zero, 
+                                                      prob = 1-5/100),]
+
+
+CSWY_ASHNW_outs = CSWY_ASHNW[CSWY_ASHNW$FST_zero > quantile(CSWY_ASHNW$FST_zero, 
+                                                         prob = 1-5/100),]
+
+Fst_manhattan(non_outs = CSWY_MYVW, 
+              outs = CSWY_MYVW_outs,
+              axisdf = axisdf_MYVW, 
+              xval = BPcum, 
+              yval = FST_zero, 
+              chr = CSWY_MYVW$CHR, 
+              out_col = '#d62828',)
+
+Fst_manhattan(non_outs = CSWY_ASHNW, 
+              outs = CSWY_ASHNW_outs, 
+              axisdf = axisdf_ASHNW, 
+              xval = BPcum, 
+              yval = FST_zero, 
+              chr = CSWY_ASHNW$CHR, 
+              out_col = '#06d6a0')
+
+Fst_manhattan(non_outs = CSWY_SKRW, 
+              outs = CSWY_SKRW_outs, 
+              axisdf = axisdf_SKRW, 
+              xval = BPcum, 
+              yval = FST_zero, 
+              chr = CSWY_SKRW$CHR, 
+              out_col = '#5f0f40')
 
