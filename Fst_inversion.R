@@ -207,3 +207,50 @@ Fst_manhattan(non_outs = CSWY_SKRW,
               chr = CSWY_SKRW$CHR, 
               out_col = '#5f0f40')
 
+
+
+
+# GTS vs COLD -------------------------------------------------------------
+
+GTS_COLD = read_tsv('GTS_COLD_FST.fst') %>% 
+  na.omit() %>%  ##pull out na's
+  mutate(FST_zero = if_else(FST < 0, 0, FST))%>% 
+  stickle_CHR_reorder() %>% 
+  dist_cal()
+
+axisdf_COLD = axis_df(GTS_COLD)
+
+GTS_COLD_outs = GTS_COLD[GTS_COLD$FST_zero > quantile(GTS_COLD$FST_zero, 
+                                                         prob = 1-5/100),]
+
+
+Fst_manhattan(non_outs = GTS_COLD, 
+              outs = GTS_COLD_outs,
+              axisdf = axisdf_COLD, 
+              xval = BPcum, 
+              yval = FST_zero, 
+              chr = GTS_COLD$CHR, 
+              out_col = '#023047',)
+
+
+# CSWY vs WARM -------------------------------------------------------------
+
+CSWY_WARM = read_tsv('CSWY_WARM_FST.fst') %>% 
+  na.omit() %>%  ##pull out na's
+  mutate(FST_zero = if_else(FST < 0, 0, FST))%>% 
+  stickle_CHR_reorder() %>% 
+  dist_cal()
+
+axisdf_WARM = axis_df(CSWY_WARM)
+
+CSWY_WARM_outs = CSWY_WARM[CSWY_WARM$FST_zero > quantile(CSWY_WARM$FST_zero, 
+                                                      prob = 1-5/100),]
+
+
+Fst_manhattan(non_outs = CSWY_WARM, 
+              outs = CSWY_WARM_outs,
+              axisdf = axisdf_WARM, 
+              xval = BPcum, 
+              yval = FST_zero, 
+              chr = CSWY_WARM$CHR, 
+              out_col = '#d62828',)
