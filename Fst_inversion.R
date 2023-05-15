@@ -39,11 +39,9 @@ ped_ids = bind_cols(ped_ids,
                     identifiers)
 
 
-## Need to split based on each comparison 
-## ASHW vs ASHC
-## MYVW vs MYVC
-## SKRW vs SKRC
-## GTS vs CSWY
+## Need to split based on GTS vs MYVC
+## Need to split based on GTS vs SKRC, 
+## Need to split based on GTS cs ASHNC
 
 # ped_ids %>% 
 #   filter(type %in% c('Warm', 
