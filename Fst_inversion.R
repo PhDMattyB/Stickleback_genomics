@@ -107,4 +107,36 @@ axisdf_MYVC = axis_df(GTS_MYVC)
 axisdf_SKRC = axis_df(GTS_SKRC)
 axisdf_ASHNC = axis_df(GTS_ASHNC)
 
+GTS_MYVC_outs = GTS_MYVC[GTS_MYVC$FST_zero > quantile(GTS_MYVC$FST_zero, 
+                                  prob = 1-5/100),]
 
+GTS_SKRC_outs = GTS_SKRC[GTS_SKRC$FST_zero > quantile(GTS_SKRC$FST_zero, 
+                                                      prob = 1-5/100),]
+
+
+GTS_ASHNC_outs = GTS_ASHNC[GTS_ASHNC$FST_zero > quantile(GTS_ASHNC$FST_zero, 
+                                                      prob = 1-5/100),]
+
+Fst_manhattan(non_outs = GTS_MYVC, 
+              outs = GTS_MYVC_outs,
+              axisdf = axisdf_MYVC, 
+              xval = BPcum, 
+              yval = FST_zero, 
+              chr = GTS_MYVC$CHR, 
+              out_col = '#d62828',)
+
+Fst_manhattan(non_outs = GTS_ASHNC, 
+              outs = GTS_ASHNC_outs, 
+              axisdf = axisdf_ASHNC, 
+              xval = BPcum, 
+              yval = FST_zero, 
+              chr = GTS_ASHNC$CHR, 
+              out_col = '#06d6a0')
+
+Fst_manhattan(non_outs = GTS_SKRC, 
+              outs = GTS_SKRC_outs, 
+              axisdf = axisdf_SKRC, 
+              xval = BPcum, 
+              yval = FST_zero, 
+              chr = GTS_SKRC$CHR, 
+              out_col = '#5f0f40')
