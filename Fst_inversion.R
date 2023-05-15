@@ -44,18 +44,14 @@ ped_ids = bind_cols(ped_ids,
 ## Need to split based on GTS cs ASHNC
 
 ped_ids %>%
-  filter(type %in% c('Warm',
-                         'Cold')) %>%
+  filter(population %in% c('GTS',
+                         'ASHNC')) %>%
   select(X1,
          X2,
          type) %>%
   rename(`#population` = 1,
          individual_id = 2) %>%
-  write_tsv('Warm_cold_Fst_grouping.txt')
-
-## Holy fuck!! Make sure to use the actual family and individual
-## identifiers in the fucking ped file. WOW
-
+  write_tsv('GTS_ASHNC_Fst_grouping.txt')
 
 
 ## Need to make a ped and map file for each of these comparisons
@@ -65,26 +61,10 @@ ped_ids %>%
 ## the --keep file needs to be a text file with family and individual
 ## identifiers
 
-# temp = read_tsv('temp.env', 
-#                 col_names = 'temp')
-# 
-# ped_ids = bind_cols(ped_ids, 
-#                     temp)
-
-# ped_ids %>% 
-#   filter(population %in% c('GTS', 
-#                            'CSWY')) %>% 
-#   dplyr::select(temp) %>% 
-#   write_tsv('GTS_CSWY_temp_var.env', 
-#             col_names = F)
 
 ped_ids %>% 
-  filter(population %in% c('MYVC', 
-                           'MYVW', 
-                           'ASHNC', 
-                           'ASHNW', 
-                           'SKRC', 
-                           'SKRW')) %>% 
+  filter(population %in% c('GTS', 
+                           'ASHNC')) %>% 
   # filter(population %in% c('GTS', 
   #                          'CSWY')) %>% 
   # filter(type %in% c('Warm', 
@@ -93,7 +73,7 @@ ped_ids %>%
                 X2) %>% 
   # rename(`#population` = population, 
   # individual_ID = X1) %>% 
-  write_tsv('Warm_Cold_No_GTS_CSWY_keep.txt', 
+  write_tsv('GTS_ASHNC_keep.txt', 
             col_names = F)
 
 ##
