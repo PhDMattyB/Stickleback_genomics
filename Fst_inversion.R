@@ -43,15 +43,15 @@ ped_ids = bind_cols(ped_ids,
 ## Need to split based on GTS vs SKRC, 
 ## Need to split based on GTS cs ASHNC
 
-# ped_ids %>% 
-#   filter(type %in% c('Warm', 
-#                          'Cold')) %>%
-#   select(X1, 
-#          X2, 
-#          type) %>% 
-#   rename(`#population` = 1, 
-#          individual_id = 2) %>% 
-#   write_tsv('Warm_cold_Fst_grouping.txt')
+ped_ids %>%
+  filter(type %in% c('Warm',
+                         'Cold')) %>%
+  select(X1,
+         X2,
+         type) %>%
+  rename(`#population` = 1,
+         individual_id = 2) %>%
+  write_tsv('Warm_cold_Fst_grouping.txt')
 
 ## Holy fuck!! Make sure to use the actual family and individual
 ## identifiers in the fucking ped file. WOW
