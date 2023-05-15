@@ -103,4 +103,8 @@ GTS_ASHNC = read_tsv('GTS_ASHNC_FST.fst') %>%
   stickle_CHR_reorder() %>% 
   dist_cal()
 
+axisdf_MYVC = axis_df(GTS_MYVC)
+axisdf_SKRC = axis_df(GTS_SKRC)
+axisdf_ASHNC = axis_df(GTS_ASHNC)
+
 
