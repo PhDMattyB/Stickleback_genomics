@@ -140,3 +140,8 @@ Fst_manhattan(non_outs = GTS_SKRC,
               yval = FST_zero, 
               chr = GTS_SKRC$CHR, 
               out_col = '#5f0f40')
+
+
+# CSWY vs warm pops FST ---------------------------------------------------
+
+
