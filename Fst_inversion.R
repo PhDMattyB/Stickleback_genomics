@@ -85,6 +85,22 @@ ped_ids %>%
 
 # GTS vs cold pops FST ---------------------------------------------------------------
 
+GTS_MYVC = read_tsv('GTS_MYVC_FST.fst') %>% 
+  na.omit() %>%  ##pull out na's
+  mutate(FST_zero = if_else(FST < 0, 0, FST))%>% 
+  stickle_CHR_reorder() %>% 
+  dist_cal()
 
+GTS_SKRC = read_tsv('GTS_SKRC_FST.fst') %>% 
+  na.omit() %>%  ##pull out na's
+  mutate(FST_zero = if_else(FST < 0, 0, FST))%>% 
+  stickle_CHR_reorder() %>% 
+  dist_cal()
+
+GTS_ASHNC = read_tsv('GTS_ASHNC_FST.fst') %>% 
+  na.omit() %>%  ##pull out na's
+  mutate(FST_zero = if_else(FST < 0, 0, FST))%>% 
+  stickle_CHR_reorder() %>% 
+  dist_cal()
 
 
