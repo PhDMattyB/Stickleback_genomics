@@ -266,3 +266,50 @@ Fst_manhattan(non_outs = CSWY_WARM,
               yval = FST_zero, 
               chr = CSWY_WARM$CHR, 
               out_col = '#d62828',)
+
+
+# GTS vs div pops ---------------------------------------------------------
+GTS_vs_divpops = read_tsv('GTS_vs_divpops_FST.fst') %>% 
+  na.omit() %>%  ##pull out na's
+  mutate(FST_zero = if_else(FST < 0, 0, FST))%>% 
+  stickle_CHR_reorder() %>% 
+  dist_cal()
+
+axisdf_vs_divpops = axis_df(GTS_vs_divpops)
+
+GTS_vs_divpops_outs = GTS_vs_divpops[GTS_vs_divpops$FST_zero > quantile(GTS_vs_divpops$FST_zero, 
+                                                      prob = 1-5/100),]
+
+
+Fst_manhattan(non_outs = GTS_vs_divpops, 
+              outs = GTS_vs_divpops_outs,
+              axisdf = axisdf_vs_divpops, 
+              xval = BPcum, 
+              yval = FST_zero, 
+              chr = GTS_vs_divpops$CHR, 
+              out_col = '#023047',)
+
+
+# GTS vs allpops ----------------------------------------------------------
+
+
+GTS_vs_allpops = read_tsv('GTS_vs_allpops_FST.fst') %>% 
+  na.omit() %>%  ##pull out na's
+  mutate(FST_zero = if_else(FST < 0, 0, FST))%>% 
+  stickle_CHR_reorder() %>% 
+  dist_cal()
+
+axisdf_vs_allpops = axis_df(GTS_vs_allpops)
+
+GTS_vs_allpops_outs = GTS_vs_allpops[GTS_vs_allpops$FST_zero > quantile(GTS_vs_allpops$FST_zero, 
+                                                                        prob = 1-5/100),]
+
+
+Fst_manhattan(non_outs = GTS_vs_allpops, 
+              outs = GTS_vs_allpops_outs,
+              axisdf = axisdf_vs_allpops, 
+              xval = BPcum, 
+              yval = FST_zero, 
+              chr = GTS_vs_allpops$CHR, 
+              out_col = '#023047',)
+
