@@ -114,6 +114,7 @@ low_warm_results = inner_join(low_food_warm,
          Weight_dif, 
          Length_growth)
 
+
 # Cold side ---------------------------------------------------------------
 
 
@@ -210,4 +211,10 @@ low_cold_results = inner_join(low_food_cold,
          Rep,
          Weight_dif,
          Length_growth)
-# 
+
+
+# Cold warm comparison ----------------------------------------------------
+
+high_warm_results
+
+high_cold_results
