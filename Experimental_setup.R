@@ -124,6 +124,7 @@ low_food_cold = treatment_data %>%
          Temperature == '12') %>% 
   group_by(Population, 
            Rep)%>% 
+  rename(Pop = Population) %>% 
   summarize(avg_weight = mean(Weight), 
             avg_length = mean(Length)) %>% 
   mutate(low_food_amount = avg_weight*0.02)
@@ -171,15 +172,15 @@ high_food_cold_final = Final_data %>%
   summarize(avg_weight_final = mean(Weight), 
             avg_length_final = mean(Length))
 
-# low_food_cold_final = Final_data %>% 
-#   # filter(Treatment == 'Low Food', 
-#   #        Population == 'ACAC') %>% 
-#   filter(Treatment == 'Low Food', 
-#          Temp == '18') %>% 
-#   group_by(Pop, 
-#            Rep)%>% 
-#   summarize(avg_weight_final = mean(Weight), 
-#             avg_length_final = mean(Length))
+low_food_cold_final = Final_data %>%
+  # filter(Treatment == 'Low Food',
+  #        Population == 'ACAC') %>%
+  filter(Treatment == 'Low Food',
+         Temp == '18') %>%
+  group_by(Pop,
+           Rep)%>%
+  summarize(avg_weight_final = mean(Weight),
+            avg_length_final = mean(Length))
 
 
 
@@ -197,16 +198,16 @@ high_cold_results = inner_join(high_food_cold,
          Weight_dif, 
          Length_growth)
 
-# 
-# low_cold_results = inner_join(low_food_cold, 
-#                               low_food_cold_final, 
-#                               by = c('Pop', 
-#                                      'Rep')) %>% 
-#   select(-'low_food_amount') %>% 
-#   mutate(Weight_dif = avg_weight_final - avg_weight, 
-#          Length_growth = avg_length_final - avg_length) %>% 
-#   select(Pop, 
-#          Rep, 
-#          Weight_dif, 
-#          Length_growth)
+
+low_cold_results = inner_join(low_food_cold,
+                              low_food_cold_final,
+                              by = c('Pop',
+                                     'Rep')) %>%
+  select(-'low_food_amount') %>%
+  mutate(Weight_dif = avg_weight_final - avg_weight,
+         Length_growth = avg_length_final - avg_length) %>%
+  select(Pop,
+         Rep,
+         Weight_dif,
+         Length_growth)
 # 
