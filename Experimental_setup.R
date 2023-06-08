@@ -253,3 +253,26 @@ inner_join(high_warm_results,
                 Rep,
                 high_warm_weight_diff, 
                 high_warm_length_diff)
+
+
+
+
+
+low_warm_results = low_warm_results %>% 
+  rename(weight_dif_warm = Weight_dif, 
+         Length_dif_warm = Length_growth)
+
+low_cold_results = low_cold_results %>% 
+  rename(weight_dif_cold = Weight_dif, 
+         Length_dif_cold = Length_growth)
+
+inner_join(low_warm_results, 
+           low_cold_results, 
+           by = c('Pop', 
+                  'Rep')) %>% 
+  mutate(low_warm_weight_diff = weight_dif_warm - weight_dif_cold, 
+         low_warm_length_diff = Length_dif_warm - Length_dif_cold) %>% 
+  dplyr::select(Pop, 
+                Rep,
+                low_warm_weight_diff, 
+                low_warm_length_diff)
