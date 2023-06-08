@@ -247,12 +247,12 @@ high_compare_results = inner_join(high_warm_results,
            high_cold_results, 
            by = c('Pop', 
                   'Rep')) %>% 
-  mutate(high_warm_weight_diff = weight_dif_warm - weight_dif_cold, 
-         high_warm_length_diff = Length_dif_warm - Length_dif_cold) %>% 
+  mutate(high_weight_diff = weight_dif_warm - weight_dif_cold, 
+         high_length_diff = Length_dif_warm - Length_dif_cold) %>% 
   dplyr::select(Pop, 
                 Rep,
-                high_warm_weight_diff, 
-                high_warm_length_diff)
+                high_weight_diff, 
+                high_length_diff)
 
 
 
@@ -270,14 +270,14 @@ low_compare_results = inner_join(low_warm_results,
            low_cold_results, 
            by = c('Pop', 
                   'Rep')) %>% 
-  mutate(low_warm_weight_diff = weight_dif_warm - weight_dif_cold, 
-         low_warm_length_diff = Length_dif_warm - Length_dif_cold) %>% 
+  mutate(low_weight_diff = weight_dif_warm - weight_dif_cold, 
+         low_length_diff = Length_dif_warm - Length_dif_cold) %>% 
   dplyr::select(Pop, 
                 Rep,
-                low_warm_weight_diff, 
-                low_warm_length_diff)
+                low_weight_diff, 
+                low_length_diff)
 
 
 high_compare_results
 
-low_cold_results
+low_compare_results
