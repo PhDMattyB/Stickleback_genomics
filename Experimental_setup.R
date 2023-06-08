@@ -235,6 +235,21 @@ low_cold_results = inner_join(low_food_cold,
 
 # Cold warm comparison ----------------------------------------------------
 
-high_warm_results
+high_warm_results = high_warm_results %>% 
+  rename(weight_dif_warm = Weight_dif, 
+         Length_dif_warm = Length_growth)
 
-high_cold_results
+high_cold_results = high_cold_results %>% 
+  rename(weight_dif_cold = Weight_dif, 
+         Length_dif_cold = Length_growth)
+
+inner_join(high_warm_results, 
+           high_cold_results, 
+           by = c('Pop', 
+                  'Rep')) %>% 
+  mutate(high_warm_weight_diff = weight_dif_warm - weight_dif_cold, 
+         high_warm_length_diff = Length_dif_warm - Length_dif_cold) %>% 
+  dplyr::select(Pop, 
+                Rep,
+                high_warm_weight_diff, 
+                high_warm_length_diff)
