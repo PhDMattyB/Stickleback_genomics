@@ -243,7 +243,7 @@ high_cold_results = high_cold_results %>%
   rename(weight_dif_cold = Weight_dif, 
          Length_dif_cold = Length_growth)
 
-inner_join(high_warm_results, 
+high_compare_results = inner_join(high_warm_results, 
            high_cold_results, 
            by = c('Pop', 
                   'Rep')) %>% 
@@ -266,7 +266,7 @@ low_cold_results = low_cold_results %>%
   rename(weight_dif_cold = Weight_dif, 
          Length_dif_cold = Length_growth)
 
-inner_join(low_warm_results, 
+low_compare_results = inner_join(low_warm_results, 
            low_cold_results, 
            by = c('Pop', 
                   'Rep')) %>% 
@@ -276,3 +276,8 @@ inner_join(low_warm_results,
                 Rep,
                 low_warm_weight_diff, 
                 low_warm_length_diff)
+
+
+high_compare_results
+
+s
