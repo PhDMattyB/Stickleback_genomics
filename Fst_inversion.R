@@ -24,8 +24,8 @@ identifiers = mutate(.data = identifiers,
                      type = as.factor(case_when(
                        population == 'ASHNC' ~ 'Cold',
                        population == 'ASHNW' ~ 'Warm',
-                       population == 'CSWY' ~ 'Manmade',
-                       population == 'GTS' ~ 'Thermal',
+                       population == 'CSWY' ~ 'Cold',
+                       population == 'GTS' ~ 'Warm',
                        population == 'MYVC' ~ 'Cold',
                        population == 'MYVW' ~ 'Warm',
                        population == 'SKRC' ~ 'Cold',
@@ -50,25 +50,13 @@ ped_ids = bind_cols(ped_ids,
 
 ped_ids %>% 
   dplyr::select(X1, 
-                X2) %>%
-  unite(col = 'vcf_format',
-        X1, 
-        X2) %>% 
-  mutate(vcf_format2 = vcf_format) %>% 
-  # rowid_to_column() %>% 
-  write_tsv('stickleback_easysfs_popfile.txt', 
-            col_names = F)
-
-ped_ids %>% 
-  dplyr::select(X1, 
                 X2, 
-                lake) %>%
+                type) %>%
+  filter(type == 'Warm') %>% 
   unite(col = 'vcf_format',
         X1, 
         X2) %>% 
-  # mutate(vcf_format2 = vcf_format) %>% 
-  # rowid_to_column() %>% 
-  write_tsv('stickleback_easysfs_popfile_allpops.txt', 
+  write_tsv('stickleback_easysfs_popfile_warm.txt', 
             col_names = F)
 
 ## Need to split based on GTS vs MYVC
@@ -112,14 +100,16 @@ ped_ids %>%
 
 
 ped_ids %>% 
-  filter(population %in% c('GTS', 
-                           'MYVW',
-                           'MYVC', 
+  filter(population %in% c(
+    'GTS',
+                           'CSWY',
+                           # 'MYVW',
+                           'MYVC',
                            'SKRC',
-                           'SKRW',
-                           'ASHNC',
-                           'ASHNW', 
-                           'CSWY')) %>% 
+                           # 'SKRW',
+                           'ASHNC'
+                           # 'ASHNW'
+                           )) %>% 
   # filter(population %in% c('GTS', 
   #                          'CSWY')) %>% 
   # filter(type %in% c('Warm', 
@@ -128,7 +118,7 @@ ped_ids %>%
                 X2) %>% 
   # rename(`#population` = population, 
   # individual_ID = X1) %>% 
-  write_tsv('GTS_vs_allpops_keep.txt', 
+  write_tsv('cold_pops_keep.txt', 
             col_names = F)
 
 ##
