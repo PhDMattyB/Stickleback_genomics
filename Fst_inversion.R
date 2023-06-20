@@ -49,6 +49,18 @@ ped_ids %>%
   write_tsv('stickleback_easysfs_popfile.txt', 
             col_names = F)
 
+ped_ids %>% 
+  dplyr::select(X1, 
+                X2, 
+                population) %>%
+  unite(col = 'vcf_format',
+        X1, 
+        X2) %>% 
+  # mutate(vcf_format2 = vcf_format) %>% 
+  # rowid_to_column() %>% 
+  write_tsv('stickleback_easysfs_popfile2.txt', 
+            col_names = F)
+
 ## Need to split based on GTS vs MYVC
 ## Need to split based on GTS vs SKRC, 
 ## Need to split based on GTS cs ASHNC
