@@ -38,6 +38,16 @@ ped_ids = read_table2('stickleback_maf0.05_ldpruned_filtered.fam',
 ped_ids = bind_cols(ped_ids, 
                     identifiers)
 
+ped_ids %>% 
+  dplyr::select(X1, 
+                X2) %>%
+  unite(col = 'vcf_format',
+        X1, 
+        X2) %>% 
+  mutate(vcf_format2 = vcf_format) %>% 
+  # rowid_to_column() %>% 
+  write_tsv('stickleback_easysfs_popfile.txt', 
+            col_names = F)
 
 ## Need to split based on GTS vs MYVC
 ## Need to split based on GTS vs SKRC, 
