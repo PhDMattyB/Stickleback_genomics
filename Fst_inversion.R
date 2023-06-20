@@ -30,6 +30,16 @@ identifiers = mutate(.data = identifiers,
                        population == 'MYVW' ~ 'Warm',
                        population == 'SKRC' ~ 'Cold',
                        population == 'SKRW' ~ 'Warm')))
+identifiers = mutate(.data = identifiers,
+                     lake = as.factor(case_when(
+                       population == 'ASHNC' ~ 'ASHN',
+                       population == 'ASHNW' ~ 'ASHN',
+                       population == 'CSWY' ~ 'CSWY',
+                       population == 'GTS' ~ 'GTS',
+                       population == 'MYVC' ~ 'MYV',
+                       population == 'MYVW' ~ 'MYV',
+                       population == 'SKRC' ~ 'SKR',
+                       population == 'SKRW' ~ 'SKR')))
 
 ped_ids = read_table2('stickleback_maf0.05_ldpruned_filtered.fam', 
                       col_names = F) %>%
@@ -52,13 +62,13 @@ ped_ids %>%
 ped_ids %>% 
   dplyr::select(X1, 
                 X2, 
-                population) %>%
+                lake) %>%
   unite(col = 'vcf_format',
         X1, 
         X2) %>% 
   # mutate(vcf_format2 = vcf_format) %>% 
   # rowid_to_column() %>% 
-  write_tsv('stickleback_easysfs_popfile2.txt', 
+  write_tsv('stickleback_easysfs_popfile_allpops.txt', 
             col_names = F)
 
 ## Need to split based on GTS vs MYVC
