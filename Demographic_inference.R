@@ -19,5 +19,11 @@ warm_stickle = read.vcf('stickleback_warm_pops.vcf',
                         from = 1, 
                         to = 173444)
 
-SFS = site.spectrum(warm_stickle, 
+warm_SFS = site.spectrum(warm_stickle, 
               folded = T)
+
+cold_stickle = read.vcf('stickleback_cold_pops.vcf', 
+                        from = 1, 
+                        to = 173444)
+cold_sfs = site.spectrum(cold_stickle, 
+                         folded = T)
