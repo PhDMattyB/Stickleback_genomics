@@ -27,3 +27,18 @@ cold_stickle = read.vcf('stickleback_cold_pops.vcf',
                         to = 173444)
 cold_sfs = site.spectrum(cold_stickle, 
                          folded = T)
+
+
+
+# Per population folded SFS -----------------------------------------------
+
+
+setwd('~/Parsons_Postdoc/Stickleback_Genomic/vcf_filter/')
+
+MYV = read.vcf('MYV_only.vcf', 
+                        from = 1, 
+                        to = 173444)
+
+MYV_sfs = site.spectrum(MYV, 
+                         folded = T)
+
