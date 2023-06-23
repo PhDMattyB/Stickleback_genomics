@@ -52,11 +52,11 @@ ped_ids %>%
   dplyr::select(X1, 
                 X2, 
                 type) %>%
-  filter(type == 'Warm') %>% 
+  # filter(type == 'Warm') %>% 
   unite(col = 'vcf_format',
         X1, 
         X2) %>% 
-  write_tsv('stickleback_easysfs_popfile_warm.txt', 
+  write_tsv('stickleback_easysfs_popfile_2pops.txt', 
             col_names = F)
 
 ## Need to split based on GTS vs MYVC
