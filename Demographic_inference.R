@@ -18,3 +18,6 @@ setwd('~/Parsons_Postdoc/Stickleback_Genomic/vcf_filter/')
 warm_stickle = read.vcf('stickleback_warm_pops.vcf', 
                         from = 1, 
                         to = 173444)
+
+SFS = site.spectrum(warm_stickle, 
+              folded = T)
