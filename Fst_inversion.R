@@ -101,13 +101,13 @@ ped_ids %>%
 
 ped_ids %>% 
   filter(population %in% c(
-    'GTS',
-                           'CSWY',
+    'GTS'
+                           # 'CSWY'
                            # 'MYVW',
-                           'MYVC',
-                           'SKRC',
-                           # 'SKRW',
-                           'ASHNC'
+                           # 'MYVC'
+                           # 'SKRC',
+                           # 'SKRW'
+                           # 'ASHNC',
                            # 'ASHNW'
                            )) %>% 
   # filter(population %in% c('GTS', 
@@ -118,10 +118,10 @@ ped_ids %>%
                 X2) %>% 
   # rename(`#population` = population, 
   # individual_ID = X1) %>% 
-  write_tsv('cold_pops_keep.txt', 
+  write_tsv('GTS_pops_keep.txt', 
             col_names = F)
 
-##
+s##
 
 
 # GTS vs cold pops FST ---------------------------------------------------------------
