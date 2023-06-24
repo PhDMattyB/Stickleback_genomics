@@ -80,8 +80,18 @@ setwd('~/Parsons_Postdoc/Stickleback_Genomic/stairwayplot2/')
 
 MYV_data = read_tsv('MYV stairway.final.summary')
 SKR_data = read_tsv('SKR stairway.final.summary')
+ASHN_data = read_tsv('ASHN stairway.final.summary')
+CSWY_data = read_tsv('CSWY stairway.final.summary')
+GTS_data = read_tsv('GTS stairway.final.summary')
+
 
 View(MYV_data)
+
+
+ggplot(data = GTS_data, 
+       aes(x = year,
+           y = Ne_median))+
+  geom_line()
 
 
 ggplot()+
@@ -91,10 +101,5 @@ ggplot()+
   geom_line(data = SKR_data, 
             aes(x = year, 
                 y = Ne_median), 
-            col = 'red')
-
-
-ggplot(data = SKR_data, 
-       aes(x = year,
-           y = Ne_median))+
-  geom_line()
+            col = 'red')+
+  scale_x_reverse()
