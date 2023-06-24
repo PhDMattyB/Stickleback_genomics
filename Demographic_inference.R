@@ -42,3 +42,59 @@ MYV = read.vcf('MYV_only.vcf',
 MYV_sfs = site.spectrum(MYV, 
                          folded = T)
 
+ASHN = read.vcf('ASHN_only.vcf', 
+               from = 1, 
+               to = 173444)
+
+ASHN_sfs = site.spectrum(ASHN, 
+                        folded = T)
+
+
+SKR = read.vcf('SKR_only.vcf', 
+               from = 1, 
+               to = 173444)
+
+SKR_sfs = site.spectrum(SKR, 
+                        folded = T)
+
+CSWY = read.vcf('CSWY_only.vcf', 
+               from = 1, 
+               to = 173444)
+
+CSWY_sfs = site.spectrum(CSWY, 
+                        folded = T)
+
+GTS = read.vcf('GTS_only.vcf', 
+               from = 1, 
+               to = 173444)
+
+GTS_sfs = site.spectrum(GTS, 
+                        folded = T)
+
+
+
+# Stairway plot 2 results -------------------------------------------------
+
+setwd('~/Parsons_Postdoc/Stickleback_Genomic/stairwayplot2/')
+
+
+MYV_data = read_tsv('MYV stairway.final.summary')
+SKR_data = read_tsv('SKR stairway.final.summary')
+
+View(MYV_data)
+
+
+ggplot()+
+  geom_line(data = MYV_data, 
+            aes(x = year, 
+                y = Ne_median))+
+  geom_line(data = SKR_data, 
+            aes(x = year, 
+                y = Ne_median), 
+            col = 'red')
+
+
+ggplot(data = SKR_data, 
+       aes(x = year,
+           y = Ne_median))+
+  geom_line()
