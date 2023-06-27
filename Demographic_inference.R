@@ -78,7 +78,8 @@ GTS_sfs = site.spectrum(GTS,
 setwd('~/Parsons_Postdoc/Stickleback_Genomic/stairwayplot2/')
 
 
-MYV_data = read_tsv('MYV stairway.final.summary')
+MYV_data = read_tsv('MYV stairway.final.summary') %>% 
+  mutate(year_conv = year/1000)
 SKR_data = read_tsv('SKR stairway.final.summary')
 ASHN_data = read_tsv('ASHN stairway.final.summary')
 CSWY_data = read_tsv('CSWY stairway.final.summary')
@@ -88,8 +89,8 @@ GTS_data = read_tsv('GTS stairway.final.summary')
 View(MYV_data)
 
 
-ggplot(data = GTS_data, 
-       aes(x = year,
+ggplot(data = MYV_data, 
+       aes(x = year_conv,
            y = Ne_median))+
   geom_line()
 
