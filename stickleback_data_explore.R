@@ -2215,9 +2215,9 @@ map %>%
            .keep_all = T) %>% 
   View()
 
-# eig1_50snps = read_csv('afvaper_eigenvector1_results_50snp_window.csv')
+eig1_50snps = read_csv('afvaper_eigenvector1_results_50snp_window.csv')
 # 
-# View(eig1_50snps)
+View(eig1_50snps)
 # 
 # afvaper try chr1 --------------------------------------------------------
 
@@ -2299,6 +2299,8 @@ chr_perms = read_tsv('Stickleback_Chromosome_sizes.txt')
 
 
 # afvaper round2 results --------------------------------------------------
+
+setwd('~/Parsons_Postdoc/Stickleback_Genomic/vcf_filter/')
 
 afvaper_results = read_csv('afvaper_round2_eigenvector1_results_50snp_window.csv')
 LFMM_data = read_csv('~/Parsons_Postdoc/Stickleback_Genomic/lfmm/Stickleback_LFMM_temperature_qvalues.csv')
