@@ -19,7 +19,7 @@ treatment_data = read_csv('Experiment1_setup_data.csv')
 ##
 # Warm side Initial---------------------------------------------------------------
 
-
+## quantify condition factor based on that new paper we just read
 low_food_warm = treatment_data %>% 
   # filter(Treatment == 'Low Food', 
   #        Population == 'ACAC') %>% 
@@ -32,7 +32,7 @@ low_food_warm = treatment_data %>%
          Temp = Temperature) %>% 
   summarize(avg_weight = mean(Weight), 
             avg_length = mean(Length)) %>% 
-  mutate(low_food_amount = avg_weight*0.02)
+  mutate(low_food_amount = avg_weight*0.02) 
 
 treatment_data %>% 
   filter(Treatment == 'Low Food', 
