@@ -314,6 +314,20 @@ Fst_manhattan(non_outs = GTS_vs_divpops,
 ## Chromosome 4 looks interesting, has a bunch of outliers on it
 ## check to see if they're around the eda locus. 
 
+GTS_vs_divpops_outs %>% 
+  filter(FST_zero >= 0.50) %>% 
+  group_by(CHR) %>% 
+  summarise(n())
+
+GTS_vs_divpops_outs %>% 
+  filter(FST_zero >= 0.50, 
+         CHR == 'chr_IV') %>% 
+  View()
+
+## EDA locus is 12783579-12794739
+## and the closest SNP is 14714177
+
+
 # GTS vs allpops ----------------------------------------------------------
 
 GTS_vs_allpops = read_tsv('GTS_vs_allpops_FST.fst') %>% 
