@@ -350,3 +350,18 @@ Fst_manhattan(non_outs = GTS_vs_allpops,
               chr = GTS_vs_allpops$CHR, 
               out_col = '#023047',)
 
+
+GTS_vs_allpops_outs
+
+GTS_vs_allpops_outs %>% 
+  filter(FST_zero >= 0.50) %>% 
+  group_by(CHR) %>% 
+  summarise(n())
+
+GTS_vs_allpops_outs %>% 
+  filter(FST_zero >= 0.50, 
+         CHR == 'chr_IV') %>% 
+  View()
+
+## EDA locus is 12783579-12794739
+## still not close
