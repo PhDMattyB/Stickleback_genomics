@@ -311,9 +311,10 @@ Fst_manhattan(non_outs = GTS_vs_divpops,
               chr = GTS_vs_divpops$CHR, 
               out_col = '#023047',)
 
+## Chromosome 4 looks interesting, has a bunch of outliers on it
+## check to see if they're around the eda locus. 
 
 # GTS vs allpops ----------------------------------------------------------
-
 
 GTS_vs_allpops = read_tsv('GTS_vs_allpops_FST.fst') %>% 
   na.omit() %>%  ##pull out na's
