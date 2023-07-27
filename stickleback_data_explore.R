@@ -726,6 +726,9 @@ ped_ids = read_table2('stickleback_maf0.05_ldpruned_filtered.fam',
 ped_ids = bind_cols(ped_ids, 
                     identifiers)
 
+ped_ids %>% 
+  select(individual_id) %>% 
+  View()
 
 ## Need to split based on each comparison 
 ## ASHW vs ASHC
