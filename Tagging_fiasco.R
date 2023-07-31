@@ -20,7 +20,7 @@ mean_vals = fiasco_data %>%
   summarize(mean_weight = mean(weight_gm), 
             mean_length = mean(length_mm)) 
 
-## The fucking 'problem' cross is bigger than the 'normals'
+## The 'problem' cross is bigger than the 'normals'
 
 
 # Data analysis -----------------------------------------------------------
