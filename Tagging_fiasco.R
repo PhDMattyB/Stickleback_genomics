@@ -90,4 +90,6 @@ ggplot(data = fiasco_data)+
         axis.text = element_text(size = 12))
 
 
-ggsave(s)
+ggsave('body_weight_plot.tiff', 
+       plot = last_plot(), 
+       dpi = 'retina')
