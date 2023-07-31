@@ -22,6 +22,9 @@ mean_vals = fiasco_data %>%
 
 ## The fucking 'problem' cross is bigger than the 'normals'
 
+
+# Data analysis -----------------------------------------------------------
+
 ## lets do some stats
 ## Anova on body weight per cross
 weight_anova = aov(weight_gm ~ Cross, 
@@ -52,3 +55,8 @@ manova = manova(dependent_vars ~ Cross,
 summary(manova)
 ## NOPE the crosses do NOT differ in a multivariate analysis of 
 ## length and weight per cross
+
+
+# Graphs ------------------------------------------------------------------
+
+
