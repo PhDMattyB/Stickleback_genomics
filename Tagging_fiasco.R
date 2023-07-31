@@ -19,3 +19,16 @@ mean_vals = fiasco_data %>%
          mean_length = mean(length_mm)) %>%
   summarize(mean_weight = mean(weight_gm), 
             mean_length = mean(length_mm)) 
+
+## The fucking 'problem' cross is bigger than the 'normals'
+
+weight_anova = aov(weight_gm ~ Cross, 
+                   data = fiasco_data)
+
+summary(weight_anova)
+
+length_anova = aov(length_mm ~ Cross, 
+                   data = fiasco_data)
+
+summary(length_anova)
+
