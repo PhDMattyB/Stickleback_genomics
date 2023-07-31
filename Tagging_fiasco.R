@@ -32,3 +32,11 @@ length_anova = aov(length_mm ~ Cross,
 
 summary(length_anova)
 
+
+dependent_vars = cbind(fiasco_data$weight_gm, 
+                       fiasco_data$length_mm)
+
+manova = manova(dependent_vars ~ Cross, 
+                data = fiasco_data)
+
+summary(manova)
