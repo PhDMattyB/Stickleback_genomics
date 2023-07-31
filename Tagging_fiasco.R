@@ -68,7 +68,7 @@ col_pal = c('#023047',
   '#fb8500', 
   '#219ebc')
 
-ggplot(data = fiasco_data)+
+body_weight_plot = ggplot(data = fiasco_data)+
   geom_violin(aes(x = Cross, 
                   y = weight_gm,
                   fill = factor(Cross)), 
@@ -91,5 +91,33 @@ ggplot(data = fiasco_data)+
 
 
 ggsave('body_weight_plot.tiff', 
-       plot = last_plot(), 
+       plot = body_weight_plot, 
+       dpi = 'retina')
+
+
+
+body_length_plot = ggplot(data = fiasco_data)+
+  geom_violin(aes(x = Cross, 
+                  y = length_mm,
+                  fill = factor(Cross)), 
+              col = 'Black')+
+  scale_fill_manual(values = col_pal)+
+  # geom_boxplot(aes(x = Cross, 
+  #                  y = weight_gm), 
+  #              col = 'Black')+
+  geom_point(data = mean_vals,
+             aes(x = Cross, 
+                 y = mean_length), 
+             size = 3,
+             col = 'Black')+
+  labs(y = 'Body length (mm)')+
+  theme(legend.position = 'none', 
+        panel.grid = element_blank(), 
+        axis.title.x = element_blank(), 
+        axis.title.y = element_text(size = 14), 
+        axis.text = element_text(size = 12))
+
+
+ggsave('body_length_plot.tiff', 
+       plot = body_length_plot, 
        dpi = 'retina')
