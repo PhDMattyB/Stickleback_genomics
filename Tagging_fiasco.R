@@ -61,3 +61,33 @@ summary(manova)
 
 theme_set(theme_bw())
 
+fiasco_data$Cross = as.character(fiasco_data$Cross)
+mean_vals$Cross = as.character(mean_vals$Cross)
+
+col_pal = c('#023047',
+  '#fb8500', 
+  '#219ebc')
+
+ggplot(data = fiasco_data)+
+  geom_violin(aes(x = Cross, 
+                  y = weight_gm,
+                  fill = factor(Cross)), 
+              col = 'Black')+
+  scale_fill_manual(values = col_pal)+
+  # geom_boxplot(aes(x = Cross, 
+  #                  y = weight_gm), 
+  #              col = 'Black')+
+  geom_point(data = mean_vals,
+             aes(x = Cross, 
+                 y = mean_weight), 
+             size = 3,
+             col = 'Black')+
+  labs(y = 'Body weight (grams)')+
+  theme(legend.position = 'none', 
+        panel.grid = element_blank(), 
+        axis.title.x = element_blank(), 
+        axis.title.y = element_text(size = 14), 
+        axis.text = element_text(size = 12))
+
+
+ggsave(s)
