@@ -544,16 +544,16 @@ ggsave(file = 'stickleback_manhattan_plot.tiff',
 
 
 # snmf analysis -----------------------------------------------------------
-setwd('C:/Stickleback_Genomic/vcf_filter/')
+setwd('~/Parsons_Postdoc/Stickleback_Genomic/vcf_filter/')
 
 convert = ped2geno('stickleback_maf0.05_ldpruned_filtered.ped',
                    'stickleback_data.geno')
 
-# snmf('stickleback_data.geno',
-#      K = 1:10,
-#      entropy = T,
-#      repetitions = 5,
-#      project = 'new')
+snmf('stickleback_data.geno',
+     K = 1:10,
+     entropy = T,
+     repetitions = 5,
+     project = 'new')
 
 project = load.snmfProject("stickleback_data.snmfProject")
 # project = load.snmfProject('Charr_Poly.snmfProject')
