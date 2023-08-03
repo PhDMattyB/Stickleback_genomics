@@ -549,6 +549,7 @@ setwd('~/Parsons_Postdoc/Stickleback_Genomic/vcf_filter/')
 convert = ped2geno('stickleback_maf0.05_ldpruned_filtered.ped',
                    'stickleback_data.geno')
 
+
 snmf('stickleback_data.geno',
      K = 1:10,
      entropy = T,
@@ -572,6 +573,9 @@ best_ce = which.min(ce)
 qmatrix = Q(project, 
             K = 5, 
             run = best_ce)
+
+qmatrix %>% 
+  as_tibble()
 # head(qmatrix)
 # dim(qmatrix)
 ## This will show the clusters each individual was assigned to
@@ -583,45 +587,60 @@ apply(qmatrix, 1, which.max) %>%
   write_tsv('stickleback_snmf_k5.txt')
 
 ## shitty base R plot
-plot = barplot(qmatrix, 
+plot = barchart(project,
+               K = 5, 
+               run = best_ce, 
                border = NA, 
                space = 0, 
                # col = my.colors, 
                # xlab = "Individuals",
                ylab = "Ancestry proportions", 
                main = "Ancestry matrix")
+axis(1, at = 1:length(plot$order), 
+     labels = plot$order, 
+     las = 3, 
+     cex.axis = .4)
 
-# bp = LEA::barchart(qmatrix, 
-#                 K = 23, 
-#                 border = NA, 
-#                 space = 0, 
-#                 xlab = 'Individuals', 
-#                 ylab = 'Ancestry proportions', 
-#                 main = 'Ancestry matrix')
 
-as_tibble(qmatrix) %>%
+
+q_values_k5 = as_tibble(qmatrix) %>%
   dplyr::rename(Q1 = V1,
                 Q2 = V2,
                 Q3 = V3,
                 Q4 = V4, 
-                Q5 = V5) %>% 
+                Q5 = V5) 
+
+plot_order = plot$order %>% 
+  as_tibble()
+  
+bind_cols(plot_order, 
+          q_values_k5) %>% 
+  rename(order = 1) %>% 
   write_csv('stickleback_snmf_qvalues_k5.csv')
 
 
 snmf_data = read_csv('stickleback_snmf_qvalues_k5.csv')
 
-identifiers
+identifiers = read_csv('stickleback_identifiers.csv')
+identifiers = identifiers %>% 
+  rowid_to_column() %>% 
+  rename(order = rowid)
 
-snmf_data = bind_cols(identifiers, 
-                      snmf_data) %>% 
-  # arrange(population, 
-  #         individual_id)
+# View(identifiers)
+# View(plot_order)
+snmf_data = left_join(snmf_data, 
+          identifiers, 
+          by = 'order') 
+# View(snmf_data)
+snmf_melted = melt(snmf_data, 
+                   id.vars = c('order',
+                               'population', 
+                               'individual_id')) %>% 
+  as_tibble() %>% 
+  group_by(population) %>% 
   arrange(population)
 
-snmf_melted = melt(snmf_data, 
-                   id.vars = c('population', 
-                               'individual_id')) %>% 
-  as_tibble()
+snmf_melted$order = as.character(snmf_melted$order)
 
 ## need colour scheme
 ## real
@@ -631,9 +650,37 @@ location_cols = c('#264653',
                   '#219ebc',
                   '#d62828')
 
+# snmf_melted %>%
+#   select(variable) %>%
+#   distinct()
+data_group1 = snmf_melted %>% 
+  ungroup() %>% 
+  arrange(individual_id) %>% 
+  # View()
+  slice(1:430) %>% 
+  # View()
+# write_csv('snmf_stickleback_k5_data.csv')
+  separate('individual_id', 
+           c('garbage',
+             'individual_id'), 
+           sep = '-') %>% 
+  select(-garbage)
+
+data_group2 = snmf_melted %>% 
+  ungroup() %>% 
+  arrange(individual_id) %>% 
+  slice(430:545) %>% 
+  View()
+
+snmf_melted_fixed = bind_rows(data_group1, 
+          data_group2) %>% 
+  arrange(individual_id)
+
+View(snmf_melted_fixed)
+
 ## snmf plot
-snmf_plot = ggplot(data = snmf_melted, 
-                   aes(x = individual_id,
+snmf_plot = ggplot(data = snmf_melted_fixed, 
+                   aes(x = fct_inorder(individual_id),
                        y = value, 
                        fill = variable, 
                        group = population))+
