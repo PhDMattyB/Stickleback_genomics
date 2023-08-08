@@ -621,6 +621,10 @@ bind_cols(plot_order,
 
 snmf_data = read_csv('stickleback_snmf_qvalues_k5.csv')
 
+identifiers %>% 
+  group_by(population) %>% 
+  summarize(n = n())
+
 identifiers = read_csv('stickleback_identifiers.csv')
 identifiers = identifiers %>% 
   rowid_to_column() %>% 
