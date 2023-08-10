@@ -118,6 +118,9 @@ genes_start_lineup = inner_join(methy_outliers,
 genes_end_lineup = inner_join(methy_outliers, 
            genes_end, 
            by = c('chromosome', 
-                  'position')) %>% 
-  View()
+                  'position')) 
+
+genes_end_lineup %>% 
+  write_tsv('Methylation_data_genes_lineup.txt')
+  
 
