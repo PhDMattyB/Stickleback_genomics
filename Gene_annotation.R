@@ -120,11 +120,12 @@ genes_end_lineup %>%
 
 # Alternative assembly information ----------------------------------------
 
-read_tsv('stickleback_v5_ensembl_genes.gff3.gz', 
+read_tsv('genomic.gff', 
          col_names = F, 
          skip = 8) %>% 
   select(X3) %>% 
   distinct()
+
 
 genes_start = read_tsv('genomic.gff', 
                        col_names = F, 
@@ -151,6 +152,14 @@ genes_start = read_tsv('genomic.gff',
                 start, 
                 gene_id) %>% 
   rename(position = start)
+
+genes_start %>% 
+  dplyr::select(chromosome) %>% 
+  distinct() %>%
+  arrange(chromosome) %>% 
+  View()
+## there is a weird chromosome thats not in the genome annotation details
+## Also there is a weird set of chromosomes with a hashtag
 
 methy_outliers = read_tsv('~/Parsons_Postdoc/Stickleback_Genomic/Methylation_outliers.txt')%>% 
   separate(col = TETWarm, 
