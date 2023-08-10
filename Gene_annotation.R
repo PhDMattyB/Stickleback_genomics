@@ -25,9 +25,35 @@ read_tsv('stickleback_v5_ensembl_genes.gff3.gz',
   select(X2) %>% 
   distinct()
 
-genes_end = read_tsv('stickleback_v5_ensembl_genes.gff3.gz', 
+genes_start = read_tsv('stickleback_v5_ensembl_genes.gff3.gz', 
                   col_names = F, 
                   skip = 8) %>% 
+  # filter(X3 %in% c('gene', 
+  #                  'exon', 
+  #                  'CDS')) %>% 
+  group_by(X1) %>% 
+  arrange(X4, 
+          X5) %>% 
+  ## arrange each gene by its start and end points on each chromosome
+  mutate(mid = X4 + (X5-X4)/2) %>% 
+  dplyr::select(X1, 
+                X3:X5, 
+                X9:mid) %>% 
+  rename(chromosome = X1, 
+         feature = X3, 
+         start = X4, 
+         end = X5, 
+         gene_id = X9, 
+         position = mid) %>% 
+  dplyr::select(chromosome, 
+                feature, 
+                start, 
+                gene_id) %>% 
+  rename(position = start)
+
+genes_end = read_tsv('stickleback_v5_ensembl_genes.gff3.gz', 
+                       col_names = F, 
+                       skip = 8) %>% 
   # filter(X3 %in% c('gene', 
   #                  'exon', 
   #                  'CDS')) %>% 
@@ -50,6 +76,7 @@ genes_end = read_tsv('stickleback_v5_ensembl_genes.gff3.gz',
                 end, 
                 gene_id) %>% 
   rename(position = end)
+
 # %>% 
 #   ## calculate the mid point of each gene from the start and end points
 #   # filter(mid >= 406599, 
@@ -75,12 +102,22 @@ methy_outliers = read_tsv('~/Parsons_Postdoc/Stickleback_Genomic/Methylation_out
   separate(col = TETWarm, 
            into = c('chromosome', 
                     'position'),
-           sep = '-') 
+           sep = '-') %>% 
+  group_by(chromosome) %>% 
+  arrange(position)
 
 methy_outliers$position = as.numeric(methy_outliers$position)
 
-inner_join(methy_outliers, 
-           genes, 
+
+genes_start_lineup = inner_join(methy_outliers, 
+           genes_start, 
            by = c('chromosome', 
                   'position')) %>% 
   View()
+
+genes_end_lineup = inner_join(methy_outliers, 
+           genes_end, 
+           by = c('chromosome', 
+                  'position')) %>% 
+  View()
+
