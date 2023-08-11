@@ -199,7 +199,17 @@ stickle_plot = mutate(.data = stickle_plot,
                         population == 'SKRC' ~ 'SKR',
                         population == 'SKRW' ~ 'SKR')))
 
-
+stickle_plot = mutate(.data = stickle_plot, 
+                      Type = as.factor(case_when(
+                        population == 'ASHNC' ~ 'Ambient',
+                        population == 'ASHNW' ~ 'Geothermal',
+                        population == 'CSWY' ~ 'Ambient',
+                        population == 'GTS' ~ 'Geothermal',
+                        population == 'MYVC' ~ 'Ambient',
+                        population == 'MYVW' ~ 'Geothermal',
+                        population == 'SKRC' ~ 'Ambient',
+                        population == 'SKRW' ~ 'Geothermal'
+                      )))
 
 ##
 # pca plot ----------------------------------------------------------------
@@ -228,7 +238,8 @@ stickleback_pca = stickle_plot %>%
   # group_by(population) %>% 
   ggplot(aes(x = PC1, 
              y = PC2))+
-  geom_point(aes(col = Location),
+  geom_point(aes(col = Location, 
+                 shape = Type),
              size = 2)+
   # geom_point(aes(col = population),
   #            size = 2)+
@@ -246,6 +257,9 @@ stickleback_pca = stickle_plot %>%
   labs(x = 'Principal component 1 (19.21%)',
        y = 'Principal component 2 (14.96%)', 
        col = 'Populations')
+
+stickleback_pca
+
 
 ggsave(file = 'stickleback_pca_cold_warm_split.tiff', 
        path = 'C:/Stickleback_Genomic/Figures/', 
