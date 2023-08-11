@@ -128,10 +128,14 @@ methy_outliers = read_tsv('~/Parsons_Postdoc/Stickleback_Genomic/Methylation_out
 methy_outliers$position = as.numeric(methy_outliers$position)
 
 ## create a 1Kb window around the snp identified
+## settting the start and end range for the methylation data
+## this number can be as big or small as you want depending
+## on how liberal you want it
+
 methy_out_window = methy_outliers %>%
   group_by(chromosome) %>% 
-  mutate(start = position-1000, 
-         end = position+1000)
+  mutate(start = position-100, 
+         end = position+100)
 
 library(data.table)
   
@@ -148,11 +152,19 @@ gene_overlap = foverlaps(gene_annotation,
           type="any")
 
 
-test = as_tibble(gene_overlap) %>% 
-  na.omit() %>% 
-  View()
+gene_overlap_tib = as_tibble(gene_overlap) %>% 
+  na.omit() 
 
-
+gene_overlap_tib %>% 
+  pull(gene_id) %>% 
+  as_tibble() %>% 
+  separate(col = value, 
+           into = c('ensemble_id', 
+                    'gene_name', 
+                    'parent_code', 
+                    'gene_name2'), 
+           sep = ';')
+  # View()
 
 
 
