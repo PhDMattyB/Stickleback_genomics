@@ -92,45 +92,12 @@ genes_end = read_tsv('stickleback_v5_ensembl_genes.gff3.gz',
 #            sep = ':') %>% 
 #   dplyr::select(geneid)
 
-methy_outliers = read_tsv('~/Parsons_Postdoc/Stickleback_Genomic/Methylation_outliers.txt')%>% 
-  separate(col = TETWarm, 
-           into = c('chromosome', 
-                    'position'),
-           sep = '-') %>% 
-  group_by(chromosome) %>% 
-  arrange(position)
 
-methy_outliers$position = as.numeric(methy_outliers$position)
+# Trying some new shit to line the genes up -------------------------------
 
-
-genes_start_lineup = inner_join(methy_outliers, 
-           genes_start, 
-           by = c('chromosome', 
-                  'position')) %>% 
-  View()
-
-genes_end_lineup = inner_join(methy_outliers, 
-           genes_end, 
-           by = c('chromosome', 
-                  'position')) 
-
-genes_end_lineup %>% 
-  write_tsv('Methylation_data_genes_lineup.txt')
-  
-
-##
-# Alternative assembly information ----------------------------------------
-
-read_tsv('genomic.gff', 
-         col_names = F, 
-         skip = 8) %>% 
-  select(X3) %>% 
-  distinct()
-
-
-genes_start = read_tsv('genomic.gff', 
-                       col_names = F, 
-                       skip = 8) %>% 
+gene_annotation = read_tsv('stickleback_v5_ensembl_genes.gff3.gz', 
+                     col_names = F, 
+                     skip = 8) %>% 
   # filter(X3 %in% c('gene', 
   #                  'exon', 
   #                  'CDS')) %>% 
@@ -148,19 +115,7 @@ genes_start = read_tsv('genomic.gff',
          end = X5, 
          gene_id = X9, 
          position = mid) %>% 
-  dplyr::select(chromosome, 
-                feature, 
-                start, 
-                gene_id) %>% 
-  rename(position = start)
-
-genes_start %>% 
-  dplyr::select(chromosome) %>% 
-  distinct() %>%
-  arrange(chromosome) %>% 
-  View()
-## there is a weird chromosome thats not in the genome annotation details
-## Also there is a weird set of chromosomes with a hashtag
+  na.omit()
 
 methy_outliers = read_tsv('~/Parsons_Postdoc/Stickleback_Genomic/Methylation_outliers.txt')%>% 
   separate(col = TETWarm, 
@@ -172,18 +127,46 @@ methy_outliers = read_tsv('~/Parsons_Postdoc/Stickleback_Genomic/Methylation_out
 
 methy_outliers$position = as.numeric(methy_outliers$position)
 
+## create a 1Kb window around the snp identified
+methy_out_window = methy_outliers %>%
+  group_by(chromosome) %>% 
+  mutate(start = position-1000, 
+         end = position+1000)
 
-genes_start_lineup = inner_join(methy_outliers, 
-                                genes_start, 
-                                by = c('chromosome', 
-                                       'position')) %>% 
+library(data.table)
+  
+setDT(methy_out_window)
+setDT(gene_annotation)
+
+setkey(methy_out_window, 
+       chromosome, 
+       start, 
+       end)
+
+gene_overlap = foverlaps(gene_annotation, 
+          methy_out_window, 
+          type="any")
+
+
+test = as_tibble(gene_overlap) %>% 
+  na.omit() %>% 
   View()
 
-genes_end_lineup = inner_join(methy_outliers, 
-                              genes_end, 
-                              by = c('chromosome', 
-                                     'position')) 
 
-genes_end_lineup %>% 
-  write_tsv('Methylation_data_genes_lineup.txt')
+
+
+
+# genes_start_lineup = inner_join(methy_outliers, 
+#            genes_start, 
+#            by = c('chromosome', 
+#                   'position')) %>% 
+#   View()
+# 
+# genes_end_lineup = inner_join(methy_outliers, 
+#            genes_end, 
+#            by = c('chromosome', 
+#                   'position')) 
+# 
+# genes_end_lineup %>% 
+#   write_tsv('Methylation_data_genes_lineup.txt')
 
