@@ -190,14 +190,14 @@ stickle_plot = bind_cols(identifiers,
 
 stickle_plot = mutate(.data = stickle_plot,
                       Location = as.factor(case_when(
-                        population == 'ASHNC' ~ 'ASH',
-                        population == 'ASHNW' ~ 'ASH',
-                        population == 'CSWY' ~ 'CSWY',
-                        population == 'GTS' ~ 'GTS',
-                        population == 'MYVC' ~ 'MYV',
-                        population == 'MYVW' ~ 'MYV',
-                        population == 'SKRC' ~ 'SKR',
-                        population == 'SKRW' ~ 'SKR')))
+                        population == 'ASHNC' ~ 'Áshildarholtsvatn',
+                        population == 'ASHNW' ~ 'Áshildarholtsvatn',
+                        population == 'CSWY' ~ 'Garðsvatn',
+                        population == 'GTS' ~ 'Grettislaug',
+                        population == 'MYVC' ~ 'Mývatn',
+                        population == 'MYVW' ~ 'Mývatn',
+                        population == 'SKRC' ~ 'Sauðárkrókur',
+                        population == 'SKRW' ~ 'Sauðárkrókur')))
 
 stickle_plot = mutate(.data = stickle_plot, 
                       Type = as.factor(case_when(
@@ -240,7 +240,7 @@ stickleback_pca = stickle_plot %>%
              y = PC2))+
   geom_point(aes(col = Location, 
                  shape = Type),
-             size = 2)+
+             size = 3)+
   # geom_point(aes(col = population),
   #            size = 2)+
   # scale_color_manual(values = cold_warm_cols)+
@@ -261,8 +261,8 @@ stickleback_pca = stickle_plot %>%
 stickleback_pca
 
 
-ggsave(file = 'stickleback_pca_cold_warm_split.tiff', 
-       path = 'C:/Stickleback_Genomic/Figures/', 
+ggsave(file = 'stickleback_pca_cold_warm_11.08.2023.tiff', 
+       path = '~/Parsons_Postdoc/Stickleback_Genomic/Figures/', 
        plot = stickleback_pca, 
        dpi = 'retina', 
        units = 'cm', 
