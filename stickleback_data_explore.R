@@ -1721,7 +1721,6 @@ GTS_CSWY_25_region_man = Fst_manhattan(non_outs = neutral,
 
 Fst_region_combo = (ASHN_25_region_man|MYV_25_region_man)/(SKR_25_region_man|GTS_CSWY_25_region_man)|WC_25_region_man
 
-
 ## ggsave that plot
 
 ggsave(file = 'stickleback_FST_25KB_manhattan_plot_13.08.2023.tiff', 
@@ -1729,8 +1728,28 @@ ggsave(file = 'stickleback_FST_25KB_manhattan_plot_13.08.2023.tiff',
        plot = Fst_region_combo, 
        dpi = 'retina', 
        units = 'cm', 
-       width = 50, 
+       width = 55, 
        height = 20)
+
+local_adapt = (ASHN_25_region_man|MYV_25_region_man)/(SKR_25_region_man|GTS_CSWY_25_region_man)
+
+ggsave(file = 'local_adapt_stickleback_FST_25KB_manhattan_plot_13.08.2023.tiff', 
+       path = '~/Parsons_Postdoc/Stickleback_Genomic/Figures/', 
+       plot = local_adapt, 
+       dpi = 'retina', 
+       units = 'cm', 
+       width = 30, 
+       height = 20)
+
+common_adapt = WC_25_region_man
+ggsave(file = 'common_adapt_stickleback_FST_25KB_manhattan_plot_13.08.2023.tiff', 
+       path = '~/Parsons_Postdoc/Stickleback_Genomic/Figures/', 
+       plot = common_adapt, 
+       dpi = 'retina', 
+       units = 'cm', 
+       width = 15, 
+       height = 15)
+
 
 ##
 # FST 50kb region manhattan plot ------------------------------------------
