@@ -1011,8 +1011,8 @@ GTS_CSWY_Fst_dist_plot = GTS_CSWY_Fst %>%
 WC_Fst_dist_plot = WC_Fst %>% 
   ggplot()+
   geom_density(aes(x = FST_zero), 
-               col = '#ef233c', 
-               fill = '#ef233c')+
+               col = '#fb8500', 
+               fill = '#fb8500')+
   geom_density(data = WC_top_dist, 
                aes(x = FST_zero),
                col = '#000000',
@@ -1131,8 +1131,8 @@ GTS_CSWY_per_chrom = GTS_CSWY_Fst %>%
 WC_per_chrom = WC_Fst %>% 
   ggplot()+
   geom_density(aes(x = FST_zero), 
-               col = '#ef233c', 
-               fill = '#ef233c')+
+               col = '#fb8500', 
+               fill = '#fb8500')+
   geom_density(data = WC_top_dist, 
                aes(x = FST_zero),
                col = '#000000',
@@ -1219,20 +1219,20 @@ axisdf = axis_df(GTS_CSWY_Fst_clean)
 axisdf = axis_df(WC_Fst_clean)
 
 non_outs = 
-  # WC_Fst_clean %>% 
-  # ASHN_Fst_clean %>%
+  # WC_Fst_clean %>%
+  ASHN_Fst_clean %>%
   # MYV_Fst_clean %>%
   # SKR_Fst_clean %>%
-  GTS_CSWY_Fst_clean %>%
+  # GTS_CSWY_Fst_clean %>%
   filter(value == 'Neutral') 
 
 ## Get the outliers
 outs = 
-  # WC_Fst_clean %>% 
-  # ASHN_Fst_clean %>%
+  # WC_Fst_clean %>%
+  ASHN_Fst_clean %>%
   # MYV_Fst_clean %>%
   # SKR_Fst_clean %>%
-  GTS_CSWY_Fst_clean %>%
+  # GTS_CSWY_Fst_clean %>%
   filter(value == 'Outlier') 
 
 
@@ -1248,8 +1248,8 @@ WC_Fst_manhattan = Fst_manhattan(non_outs = non_outs,
                                  xval = BPcum, 
                                  yval = FST_zero, 
                                  chr = non_outs$CHR, 
-                                 out_col = '#ef233c', 
-                                 plot_letter = 'E)')
+                                 out_col = '#fb8500', 
+                                 plot_letter = 'E) Geothermal-Ambient comparison')
 
 
 ASHN_Fst_manhattan = Fst_manhattan(non_outs = non_outs, 
@@ -1259,7 +1259,7 @@ ASHN_Fst_manhattan = Fst_manhattan(non_outs = non_outs,
                                        yval = FST_zero, 
                                        chr = non_outs$CHR, 
                                        out_col = '#06d6a0', 
-                                       plot_letter = 'A)')
+                                       plot_letter = 'A) Áshildarholtsvatn geothermal-ambient comparison')
 
 MYV_Fst_manhattan = Fst_manhattan(non_outs = non_outs, 
                                    outs = outs, 
@@ -1268,7 +1268,7 @@ MYV_Fst_manhattan = Fst_manhattan(non_outs = non_outs,
                                    yval = FST_zero, 
                                    chr = non_outs$CHR, 
                                    out_col = '#d62828', 
-                                   plot_letter = 'B)')
+                                   plot_letter = 'B) Mývatn')
 
 SKR_Fst_manhattan = Fst_manhattan(non_outs = non_outs, 
                                   outs = outs, 
@@ -1277,7 +1277,7 @@ SKR_Fst_manhattan = Fst_manhattan(non_outs = non_outs,
                                   yval = FST_zero, 
                                   chr = non_outs$CHR, 
                                   out_col = '#5f0f40', 
-                                  plot_letter = 'C)')
+                                  plot_letter = 'C) Sauðárkrókur')
 
 GTS_CSWY_Fst_manhattan = Fst_manhattan(non_outs = non_outs,
               outs = outs, 
@@ -1286,7 +1286,7 @@ GTS_CSWY_Fst_manhattan = Fst_manhattan(non_outs = non_outs,
               yval = FST_zero, 
               chr = non_outs$CHR, 
               out_col = '#264653', 
-              plot_letter = 'D)')
+              plot_letter = 'D) Grettislaug-Garðsvatn comparison')
 
 
 Fst_man_combo = (ASHN_Fst_manhattan|MYV_Fst_manhattan)/(SKR_Fst_manhattan|GTS_CSWY_Fst_manhattan)|WC_Fst_manhattan
@@ -1614,9 +1614,9 @@ WC_25_region_man = Fst_manhattan(non_outs = neutral,
                               xval = BPcum, 
                               yval = FST_mean, 
                               chr = neutral$CHR,
-                              out_col = '#ef233c', 
-                              plot_letter = 'E)')
-
+                              out_col = '#fb8500', 
+                              plot_letter = 'E) Geothermal-Ambient comparison')
+ 
 ASHN_25_top5 = read_csv('ASHN_25Kb_Fst_outlier.csv') 
 ASHN_25kb = read_tsv('ASHN_Fst_25Kb_3obs_window.txt') 
 
@@ -1639,7 +1639,7 @@ ASHN_25_region_man = Fst_manhattan(non_outs = neutral,
                                  yval = FST_mean, 
                                  chr = neutral$CHR,
                                  out_col = '#06d6a0', 
-                                 plot_letter = 'A)')
+                                 plot_letter = 'A) Áshildarholtsvatn geothermal-ambient comparison')
 
 
 
@@ -1666,7 +1666,7 @@ MYV_25_region_man = Fst_manhattan(non_outs = neutral,
                                    yval = FST_mean, 
                                    chr = neutral$CHR,
                                    out_col = '#d62828', 
-                                   plot_letter = 'B)')
+                                   plot_letter = 'B) Mývatn geothermal-ambient comparison')
 
 SKR_25_top5 = read_csv('SKR_25Kb_Fst_outlier.csv') 
 SKR_25kb = read_tsv('SKR_Fst_25Kb_3obs_window.txt') 
@@ -1690,7 +1690,7 @@ SKR_25_region_man = Fst_manhattan(non_outs = neutral,
                                   yval = FST_mean, 
                                   chr = neutral$CHR,
                                   out_col = '#5f0f40', 
-                                  plot_letter = 'C)')
+                                  plot_letter = 'C) Sauðárkrókur geothermal-ambient comparison')
 
 
 GTS_CSWY_25_top5 = read_csv('GTS_CSWY_25Kb_Fst_outlier.csv') 
@@ -1715,7 +1715,7 @@ GTS_CSWY_25_region_man = Fst_manhattan(non_outs = neutral,
                                   yval = FST_mean, 
                                   chr = neutral$CHR,
                                   out_col = '#264653', 
-                                  plot_letter = 'D)')
+                                  plot_letter = 'D) Grettislaug-Garðsvatn comparison')
 
 
 
@@ -1724,15 +1724,15 @@ Fst_region_combo = (ASHN_25_region_man|MYV_25_region_man)/(SKR_25_region_man|GTS
 
 ## ggsave that plot
 
-ggsave(file = 'stickleback_FST_25KB_manhattan_plot.tiff', 
-       path = 'C:/Stickleback_Genomic/Figures/', 
+ggsave(file = 'stickleback_FST_25KB_manhattan_plot_13.08.2023.tiff', 
+       path = '~/Parsons_Postdoc/Stickleback_Genomic/Figures/', 
        plot = Fst_region_combo, 
        dpi = 'retina', 
        units = 'cm', 
-       width = 40, 
+       width = 50, 
        height = 20)
 
-
+##
 # FST 50kb region manhattan plot ------------------------------------------
 WC_top5 = read_csv('WC_50Kb_Fst_outlier.csv') 
 WC_50kb = read_tsv('WC_Fst_50Kb_3obs_window.txt') 
