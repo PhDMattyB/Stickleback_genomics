@@ -75,7 +75,10 @@ appetite_plot = ggplot(data = appetite_data,
 
 ggsave('Appetite_difference.tiff', 
        plot = appetite_plot, 
-       dpi = 'retina')
+       dpi = 'retina', 
+       units = 'cm', 
+       height = 10, 
+       width = 15)
 
 
 
