@@ -49,11 +49,12 @@ summary(aov_test)
 appetite_cols = c('#003049', 
                   '#c1121f')
 
-  ggplot(data = appetite_data, 
+appetite_plot = ggplot(data = appetite_data, 
          aes(x = Location, 
              y = pellets_eaten, 
              fill = Type), 
          col = 'black') +
+    # geom_boxplot()+
   geom_violin() +
     stat_summary(fun = "mean", 
                  geom = "point", 
@@ -65,8 +66,16 @@ appetite_cols = c('#003049',
   #            col = 'black', 
   #            size = 3)+
   scale_fill_manual(values = appetite_cols)+
-  labs(y = 'Pellets eaten to satiation')
+  labs(y = 'Pellets eaten to satiation')+
+    theme(panel.grid = element_blank(), 
+          axis.title.x = element_blank(), 
+          axis.title.y = element_text(size = 14), 
+          axis.text = element_text(size = 12))
 
+
+ggsave('Appetite_difference.tiff', 
+       plot = appetite_plot, 
+       dpi = 'retina')
 
 
 
