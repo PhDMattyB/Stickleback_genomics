@@ -2177,8 +2177,8 @@ popmap = mutate(.data = popmap,
                       Ecotype = as.factor(case_when(
                         Morph == 'ASHNC' ~ 'Cold2',
                         Morph == 'ASHNW' ~ 'Warm2',
-                        # Morph == 'CSWY' ~ 'Cold4',
-                        # Morph == 'GTS' ~ 'Warm4',
+                        Morph == 'CSWY' ~ 'Cold4',
+                        Morph == 'GTS' ~ 'Warm4',
                         Morph == 'MYVC' ~ 'Cold1',
                         Morph == 'MYVW' ~ 'Warm1',
                         Morph == 'SKRC' ~ 'Cold3',
@@ -2305,6 +2305,16 @@ map %>%
 eig1_50snps = read_csv('afvaper_eigenvector1_results_50snp_window.csv')
 # 
 View(eig1_50snps)
+
+
+setwd('~/Parsons_Postdoc/Stickleback_Genomic/afvaper/')
+
+ped_file = read_table2('stickle_filtered_chr_fix.ped', 
+                     col_names = F)
+
+map_file = read_tsv('stickle_filtered_chr_fix.map', 
+                    col_names = F)
+
 # 
 # afvaper try chr1 --------------------------------------------------------
 
