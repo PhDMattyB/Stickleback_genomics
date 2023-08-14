@@ -2315,13 +2315,16 @@ eig1_50snps = read_csv('afvaper_eigenvector1_results_50snp_window.csv')
 View(eig1_50snps)
 
 
-setwd('~/Parsons_Postdoc/Stickleback_Genomic/afvaper/')
+setwd('~/Parsons_Postdoc/Stickleback_Genomic/vcf_filter/')
 
-ped_file = read_table2('stickle_filtered_chr_fix.ped', 
-                     col_names = F)
+MYV_freq = read_tsv('MYV_afvaper_region_allele_freq.frq', 
+                    col_names = c('CHR', 
+                                  'SNP', 
+                                  'A1', 
+                                  'A2', 
+                                  'Freq', 
+                                  'Num_indivs'))
 
-map_file = read_tsv('stickle_filtered_chr_fix.map', 
-                    col_names = F)
 
 # 
 # afvaper try chr1 --------------------------------------------------------
