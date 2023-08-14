@@ -770,7 +770,15 @@ umap_fit = pc_data %>%
 # Fst set up Plink ---------------------------------------------------------------
 
 ped_test = read_table2('stickleback_maf0.05_ldpruned_filtered.ped', 
-            col_names = F)
+            col_names = F) 
+
+# read_tsv('stickleback_maf0.05_ldpruned_filtered.map', 
+#                col_names = F) %>% 
+#   filter(X1 == 'chr_XXI') %>% 
+#   filter(X4 >= 9963830, 
+#          X4 <= 11574024) %>% 
+#   write_tsv('stickleback_afvaper_500snps.map')
+  
 
 identifiers = read_csv('stickleback_identifiers.csv')
 identifiers = mutate(.data = identifiers,
