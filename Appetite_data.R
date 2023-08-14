@@ -122,7 +122,7 @@ eating_time_plot = ggplot(data = Time_format,
   #            col = 'black', 
   #            size = 3)+
   scale_fill_manual(values = appetite_cols)+
-  labs(y = 'Pellets eaten to satiation')+
+  labs(y = 'Time taken to eat to satiation')+
   theme(panel.grid = element_blank(), 
         axis.title.x = element_blank(), 
         axis.title.y = element_text(size = 14), 
