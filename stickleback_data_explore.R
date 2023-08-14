@@ -2326,6 +2326,40 @@ MYV_freq = read_tsv('MYV_afvaper_region_allele_freq.frq',
                                   'Num_indivs'))
 
 
+
+
+SKR_freq = read_tsv('SKR_afvaper_region_allele_freq.frq', 
+                    col_names = c('CHR', 
+                                  'SNP', 
+                                  'A1', 
+                                  'A2', 
+                                  'Freq', 
+                                  'Num_indivs'))
+
+ASHN_freq = read_tsv('ASHN_afvaper_region_allele_freq.frq', 
+                    col_names = c('CHR', 
+                                  'SNP', 
+                                  'A1', 
+                                  'A2', 
+                                  'Freq', 
+                                  'Num_indivs'))
+
+GTS_freq = read_tsv('GTS_afvaper_region_allele_freq.frq', 
+                     col_names = c('CHR', 
+                                   'SNP', 
+                                   'A1', 
+                                   'A2', 
+                                   'Freq', 
+                                   'Num_indivs'))
+
+CSWY_freq = read_tsv('CSWY_afvaper_region_allele_freq.frq', 
+                     col_names = c('CHR', 
+                                   'SNP', 
+                                   'A1', 
+                                   'A2', 
+                                   'Freq', 
+                                   'Num_indivs'))
+
 # 
 # afvaper try chr1 --------------------------------------------------------
 
