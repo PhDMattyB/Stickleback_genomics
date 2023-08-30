@@ -413,7 +413,25 @@ warm_morph_weight_loss_cold = inner_join(low_food_cold,
   mutate(percent_weight_loss = mean_weight_dif*100, 
          percent_length_change = mean_length_dif*100)
 
-
+inner_join(low_food_cold, 
+           low_food_cold_final, 
+           by = c('Pop', 
+                  'Rep', 
+                  'Temp')) %>% 
+  select(-'low_food_amount') %>% 
+  mutate(Weight_dif = avg_weight_final - avg_weight, 
+         Length_growth = avg_length_final - avg_length, 
+         cond_fac_diff = cond_fac_final - low_cond_fac)%>% 
+  select(Pop, 
+         Rep, 
+         Temp,
+         Weight_dif, 
+         Length_growth, 
+         cond_fac_diff) %>% 
+  ggplot() +
+  geom_point(aes(x = Weight_dif, 
+                 y = Length_growth, 
+                 col = Pop))
 
 ##
 # Cold warm comparison ----------------------------------------------------
