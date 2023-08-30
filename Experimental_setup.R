@@ -137,7 +137,70 @@ low_warm_results = inner_join(low_food_warm,
 
 # warm side expectation ---------------------------------------------------
 
+inner_join(low_food_warm, 
+           low_food_warm_final, 
+           by = c('Pop', 
+                  'Rep', 
+                  'Temp')) %>% 
+  select(-'low_food_amount') %>% 
+  mutate(Weight_dif = avg_weight_final - avg_weight, 
+         Length_growth = avg_length_final - avg_length, 
+         cond_fac_diff = low_cond_fac_final - low_cond_fac)%>% 
+  select(Pop, 
+         Rep, 
+         Temp,
+         Weight_dif, 
+         Length_growth, 
+         cond_fac_diff) %>% 
+  ungroup() %>% 
+  summarize(mean_weight_dif = mean(Weight_dif), 
+            mean_length_dif = mean(Length_growth), 
+            mean_cond_dif = mean(cond_fac_diff))
+  
 
+cold_morph_weight_loss_warm = inner_join(low_food_warm, 
+           low_food_warm_final, 
+           by = c('Pop', 
+                  'Rep', 
+                  'Temp')) %>% 
+  select(-'low_food_amount') %>% 
+  mutate(Weight_dif = avg_weight_final - avg_weight, 
+         Length_growth = avg_length_final - avg_length, 
+         cond_fac_diff = low_cond_fac_final - low_cond_fac)%>% 
+  select(Pop, 
+         Rep, 
+         Temp,
+         Weight_dif, 
+         Length_growth, 
+         cond_fac_diff) %>% 
+  ungroup() %>% 
+  filter(Pop %in% c('ACAC', 
+                    'MCMC')) %>% 
+  summarize(mean_weight_dif = mean(Weight_dif), 
+            mean_length_dif = mean(Length_growth), 
+            mean_cond_dif = mean(cond_fac_diff))
+
+warm_morph_weight_loss_warm = inner_join(low_food_warm, 
+                                         low_food_warm_final, 
+                                         by = c('Pop', 
+                                                'Rep', 
+                                                'Temp')) %>% 
+  select(-'low_food_amount') %>% 
+  mutate(Weight_dif = avg_weight_final - avg_weight, 
+         Length_growth = avg_length_final - avg_length, 
+         cond_fac_diff = low_cond_fac_final - low_cond_fac)%>% 
+  select(Pop, 
+         Rep, 
+         Temp,
+         Weight_dif, 
+         Length_growth, 
+         cond_fac_diff) %>% 
+  ungroup() %>% 
+  filter(Pop %in% c('AWAW', 
+                    'MWMW')) %>% 
+  summarize(mean_weight_dif = mean(Weight_dif), 
+            mean_length_dif = mean(Length_growth), 
+            mean_cond_dif = mean(cond_fac_diff))
 
 # Cold side ---------------------------------------------------------------
 
