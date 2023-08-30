@@ -32,7 +32,10 @@ low_food_warm = treatment_data %>%
          Temp = Temperature) %>% 
   summarize(avg_weight = mean(Weight), 
             avg_length = mean(Length)) %>% 
-  mutate(low_food_amount = avg_weight*0.02) 
+  mutate(low_food_amount = avg_weight*0.02, 
+         low_cond_fac = avg_weight/avg_length^(1/3)*100)
+
+View(low_food_warm)
 
 treatment_data %>% 
   filter(Treatment == 'Low Food', 
@@ -54,7 +57,8 @@ high_food_warm = treatment_data %>%
          Temp = Temperature) %>% 
   summarize(avg_weight = mean(Weight), 
             avg_length = mean(Length)) %>% 
-  mutate(high_food_amount = avg_weight*0.3)
+  mutate(high_food_amount = avg_weight*0.3,
+         high_cond_fac = avg_weight/avg_length^(1/3)*100)
 
 treatment_data %>% 
   filter(Treatment == 'High Food', 
@@ -78,7 +82,8 @@ high_food_warm_final = Final_data %>%
            Rep, 
            Temp)%>% 
   summarize(avg_weight_final = mean(Weight), 
-            avg_length_final = mean(Length))
+            avg_length_final = mean(Length), 
+            high_cond_fac_final = avg_weight_final/avg_length_final^(1/3)*100)
 
 low_food_warm_final = Final_data %>% 
   # filter(Treatment == 'Low Food', 
@@ -89,7 +94,8 @@ low_food_warm_final = Final_data %>%
            Rep, 
            Temp)%>% 
   summarize(avg_weight_final = mean(Weight), 
-            avg_length_final = mean(Length))
+            avg_length_final = mean(Length), 
+            low_cond_fac_final = avg_weight_final/avg_length_final^(1/3)*100)
 
 
 # Warm Data Comparison ----------------------------------------------------
@@ -102,12 +108,14 @@ high_warm_results = inner_join(high_food_warm,
                   'Temp')) %>% 
   select(-'high_food_amount') %>% 
   mutate(Weight_dif = avg_weight_final - avg_weight, 
-         Length_growth = avg_length_final - avg_length) %>% 
+         Length_growth = avg_length_final - avg_length, 
+         cond_fac_diff = high_cond_fac_final - high_cond_fac) %>% 
   select(Pop, 
          Rep,
          Temp,
          Weight_dif, 
-         Length_growth)
+         Length_growth, 
+         cond_fac_diff)
 
 
 low_warm_results = inner_join(low_food_warm, 
@@ -117,12 +125,18 @@ low_warm_results = inner_join(low_food_warm,
                   'Temp')) %>% 
   select(-'low_food_amount') %>% 
   mutate(Weight_dif = avg_weight_final - avg_weight, 
-         Length_growth = avg_length_final - avg_length) %>% 
+         Length_growth = avg_length_final - avg_length, 
+         cond_fac_diff = low_cond_fac_final - low_cond_fac) %>% 
   select(Pop, 
          Rep, 
          Temp,
          Weight_dif, 
-         Length_growth)
+         Length_growth, 
+         cond_fac_diff)
+
+
+# warm side expectation ---------------------------------------------------
+
 
 
 # Cold side ---------------------------------------------------------------
