@@ -152,10 +152,12 @@ inner_join(low_food_warm,
          Weight_dif, 
          Length_growth, 
          cond_fac_diff) %>% 
-  # ungroup() %>% 
+  ungroup() %>%
   summarize(mean_weight_dif = mean(Weight_dif), 
             mean_length_dif = mean(Length_growth), 
-            mean_cond_dif = mean(cond_fac_diff))
+            mean_cond_dif = mean(cond_fac_diff)) %>% 
+  mutate(percent_weight_loss = mean_weight_dif*100, 
+         percent_length_change = mean_length_dif*100)
   
 
 cold_morph_weight_loss_warm = inner_join(low_food_warm, 
@@ -178,7 +180,9 @@ cold_morph_weight_loss_warm = inner_join(low_food_warm,
                     'MCMC')) %>% 
   summarize(mean_weight_dif = mean(Weight_dif), 
             mean_length_dif = mean(Length_growth), 
-            mean_cond_dif = mean(cond_fac_diff))
+            mean_cond_dif = mean(cond_fac_diff)) %>%
+  mutate(percent_weight_loss = mean_weight_dif*100, 
+         percent_length_change = mean_length_dif*100)
 
 warm_morph_weight_loss_warm = inner_join(low_food_warm, 
                                          low_food_warm_final, 
@@ -200,7 +204,9 @@ warm_morph_weight_loss_warm = inner_join(low_food_warm,
                     'MWMW')) %>% 
   summarize(mean_weight_dif = mean(Weight_dif), 
             mean_length_dif = mean(Length_growth), 
-            mean_cond_dif = mean(cond_fac_diff))
+            mean_cond_dif = mean(cond_fac_diff))%>% 
+  mutate(percent_weight_loss = mean_weight_dif*100, 
+         percent_length_change = mean_length_dif*100)
 
 # Cold side ---------------------------------------------------------------
 
@@ -331,10 +337,12 @@ inner_join(low_food_cold,
          Weight_dif, 
          Length_growth, 
          cond_fac_diff) %>% 
-  # ungroup() %>% 
+  ungroup() %>%
   summarize(mean_weight_dif = mean(Weight_dif), 
             mean_length_dif = mean(Length_growth), 
-            mean_cond_dif = mean(cond_fac_diff))
+            mean_cond_dif = mean(cond_fac_diff)) %>% 
+  mutate(percent_weight_loss = mean_weight_dif*100, 
+         percent_length_change = mean_length_dif*100)
 
 
 cold_morph_weight_loss_cold = inner_join(low_food_cold, 
@@ -357,7 +365,9 @@ cold_morph_weight_loss_cold = inner_join(low_food_cold,
                     'MCMC')) %>% 
   summarize(mean_weight_dif = mean(Weight_dif), 
             mean_length_dif = mean(Length_growth), 
-            mean_cond_dif = mean(cond_fac_diff))
+            mean_cond_dif = mean(cond_fac_diff)) %>% 
+  mutate(percent_weight_loss = mean_weight_dif*100, 
+         percent_length_change = mean_length_dif*100)
 
 warm_morph_weight_loss_cold = inner_join(low_food_cold, 
                                          low_food_cold_final, 
@@ -379,9 +389,13 @@ warm_morph_weight_loss_cold = inner_join(low_food_cold,
                     'MWMW')) %>% 
   summarize(mean_weight_dif = mean(Weight_dif), 
             mean_length_dif = mean(Length_growth), 
-            mean_cond_dif = mean(cond_fac_diff))
+            mean_cond_dif = mean(cond_fac_diff)) %>% 
+  mutate(percent_weight_loss = mean_weight_dif*100, 
+         percent_length_change = mean_length_dif*100)
 
 
+
+##
 # Cold warm comparison ----------------------------------------------------
 
 high_warm_results = high_warm_results %>% 
