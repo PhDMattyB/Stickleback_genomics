@@ -63,11 +63,11 @@ lostruct_run = function(data,
                         window_size, 
                         k_value){
   df = data %>% 
-    dplyr::select(Chromosome, 
+    dplyr::select(CHR, 
                   5:length(tped)) %>% 
-    filter(Chromosome == chr) %>% 
-    dplyr::select(-Chromosome) %>% 
-    dplyr::select(-CHROMOSOME)
+    filter(CHR == chr) %>% 
+    # dplyr::select(-CHR) %>% 
+    # dplyr::select(-CHR)
   
   message('calculating eigenvectors for windows')
   eigen = eigen_windows(df, 
