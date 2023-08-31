@@ -42,15 +42,15 @@ Create_tped = function(ped, map){
   message('Merging ped and map files')
   ped %>% 
     # filter(FamilyID != 'GDL') %>%
-    select(contains('AX-')) %>% 
+    select(contains('chr_')) %>% 
     t() %>% 
     as_tibble() %>% 
     rename_all(funs(c(indiv_names))) %>% 
     bind_cols(map) %>% 
-    select(Chromosome, 
-           MarkerID, 
-           Genetic_dist, 
-           Physical_dist, 
+    select(CHR, 
+           SNP, 
+           GPOS, 
+           POS, 
            everything())
 }
 

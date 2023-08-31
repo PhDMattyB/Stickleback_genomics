@@ -13,14 +13,13 @@ library(tidyverse)
 library(data.table)
 
 ped_data = read_table('stickleback_maf0.05_ldpruned_filtered.ped',
-                      col_names = F) %>% 
-  rename(IndividualID = X2, 
-         Population = X1, 
-         MaternalID = X3, 
-         PaternalID = X4, 
-         Phenotype = X6, 
-         Sex = X5)
-
+                      col_names = c('PopulationID', 
+                                    'IndividualID', 
+                                    'MaternalID', 
+                                    'PaternalID', 
+                                    'Sex', 
+                                    'Phenotype', 
+                                    map_data$SNP))
 
 map_data = read_tsv('stickleback_maf0.05_ldpruned_filtered.map', 
                     col_names = c('CHR', 
