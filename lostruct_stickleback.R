@@ -68,9 +68,22 @@ window_data = snps %>%
            .keep_all = T) %>% 
   filter(window %in% 1:nrow(windist))
 
-lostruct_run(data = tped, 
-             chr = 'chr_XXI', 
-             window_size = 50, 
-             k_value = 5)
+combo_data = bind_cols(window_data, 
+                       windist)
 
-eigen_windows()
+
+MDS_data = cmdscale(combo_data[7:length(combo_data)], 
+                    eig = TRUE, 
+                    k = 5)
+
+MDS_points = MDS_data$points %>% 
+  as_tibble() %>% 
+  rename(MDS_Points1 = V1, 
+         MDS_Points2 = V2, 
+         MDS_points3 = V3, 
+         MDS_points4 = V4, 
+         MDS_points5 = V5)
+
+combo_data = bind_cols(combo_data, 
+                       MDS_points) 
+
