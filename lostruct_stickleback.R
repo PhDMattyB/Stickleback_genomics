@@ -36,23 +36,27 @@ map_data = read_tsv('stickleback_maf0.05_ldpruned_filtered.map',
 tped = Create_tped(ped = ped_data, 
             map = map_data)
 
-tped %>% 
-  write_tsv('stickleback_maf0.05_ldpruned_filtered.tped')
+tped %>%
+  write_tsv('stickleback_maf0.05_ldpruned_filtered.tped', 
+            col_names = F)
+# 
+snps = read_table('stickleback_maf0.05_ldpruned_filtered.tped', 
+                  col_names = F)
 
-snps = read_tped('stickleback_maf0.05_ldpruned_filtered.tped')
 
-
-df = tped %>% 
-  dplyr::select(CHR, 
-                5:length(tped)) %>% 
-  filter(CHR == 'chr_XXI') %>% 
-  dplyr::select(-CHR) %>% 
-  dplyr::select(-IID) %>% 
-  as.data.frame()
+df = snps %>% 
+  dplyr::select(1, 
+                5:length(snps)) %>% 
+  filter(X1 == 'chr_XXI') %>% 
+  dplyr::select(-X1) %>% 
+  dplyr::select(-X5)
 
 eigen = eigen_windows(df, 
                       win = 50, 
                       k = 5)
+windist = pc_dist(eigen, 
+                  npc = 5) %>% 
+  as_tibble()
 
 lostruct_run(data = tped, 
              chr = 'chr_XXI', 
