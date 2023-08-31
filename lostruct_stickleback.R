@@ -58,6 +58,16 @@ windist = pc_dist(eigen,
                   npc = 5) %>% 
   as_tibble()
 
+window_data = snps %>% 
+  select(1:4) %>% 
+  filter(X1 == 'chr_XXI') %>% 
+  mutate(window = ceiling(row_number()/50)) %>% 
+  group_by(window) %>% 
+  mutate(mean_window = mean(X4)) %>% 
+  distinct(mean_window, 
+           .keep_all = T) %>% 
+  filter(window %in% 1:nrow(windist))
+
 lostruct_run(data = tped, 
              chr = 'chr_XXI', 
              window_size = 50, 
