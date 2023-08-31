@@ -26,12 +26,6 @@ map_data = read_tsv('stickleback_maf0.05_ldpruned_filtered.map',
                                   'SNP', 
                                   'GPOS', 
                                   'POS'))
-# map_data %>%
-#   # select(CHR) %>% 
-#   # distinct() %>% 
-#   # View()
-#   filter(CHR == 'chr_XXI')
-
 
 tped = Create_tped(ped = ped_data, 
             map = map_data)
@@ -42,7 +36,6 @@ tped %>%
 # 
 snps = read_table('stickleback_maf0.05_ldpruned_filtered.tped', 
                   col_names = F)
-
 
 df = snps %>% 
   dplyr::select(1, 
@@ -85,5 +78,12 @@ MDS_points = MDS_data$points %>%
          MDS_points5 = V5)
 
 combo_data = bind_cols(combo_data, 
-                       MDS_points) 
+                       MDS_points) %>% 
+  group_by(window)
 
+
+# plot the MDS structure  -------------------------------------------------
+
+
+## Need to plot the MDS structure for the regions 
+## flanking the potential inversion
