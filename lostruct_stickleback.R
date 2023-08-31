@@ -81,9 +81,15 @@ combo_data = bind_cols(combo_data,
                        MDS_points) %>% 
   group_by(window)
 
-
+View(combo_data)
 # plot the MDS structure  -------------------------------------------------
 
 
 ## Need to plot the MDS structure for the regions 
 ## flanking the potential inversion
+
+## windows 83 and 93 are the start and end positions of the afvaper region
+
+afvaper_region = combo_data %>% 
+  filter(window >= '81', 
+         window <= '95')
