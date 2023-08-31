@@ -122,3 +122,8 @@ MDS_points_windows %>%
 #   theme(legend.position = 'none')
 
 
+
+## HOLY SHIT!! window 83-92 are MDS outliers!!!
+Outlier_hunter(data = MDS_points_windows, 
+               sd_percentile = 3) %>% 
+  View()
