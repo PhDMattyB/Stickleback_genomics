@@ -266,12 +266,12 @@ Outlier_plots = function(normal_data,
     filter(outlier_lab == 'MDS2 outlier')
   
   plot2 = normal_data %>% 
-    ggplot(aes(x = mean_window, 
+    ggplot(aes(x = X4, 
                y = abs(MDS_Points1)))+
     geom_point(col = 'Grey', 
                size = 3)+
     geom_point(data = outliers_mds1, 
-               aes(x = mean_window, 
+               aes(x = X4, 
                    y = abs(MDS_Points1)),
                col = '#F2055C',
                size = 3)+
@@ -287,12 +287,12 @@ Outlier_plots = function(normal_data,
   
   
   plot3 = normal_data %>% 
-    ggplot(aes(x = mean_window, 
+    ggplot(aes(x = X4, 
                y = abs(MDS_Points2)))+
     geom_point(col = 'Grey', 
                size = 3)+
     geom_point(data = outliers_mds2, 
-               aes(x = mean_window, 
+               aes(x = X4, 
                    y = abs(MDS_Points2)),
                col = '#1F26A6',
                size = 3)+

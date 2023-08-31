@@ -124,6 +124,15 @@ MDS_points_windows %>%
 
 
 ## HOLY SHIT!! window 83-92 are MDS outliers!!!
-Outlier_hunter(data = MDS_points_windows, 
-               sd_percentile = 3) %>% 
-  View()
+MDS_outliers = Outlier_hunter(data = MDS_points_windows, 
+               sd_percentile = 3) 
+
+Normal_data = MDS_points_windows %>% 
+  filter(window %in% c('81', 
+                       '82', 
+                       '93', 
+                       '94', 
+                       '95'))
+
+Outlier_plots(outlier_data = MDS_outliers, 
+              normal_data = Normal_data)
