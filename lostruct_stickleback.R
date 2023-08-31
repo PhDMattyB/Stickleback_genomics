@@ -92,4 +92,27 @@ View(combo_data)
 
 afvaper_region = combo_data %>% 
   filter(window >= '81', 
-         window <= '95')
+         window <= '95') 
+
+
+theme_set(theme_bw())
+
+MDS_points_windows = afvaper_region %>% 
+  dplyr::select(X4, 
+                window, 
+                MDS_Points1, 
+                MDS_Points2)
+
+window_distance = afvaper_region %>%
+  dplyr::select(contains('V'))
+
+MDS_points_windows %>% 
+  ggplot(aes(x = MDS_Points1, 
+             y = MDS_Points2,
+             col = rainbow(nrow(window_distance))))+
+  geom_point(size = 3) +
+  labs(x = 'MDS coordinate 1', 
+       y = 'MDS coordinate 2')+
+  theme(legend.position = 'none')
+
+
