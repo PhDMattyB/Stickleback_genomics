@@ -169,4 +169,12 @@ chr21_map_data = read_tsv('stickleback_maf0.05_ldpruned_filtered.map',
   filter(POS >= 9963830, 
          POS <= 11370710)
 
+chr21_ped_data %>% 
+  write_tsv('chr21_inversion_region.ped', 
+            col_names = F)
+chr21_map_data %>% 
+  write_tsv('chr21_inversion_region.map', 
+            col_names = F)
+
+library(pcadapt)
 
