@@ -179,5 +179,41 @@ chr21_map_data %>%
   write_tsv('chr21_inversion_region.map',
             col_names = F)
 
+
+
+# PCA on the putative inversion -------------------------------------------
+
 library(pcadapt)
+
+
+chr21_inversion = read.pcadapt('chr21_inversion_region.bed', 
+                               type = 'bed')
+
+chr21_pca = pcadapt::pcadapt(chr21_inversion, 
+                               K = 10, 
+                               method = 'mahalanobis', 
+                               min.maf = 0.01)
+
+plot(chr21_pca, 
+     option = 'screeplot', 
+     K = 10)
+
+
+## percent variation explained by the three significant axes
+chr21_pca$singular.values
+sum(chr21_pca$singular.values)
+(0.6293236/2.172823)*100
+(0.2314772/2.172823)*100
+## singular values should have already been square root transformed
+
+chr21_pca_scores = as_tibble(chr21_pca$scores) %>%
+  rename(PC1 = 1,
+         PC2 = 2) %>%
+  dplyr::select(PC1,
+                PC2) %>%
+  write_csv('chr21_PCA_scores.csv')
+
+stickle_plot = read_csv('chr21_PCA_scores.csv')
+
+identifiers = read_csv('stickleback_identifiers.csv')
 
