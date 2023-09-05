@@ -141,6 +141,8 @@ Outlier_plots(outlier_data = MDS_outliers,
 
 # PCA of the CHR21 region -------------------------------------------------
 
+## Holy fuck just filter in plink with the --from --to flags to filter
+## by the specific snp range
 ## the .raw file from RecodeA data can't be loaded by plink. 
 ped_data = read_table('stickleback_maf0.05_ldpruned_filtered.ped',
                       col_names = c('PopulationID',
@@ -159,7 +161,7 @@ chr21_ped_data = ped_data %>%
                 PaternalID,
                 Sex,
                 Phenotype,
-                chr_XXI_9963830:chr_XXI_11370710)
+                'chr_XXI_9963830':'chr_XXI_11370710')
 
 chr21_map_data = read_tsv('stickleback_maf0.05_ldpruned_filtered.map',
                     col_names = c('CHR',
