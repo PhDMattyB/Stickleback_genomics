@@ -141,39 +141,40 @@ Outlier_plots(outlier_data = MDS_outliers,
 
 # PCA of the CHR21 region -------------------------------------------------
 
-ped_data = read_table('stickleback_maf0.05_ldprunded_filtered.raw',
-                      col_names = c('PopulationID', 
-                                    'IndividualID', 
-                                    'MaternalID', 
-                                    'PaternalID', 
-                                    'Sex', 
-                                    'Phenotype', 
+## the .raw file from RecodeA data can't be loaded by plink. 
+ped_data = read_table('stickleback_maf0.05_ldpruned_filtered.ped',
+                      col_names = c('PopulationID',
+                                    'IndividualID',
+                                    'MaternalID',
+                                    'PaternalID',
+                                    'Sex',
+                                    'Phenotype',
                                     map_data$SNP))
 
-chr21_ped_data = ped_data %>% 
-  slice(-1) %>% 
-  dplyr::select(PopulationID, 
-                IndividualID, 
-                MaternalID, 
-                PaternalID, 
-                Sex, 
-                Phenotype, 
+chr21_ped_data = ped_data %>%
+  # slice(-1) %>%
+  dplyr::select(PopulationID,
+                IndividualID,
+                MaternalID,
+                PaternalID,
+                Sex,
+                Phenotype,
                 chr_XXI_9963830:chr_XXI_11370710)
 
-chr21_map_data = read_tsv('stickleback_maf0.05_ldpruned_filtered.map', 
-                    col_names = c('CHR', 
-                                  'SNP', 
-                                  'GPOS', 
-                                  'POS')) %>% 
-  filter(CHR == 'chr_XXI') %>% 
-  filter(POS >= 9963830, 
+chr21_map_data = read_tsv('stickleback_maf0.05_ldpruned_filtered.map',
+                    col_names = c('CHR',
+                                  'SNP',
+                                  'GPOS',
+                                  'POS')) %>%
+  filter(CHR == 'chr_XXI') %>%
+  filter(POS >= 9963830,
          POS <= 11370710)
 
-chr21_ped_data %>% 
-  write_tsv('chr21_inversion_region.ped', 
+chr21_ped_data %>%
+  write_tsv('chr21_inversion_region.ped',
             col_names = F)
-chr21_map_data %>% 
-  write_tsv('chr21_inversion_region.map', 
+chr21_map_data %>%
+  write_tsv('chr21_inversion_region.map',
             col_names = F)
 
 library(pcadapt)
