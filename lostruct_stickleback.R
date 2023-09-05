@@ -12,6 +12,12 @@ setwd('~/Parsons_Postdoc/Stickleback_Genomic/vcf_filter/')
 library(tidyverse)
 library(data.table)
 
+map_data = read_tsv('stickleback_maf0.05_ldpruned_filtered.map', 
+                    col_names = c('CHR', 
+                                  'SNP', 
+                                  'GPOS', 
+                                  'POS'))
+
 ped_data = read_table('stickleback_maf0.05_ldprunded_filtered.raw',
                       col_names = c('PopulationID', 
                                     'IndividualID', 
@@ -20,12 +26,6 @@ ped_data = read_table('stickleback_maf0.05_ldprunded_filtered.raw',
                                     'Sex', 
                                     'Phenotype', 
                                     map_data$SNP))
-
-map_data = read_tsv('stickleback_maf0.05_ldpruned_filtered.map', 
-                    col_names = c('CHR', 
-                                  'SNP', 
-                                  'GPOS', 
-                                  'POS'))
 
 tped = Create_tped(ped = ped_data, 
             map = map_data)
@@ -136,6 +136,10 @@ Normal_data = MDS_points_windows %>%
 
 Outlier_plots(outlier_data = MDS_outliers, 
               normal_data = Normal_data)
+
+
+
+# Lostruct on full chr XXI -------------------------------------------------
 
 
 
