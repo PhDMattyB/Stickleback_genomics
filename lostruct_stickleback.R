@@ -125,8 +125,7 @@ MDS_points_windows %>%
 
 ## HOLY SHIT!! window 83-92 are MDS outliers!!!
 MDS_outliers = Outlier_hunter(data = MDS_points_windows, 
-               sd_percentile = 3) %>% 
-  rename(POS = X4)
+               sd_percentile = 3) 
 
 Normal_data = MDS_points_windows %>% 
   filter(window %in% c('81', 
@@ -137,3 +136,37 @@ Normal_data = MDS_points_windows %>%
 
 Outlier_plots(outlier_data = MDS_outliers, 
               normal_data = Normal_data)
+
+
+
+# PCA of the CHR21 region -------------------------------------------------
+
+ped_data = read_table('stickleback_maf0.05_ldprunded_filtered.raw',
+                      col_names = c('PopulationID', 
+                                    'IndividualID', 
+                                    'MaternalID', 
+                                    'PaternalID', 
+                                    'Sex', 
+                                    'Phenotype', 
+                                    map_data$SNP))
+
+chr21_ped_data = ped_data %>% 
+  slice(-1) %>% 
+  dplyr::select(PopulationID, 
+                IndividualID, 
+                MaternalID, 
+                PaternalID, 
+                Sex, 
+                Phenotype, 
+                chr_XXI_9963830:chr_XXI_11370710)
+
+chr21_map_data = read_tsv('stickleback_maf0.05_ldpruned_filtered.map', 
+                    col_names = c('CHR', 
+                                  'SNP', 
+                                  'GPOS', 
+                                  'POS')) %>% 
+  filter(CHR == 'chr_XXI') %>% 
+  filter(POS >= 9963830, 
+         POS <= 11370710)
+
+
