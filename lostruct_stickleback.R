@@ -217,3 +217,74 @@ stickle_plot = read_csv('chr21_PCA_scores.csv')
 
 identifiers = read_csv('stickleback_identifiers.csv')
 
+stickle_plot = bind_cols(identifiers, 
+                         stickle_plot)
+
+stickle_plot = mutate(.data = stickle_plot,
+                      Location = as.factor(case_when(
+                        population == 'ASHNC' ~ 'Áshildarholtsvatn',
+                        population == 'ASHNW' ~ 'Áshildarholtsvatn',
+                        population == 'CSWY' ~ 'Garðsvatn',
+                        population == 'GTS' ~ 'Grettislaug',
+                        population == 'MYVC' ~ 'Mývatn',
+                        population == 'MYVW' ~ 'Mývatn',
+                        population == 'SKRC' ~ 'Sauðárkrókur',
+                        population == 'SKRW' ~ 'Sauðárkrókur')))
+
+stickle_plot = mutate(.data = stickle_plot, 
+                      Type = as.factor(case_when(
+                        population == 'ASHNC' ~ 'Ambient',
+                        population == 'ASHNW' ~ 'Geothermal',
+                        population == 'CSWY' ~ 'Ambient',
+                        population == 'GTS' ~ 'Geothermal',
+                        population == 'MYVC' ~ 'Ambient',
+                        population == 'MYVW' ~ 'Geothermal',
+                        population == 'SKRC' ~ 'Ambient',
+                        population == 'SKRW' ~ 'Geothermal'
+                      )))
+
+
+theme_set(theme_bw())
+
+location_cols = c('#06d6a0',
+                  '#264653',
+                  '#219ebc',
+                  '#d62828',
+                  '#5f0f40')
+
+
+stickleback_pca = stickle_plot %>%
+  # arrange(population) %>% 
+  # group_by(population) %>% 
+  ggplot(aes(x = PC1, 
+             y = PC2))+
+  geom_point(aes(col = Location, 
+                 shape = Type),
+             size = 3)+
+  # geom_point(aes(col = population),
+  #            size = 2)+
+  # scale_color_manual(values = cold_warm_cols)+
+  scale_color_manual(values = location_cols)+
+  theme(panel.grid.major = element_blank(),
+        panel.grid.minor = element_blank(), 
+        axis.title = element_text(size = 15), 
+        axis.text = element_text(size = 15), 
+        axis.ticks = element_line(size = 1), 
+        plot.title = element_text(size = 15, 
+                                  hjust = 0), 
+        legend.text = element_text(size = 12),
+        legend.title = element_text(size = 14)) +
+  labs(x = 'Principal component 1 (28.96%)',
+       y = 'Principal component 2 (10.65%)', 
+       col = 'Populations')
+
+stickleback_pca
+
+
+ggsave(file = 'stickleback_pca_cold_warm_11.08.2023.tiff', 
+       path = '~/Parsons_Postdoc/Stickleback_Genomic/Figures/', 
+       plot = stickleback_pca, 
+       dpi = 'retina', 
+       units = 'cm', 
+       width = 20.0, 
+       height = 13)
