@@ -142,7 +142,80 @@ Outlier_plots(outlier_data = MDS_outliers,
 # Lostruct on full chr XXI -------------------------------------------------
 
 
+## Need to plot the MDS structure for the regions 
+## flanking the potential inversion
 
+## windows 83 and 93 are the start and end positions of the afvaper region
+theme_set(theme_bw())
+
+Normal_data = combo_data %>% 
+  filter(!window %in% c('83',
+                        '84', 
+                        '85', 
+                        '86', 
+                        '87', 
+                        '88', 
+                        '89', 
+                        '90', 
+                        '91', 
+                        '92',
+                        '93')) 
+label = rep('Normal_region', 
+     nrow(Normal_data))
+
+Normal_data = cbind(label, 
+                    Normal_data) %>% 
+  as_tibble() %>% 
+  rename(group = 1)%>% 
+  dplyr::select(group, 
+                X4, 
+                window, 
+                MDS_Points1, 
+                MDS_Points2)
+# afvaper_region = combo_data %>%
+#   filter(window >= '81',
+#          window <= '95')
+# MDS_points_windows = afvaper_region %>% 
+#   dplyr::select(X4, 
+#                 window, 
+#                 MDS_Points1, 
+#                 MDS_Points2)
+# 
+# MDS_points_windows %>% 
+#   write_csv('AFvaper_region_lostruct_survey.csv')
+
+afvaper_region = read_csv('AFvaper_region_lostruct_survey.csv') %>% 
+  filter(group == 'Afvaper_region')
+
+labeled_data = bind_rows(Normal_data, 
+                         afvaper_region)
+
+# window_distance = afvaper_region %>%
+#   dplyr::select(contains('V'))
+
+labeled_data %>% 
+  ggplot(aes(x = MDS_Points1, 
+             y = MDS_Points2,
+             col = group))+
+  # ggplot(aes(x = MDS_Points1, 
+  #            y = MDS_Points2,
+  #            col = rainbow(nrow(window_distance))))+
+  geom_point(size = 3) +
+  labs(x = 'MDS coordinate 1', 
+       y = 'MDS coordinate 2')
+# +
+#   theme(legend.position = 'none')
+
+
+
+## HOLY SHIT!! window 83-92 are MDS outliers!!!
+MDS_outliers = Outlier_hunter(data = labeled_data, 
+                              sd_percentile = 3) 
+
+Outlier_plots(outlier_data = MDS_outliers, 
+              normal_data = Normal_data)
+
+##s
 # PCA of the CHR21 region -------------------------------------------------
 
 ## Holy fuck just filter in plink with the --from --to flags to filter
