@@ -215,6 +215,7 @@ MDS_outliers = Outlier_hunter(data = labeled_data,
 Outlier_plots(outlier_data = MDS_outliers, 
               normal_data = Normal_data)
 
+
 ##s
 # PCA of the CHR21 region -------------------------------------------------
 
