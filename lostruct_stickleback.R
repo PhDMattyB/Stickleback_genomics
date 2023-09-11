@@ -550,7 +550,7 @@ individual_data = bind_cols(individual_coords,
                             individual_groups) %>% 
   rename(cluster_group = 3)
 
-individual_data$dapc_group_assignment = as.character(individual_data$dapc_group_assignment)
+individual_data$cluster_group = as.character(individual_data$cluster_group)
 
 library(ggforce)
 library(patchwork)
@@ -561,40 +561,16 @@ pal = c('#2E4159',
 
 theme_set(theme_bw())
 
-dapc_plot1 = ggplot(data = individual_data,
-                    aes(x = LD1, 
-                        y = LD2))+
-  # geom_point(aes(col = dapc_group_assignment), 
-  #            size = 1.5)+
-  geom_point(aes(col = Lat...4),
-             size = 1.5)+
-  # geom_mark_ellipse(expand = 0, 
-  #                   size = 2,
-  #                  aes(col = dapc_group_assignment))+
-  geom_mark_ellipse(expand = 0, 
-                    size = 1, 
-                    aes(group = dapc_group_assignment))+
-  # scale_color_manual(values = pal)+
-  labs(x = 'Linear discriminant axis 1', 
-       y = 'Linear discriminant axis 2', 
-       color = 'Latitude')+
-  theme(panel.grid = element_blank(),
-        axis.title = element_text(size = 14),
-        axis.title.y = element_blank(),
-        axis.text =  element_text(size = 12),
-        axis.ticks = element_line(size = 1),
-        legend.text = element_text(size = 12),
-        legend.title = element_text(size = 14))
-dapc_plot1
 
-dapc_plot2 = ggplot(data = individual_data,
+
+dapc_chr21_plot = ggplot(data = individual_data,
                     aes(x = LD1, 
                         y = LD2))+
-  geom_point(aes(col = dapc_group_assignment),
+  geom_point(aes(col = cluster_group),
              size = 1.5)+
   geom_mark_ellipse(expand = 0,
                     size = 1,
-                    aes(group = dapc_group_assignment))+
+                    aes(group = cluster_group))+
   scale_color_manual(values = pal)+
   labs(x = 'Linear discriminant axis 1', 
        y = 'Linear discriminant axis 2', 
