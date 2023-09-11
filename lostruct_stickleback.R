@@ -520,6 +520,7 @@ scatter(dapc_chr21_region,
         legend=F, 
         solid=.4)
 
+## left off coding the dpac for the inversion region here
 # Dapc ggplot mashup ------------------------------------------------------
 
 # individual_coords = read_csv('~/Charr_Adaptive_Introgression/Charr_Project_1/GeneticData/Lab_dapc_individual_LD_coordinates.csv')
