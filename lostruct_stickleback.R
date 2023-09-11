@@ -358,10 +358,13 @@ stickleback_pca = stickle_plot %>%
 stickleback_pca
 
 
-ggsave(file = 'stickleback_pca_cold_warm_11.08.2023.tiff', 
+ggsave(file = 'PCA_Afvaper_Inversion_region_lostruct_outlier.tiff', 
        path = '~/Parsons_Postdoc/Stickleback_Genomic/Figures/', 
        plot = stickleback_pca, 
        dpi = 'retina', 
        units = 'cm', 
        width = 20.0, 
        height = 13)
+
+
+
