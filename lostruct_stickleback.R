@@ -485,6 +485,9 @@ as.data.frame(dapc_chr21_region$var.contr) %>%
   as_tibble() %>%
   write_csv('Dapc_SNP_LD_coordinates.csv')
 
+as.data.frame(dapc_chr21_region$grp) %>% 
+  as_tibble() %>% 
+  write_csv('Dapc_Individual_group_assignment.csv')
 ## eigenvalues
 dapc_chr21_region$eig
 
@@ -520,14 +523,13 @@ scatter(dapc_chr21_region,
         legend=F, 
         solid=.4)
 
-## left off coding the dpac for the inversion region here
-# Dapc ggplot mashup ------------------------------------------------------
+# Dapca ggplot mashup ------------------------------------------------------
 
 # individual_coords = read_csv('~/Charr_Adaptive_Introgression/Charr_Project_1/GeneticData/Lab_dapc_individual_LD_coordinates.csv')
-group_coords = read_csv('~/Charr_Adaptive_Introgression/Charr_Project_1/GeneticData/Lab_dapc_group_LD_coordinates.csv')
-snp_coords = read_csv('~/Charr_Adaptive_Introgression/Charr_Project_1/GeneticData/Lab_dapc_SNP_LD_coordinates.csv')
-individual_coords = read_csv('~/Charr_Adaptive_Introgression/Charr_Project_1/GeneticData/Lab_dapc_individual_coords.csv')
-individual_groups = read_csv('~/Charr_Adaptive_Introgression/Charr_Project_1/GeneticData/dapc_Individual_group_assignment.csv')
+group_coords = read_csv('Dapc_group_LD_coordinates.csv')
+snp_coords = read_csv('Dapc_SNP_LD_coordinates.csv')
+individual_coords = read_csv('Dapc_individual_LD_coordinates.csv')
+individual_groups = read_csv('Dapc_Individual_group_assignment.csv')
 # indiv = read_csv('~/Charr_Adaptive_Introgression/Charr_Project_1/GeneticData/Lab_dapc_individual_LD_coordinates.csv')
 # lab_metadata = lab_data %>%
 #   as_tibble() %>%
@@ -545,7 +547,8 @@ individual_groups = read_csv('~/Charr_Adaptive_Introgression/Charr_Project_1/Gen
 #   write_csv('~/Charr_Adaptive_Introgression/Charr_Project_1/GeneticData/Lab_dapc_individual_coords.csv')
 
 individual_data = bind_cols(individual_coords, 
-                            individual_groups)
+                            individual_groups) %>% 
+  rename(cluster_group = 3)
 
 individual_data$dapc_group_assignment = as.character(individual_data$dapc_group_assignment)
 
