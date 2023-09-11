@@ -398,3 +398,251 @@ ggsave(file = 'PCA_Afvaper_Inversion_region_lostruct_outlier.tiff',
 
 
 
+
+
+
+# DAPCA chr21 inversion region --------------------------------------------
+
+library(adegenet)
+
+map = read_tsv('chr21_inversion_region.map', 
+               col_names = F) %>% 
+  rename(CHR = X1, 
+         SNP = X2, 
+         GPOS = X3, 
+         POS = X4)
+
+chr21_inversion_data = read_tsv('chr21_inversion_region.ped', 
+                    col_names = c('#FamilyID', 
+                                  'IndividualID', 
+                                  'PaternalID', 
+                                  'MaternalID', 
+                                  'Sex', 
+                                  'Phenotype', 
+                                  map$SNP)) 
+
+
+## Need to change to a data frame from a tibble
+## otherwise we'll get a weird dimension names error
+lab_data = as.data.frame(lab_data)
+
+lab_genind = df2genind(lab_data[,3:length(lab_data)], 
+                       ploidy = 2, 
+                       ind.names = lab_data[,2], 
+                       sep = '\t', 
+                       pop = lab_data[,1])
+set.seed(666)
+lab_clust = find.clusters(lab_genind, max.n.clust = 37)
+## 900 PCs to maximize variance
+## clear 3 - 5 clusters on BIC graph
+## everytime I run this I get a different answer which will 
+## drastically affect the dapc downstream
+
+
+## Figured it out....i'm a coding GOD
+dapc_table = table(pop(lab_genind), 
+                   lab_clust$grp)
+
+## write the table to see if the strong clustering 
+## relates 
+# as.data.frame(dapc_table) %>% 
+#   write_tsv('DAPC_output_three_clusters.txt')
+
+table.value(table(pop(lab_genind), 
+                  lab_clust$grp), 
+            col.lab=paste("inf", 1:4),
+            row.lab=paste("ori", 1:37))
+
+lab_clust$grp %>% 
+  as.data.frame() %>% 
+  rownames_to_column() %>% 
+  as_tibble() %>% 
+  rename(IndividualID = 1, 
+         dapc_group_assignment = 2) %>% 
+  write_csv('~/Charr_Adaptive_Introgression/Charr_Project_1/GeneticData/dapc_Individual_group_assignment.csv')
+
+
+## MBB and ENG (both southern pops) are clearly clustering on their own
+## I Want to make a heat map with this data and color it by latitude
+## to see if the four clusters are due to a latitudinal gradient
+
+## Need to determine the number of pcs to retain as
+## the number of pcs can really affect the dapc outcome
+# set.seed(666)
+# pramx = xvalDapc(tab(lab_genind, 
+#                       NA.method = "mean"), 
+#                   pop(lab_genind))
+## This was very uninformative due to the large amount of pc
+## axes and variation
+
+## be careful and pay attention
+## the number of PC axes you use with this part of the analysis
+## will largely change the dapc output
+lab_dapc = dapc(lab_genind, 
+                lab_clust$grp)
+
+## contribution of individuals to the 2 LDs
+
+as.data.frame(lab_dapc$ind.coord) %>%
+  as_tibble() %>%
+  write_csv('~/Charr_Adaptive_Introgression/Charr_Project_1/GeneticData/Lab_dapc_individual_LD_coordinates.csv')
+
+## contribution of the groups to the 3 LDs
+
+as.data.frame(lab_dapc$grp.coord) %>%
+  as_tibble() %>%
+  write_csv('~/Charr_Adaptive_Introgression/Charr_Project_1/GeneticData/Lab_dapc_group_LD_coordinates.csv')
+
+## contribution of the individual loci to the 3 LDs
+
+as.data.frame(lab_dapc$var.contr) %>%
+  as_tibble() %>%
+  write_csv('~/Charr_Adaptive_Introgression/Charr_Project_1/GeneticData/Lab_dapc_SNP_LD_coordinates.csv')
+
+## eigenvalues
+lab_dapc$eig
+
+## individuals are dots
+## groups are inertia ellipses
+scatter(lab_dapc)
+
+
+pal = c('#2E4159',
+        '#4968A6',
+        # '#F29E38',
+        '#F23E2E')
+
+scatter(lab_dapc, 
+        scree.da=FALSE, 
+        bg="white", 
+        pch=20, 
+        cell=0, 
+        cstar=0, 
+        col=pal,
+        solid=.4,
+        cex=3,
+        clab=0, 
+        leg=FALSE)
+# txt.leg=paste("Cluster",1:3))
+
+scatter(lab_dapc,
+        1,
+        1, 
+        col=pal, 
+        bg="white",
+        scree.da=FALSE, 
+        legend=F, 
+        solid=.4)
+
+# Dapc ggplot mashup ------------------------------------------------------
+
+# individual_coords = read_csv('~/Charr_Adaptive_Introgression/Charr_Project_1/GeneticData/Lab_dapc_individual_LD_coordinates.csv')
+group_coords = read_csv('~/Charr_Adaptive_Introgression/Charr_Project_1/GeneticData/Lab_dapc_group_LD_coordinates.csv')
+snp_coords = read_csv('~/Charr_Adaptive_Introgression/Charr_Project_1/GeneticData/Lab_dapc_SNP_LD_coordinates.csv')
+individual_coords = read_csv('~/Charr_Adaptive_Introgression/Charr_Project_1/GeneticData/Lab_dapc_individual_coords.csv')
+individual_groups = read_csv('~/Charr_Adaptive_Introgression/Charr_Project_1/GeneticData/dapc_Individual_group_assignment.csv')
+# indiv = read_csv('~/Charr_Adaptive_Introgression/Charr_Project_1/GeneticData/Lab_dapc_individual_LD_coordinates.csv')
+# lab_metadata = lab_data %>%
+#   as_tibble() %>%
+#   dplyr::select(`#FamilyID`,
+#                 IndividualID) %>%
+#   rename(Population = `#FamilyID`)
+# coords = read_csv('~/Charr_Adaptive_Introgression/Charr_Project_1/SampleSiteData/LabSampleSites_Coord_1June2020.csv')
+# 
+# lab_metadata = full_join(lab_metadata,
+#           coords,
+#           by = 'Population')
+# 
+# bind_cols(lab_metadata,
+#                      individual_coords) %>%
+#   write_csv('~/Charr_Adaptive_Introgression/Charr_Project_1/GeneticData/Lab_dapc_individual_coords.csv')
+
+individual_data = bind_cols(individual_coords, 
+                            individual_groups)
+
+individual_data$dapc_group_assignment = as.character(individual_data$dapc_group_assignment)
+
+library(ggforce)
+library(patchwork)
+
+pal = c('#2E4159',
+        '#4968A6',
+        '#F23E2E')
+
+theme_set(theme_bw())
+
+dapc_plot1 = ggplot(data = individual_data,
+                    aes(x = LD1, 
+                        y = LD2))+
+  # geom_point(aes(col = dapc_group_assignment), 
+  #            size = 1.5)+
+  geom_point(aes(col = Lat...4),
+             size = 1.5)+
+  # geom_mark_ellipse(expand = 0, 
+  #                   size = 2,
+  #                  aes(col = dapc_group_assignment))+
+  geom_mark_ellipse(expand = 0, 
+                    size = 1, 
+                    aes(group = dapc_group_assignment))+
+  # scale_color_manual(values = pal)+
+  labs(x = 'Linear discriminant axis 1', 
+       y = 'Linear discriminant axis 2', 
+       color = 'Latitude')+
+  theme(panel.grid = element_blank(),
+        axis.title = element_text(size = 14),
+        axis.title.y = element_blank(),
+        axis.text =  element_text(size = 12),
+        axis.ticks = element_line(size = 1),
+        legend.text = element_text(size = 12),
+        legend.title = element_text(size = 14))
+dapc_plot1
+
+dapc_plot2 = ggplot(data = individual_data,
+                    aes(x = LD1, 
+                        y = LD2))+
+  geom_point(aes(col = dapc_group_assignment),
+             size = 1.5)+
+  geom_mark_ellipse(expand = 0,
+                    size = 1,
+                    aes(group = dapc_group_assignment))+
+  scale_color_manual(values = pal)+
+  labs(x = 'Linear discriminant axis 1', 
+       y = 'Linear discriminant axis 2', 
+       color = 'Latitude')+
+  theme(panel.grid = element_blank(),
+        axis.title = element_text(size = 14),
+        axis.text =  element_text(size = 12),
+        axis.ticks = element_line(size = 1),
+        legend.position = 'none')
+
+dapc_plot3 = ggplot(data = individual_data, 
+                    aes(x = LD1))+
+  geom_histogram(col = 'black',
+                 aes(fill = dapc_group_assignment))+
+  scale_fill_manual(values = pal)+
+  labs(x = 'Linear discriminant axis 1', 
+       y = 'Count')+
+  theme(panel.grid = element_blank(),
+        axis.title = element_text(size = 14),
+        axis.text =  element_text(size = 12),
+        axis.ticks = element_line(size = 1),
+        legend.position = 'none')
+
+dapc_plot4 = ggplot(data = individual_data, 
+                    aes(x = LD2))+
+  geom_histogram(col = 'black',
+                 aes(fill = dapc_group_assignment))+
+  scale_fill_manual(values = pal)+
+  labs(x = 'Linear discriminant axis 2', 
+       y = 'Count', 
+       fill = 'Cluster')+
+  theme(panel.grid = element_blank(),
+        axis.title = element_text(size = 14),
+        axis.title.y = element_blank(),
+        axis.text =  element_text(size = 12),
+        axis.ticks = element_line(size = 1), 
+        legend.title = element_text(size = 14), 
+        legend.text = element_text(size = 12))
+
+combo_plot = (dapc_plot2 + dapc_plot1)/(dapc_plot3 + dapc_plot4)
+
