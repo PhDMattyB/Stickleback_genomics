@@ -530,27 +530,17 @@ group_coords = read_csv('Dapc_group_LD_coordinates.csv')
 snp_coords = read_csv('Dapc_SNP_LD_coordinates.csv')
 individual_coords = read_csv('Dapc_individual_LD_coordinates.csv')
 individual_groups = read_csv('Dapc_Individual_group_assignment.csv')
-# indiv = read_csv('~/Charr_Adaptive_Introgression/Charr_Project_1/GeneticData/Lab_dapc_individual_LD_coordinates.csv')
-# lab_metadata = lab_data %>%
-#   as_tibble() %>%
-#   dplyr::select(`#FamilyID`,
-#                 IndividualID) %>%
-#   rename(Population = `#FamilyID`)
-# coords = read_csv('~/Charr_Adaptive_Introgression/Charr_Project_1/SampleSiteData/LabSampleSites_Coord_1June2020.csv')
-# 
-# lab_metadata = full_join(lab_metadata,
-#           coords,
-#           by = 'Population')
-# 
-# bind_cols(lab_metadata,
-#                      individual_coords) %>%
-#   write_csv('~/Charr_Adaptive_Introgression/Charr_Project_1/GeneticData/Lab_dapc_individual_coords.csv')
+identifiers = read_csv('stickleback_identifiers.csv')
 
 individual_data = bind_cols(individual_coords, 
                             individual_groups) %>% 
   rename(cluster_group = 3)
 
 individual_data$cluster_group = as.character(individual_data$cluster_group)
+
+individual_data = bind_cols(identifiers, 
+                         individual_data)
+
 
 library(ggforce)
 library(patchwork)
