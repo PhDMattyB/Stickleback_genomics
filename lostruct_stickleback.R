@@ -397,10 +397,6 @@ ggsave(file = 'PCA_Afvaper_Inversion_region_lostruct_outlier.tiff',
        height = 13)
 
 
-
-
-
-
 # DAPCA chr21 inversion region --------------------------------------------
 
 library(adegenet)
