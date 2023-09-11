@@ -579,8 +579,6 @@ location_cols = c('#06d6a0',
 
 theme_set(theme_bw())
 
-
-
 dapc_chr21_plot = ggplot(data = individual_data,
                     aes(x = LD1, 
                         y = LD2))+
