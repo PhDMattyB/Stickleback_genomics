@@ -215,6 +215,35 @@ Outlier_plots(outlier_data = MDS_outliers,
               normal_data = Normal_data)
 
 
+
+# Calculate window size - 50 snp windows ----------------------------------
+
+Normal_data_win_size = combo_data %>% 
+  dplyr::select(X1, 
+                window, 
+                mean_window) %>% 
+  group_by(window) %>% 
+  mutate(mean_window_Mb = mean_window/1000000)
+
+
+outlier_data_win_size = combo_data %>% 
+  filter(window %in% c('83',
+                        '84', 
+                        '85', 
+                        '86', 
+                        '87', 
+                        '88', 
+                        '89', 
+                        '90', 
+                        '91', 
+                        '92')) %>% 
+  dplyr::select(X1, 
+                window, 
+                mean_window) %>% 
+  group_by(window) %>% 
+  mutate(mean_window_Mb = mean_window/1000000)
+
+
 ##s
 # PCA of the CHR21 region -------------------------------------------------
 
