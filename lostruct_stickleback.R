@@ -225,6 +225,7 @@ Normal_data_win_size = combo_data %>%
   group_by(window) %>% 
   mutate(mean_window_Mb = mean_window/1000000)
 
+Normal_data_win_size$mean_window_Mb
 
 outlier_data_win_size = combo_data %>% 
   filter(window %in% c('83',
