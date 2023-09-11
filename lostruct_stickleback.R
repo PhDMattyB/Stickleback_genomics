@@ -541,7 +541,28 @@ individual_data$cluster_group = as.character(individual_data$cluster_group)
 individual_data = bind_cols(identifiers, 
                          individual_data)
 
+individual_data = mutate(.data = individual_data,
+                      Location = as.factor(case_when(
+                        population == 'ASHNC' ~ 'Áshildarholtsvatn',
+                        population == 'ASHNW' ~ 'Áshildarholtsvatn',
+                        population == 'CSWY' ~ 'Garðsvatn',
+                        population == 'GTS' ~ 'Grettislaug',
+                        population == 'MYVC' ~ 'Mývatn',
+                        population == 'MYVW' ~ 'Mývatn',
+                        population == 'SKRC' ~ 'Sauðárkrókur',
+                        population == 'SKRW' ~ 'Sauðárkrókur')))
 
+individual_data = mutate(.data = individual_data, 
+                      Type = as.factor(case_when(
+                        population == 'ASHNC' ~ 'Ambient',
+                        population == 'ASHNW' ~ 'Geothermal',
+                        population == 'CSWY' ~ 'Ambient',
+                        population == 'GTS' ~ 'Geothermal',
+                        population == 'MYVC' ~ 'Ambient',
+                        population == 'MYVW' ~ 'Geothermal',
+                        population == 'SKRC' ~ 'Ambient',
+                        population == 'SKRW' ~ 'Geothermal'
+                      )))
 library(ggforce)
 library(patchwork)
 
