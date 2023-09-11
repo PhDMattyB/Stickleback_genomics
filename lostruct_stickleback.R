@@ -30,9 +30,9 @@ ped_data = read_table('stickleback_maf0.05_ldprunded_filtered.raw',
 tped = Create_tped(ped = ped_data, 
             map = map_data)
 
-tped %>%
-  write_tsv('stickleback_maf0.05_ldpruned_filtered.tped', 
-            col_names = F)
+# tped %>%
+#   write_tsv('stickleback_maf0.05_ldpruned_filtered.tped', 
+#             col_names = F)
 # 
 snps = read_table('stickleback_maf0.05_ldpruned_filtered.tped', 
                   col_names = F)
@@ -145,7 +145,6 @@ Outlier_plots(outlier_data = MDS_outliers,
 ## Need to plot the MDS structure for the regions 
 ## flanking the potential inversion
 
-## windows 83 and 93 are the start and end positions of the afvaper region
 theme_set(theme_bw())
 
 Normal_data = combo_data %>% 
