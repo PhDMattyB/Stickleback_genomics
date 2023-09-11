@@ -570,6 +570,13 @@ pal = c('#F23E2E',
         '#2E4159',
         '#4968A6')
 
+location_cols = c('#06d6a0',
+                  '#264653',
+                  '#219ebc',
+                  '#d62828',
+                  '#5f0f40')
+
+
 theme_set(theme_bw())
 
 
@@ -577,12 +584,14 @@ theme_set(theme_bw())
 dapc_chr21_plot = ggplot(data = individual_data,
                     aes(x = LD1, 
                         y = LD2))+
-  geom_point(aes(col = cluster_group),
+  geom_point(aes(col = Location, 
+                 shape = Type),
              size = 1.5)+
   geom_mark_ellipse(expand = 0,
                     size = 1,
                     aes(group = cluster_group))+
-  scale_color_manual(values = pal)+
+  # scale_color_manual(values = pal)+
+  scale_color_manual(values = location_cols)+
   labs(x = 'Linear discriminant axis 1', 
        y = 'Linear discriminant axis 2', 
        color = 'Latitude')+
@@ -595,8 +604,8 @@ dapc_chr21_plot = ggplot(data = individual_data,
 dapc_chr21_region_hist = ggplot(data = individual_data, 
                     aes(x = LD1))+
   geom_histogram(col = 'black',
-                 aes(fill = cluster_group))+
-  scale_fill_manual(values = pal)+
+                 aes(fill = Location))+
+  scale_fill_manual(values = location_cols)+
   labs(x = 'Linear discriminant axis 1', 
        y = 'Count')+
   theme(panel.grid = element_blank(),
