@@ -419,92 +419,78 @@ chr21_inversion_data = read_tsv('chr21_inversion_region.ped',
                                   'MaternalID', 
                                   'Sex', 
                                   'Phenotype', 
-                                  map$SNP)) 
+                                  map$SNP)) %>% 
+  dplyr::select(`#FamilyID`, 
+                IndividualID, 
+                contains('chr_'))
 
 
 ## Need to change to a data frame from a tibble
 ## otherwise we'll get a weird dimension names error
-lab_data = as.data.frame(lab_data)
+chr21_inversion_data = as.data.frame(chr21_inversion_data)
 
-lab_genind = df2genind(lab_data[,3:length(lab_data)], 
+genind = df2genind(chr21_inversion_data[,3:length(chr21_inversion_data)], 
                        ploidy = 2, 
-                       ind.names = lab_data[,2], 
+                       ind.names = chr21_inversion_data[,2], 
                        sep = '\t', 
-                       pop = lab_data[,1])
+                       pop = chr21_inversion_data[,1])
 set.seed(666)
-lab_clust = find.clusters(lab_genind, max.n.clust = 37)
-## 900 PCs to maximize variance
-## clear 3 - 5 clusters on BIC graph
-## everytime I run this I get a different answer which will 
-## drastically affect the dapc downstream
-
+chr21_inversion_clust = find.clusters(genind, 
+                                      max.n.clust = 10)
 
 ## Figured it out....i'm a coding GOD
-dapc_table = table(pop(lab_genind), 
-                   lab_clust$grp)
+dapc_table = table(pop(genind), 
+                   chr21_inversion_clust$grp)
 
 ## write the table to see if the strong clustering 
-## relates 
+## relates chr
 # as.data.frame(dapc_table) %>% 
 #   write_tsv('DAPC_output_three_clusters.txt')
 
-table.value(table(pop(lab_genind), 
-                  lab_clust$grp), 
+table.value(table(pop(genind), 
+                  chr21_inversion_clust$grp), 
             col.lab=paste("inf", 1:4),
             row.lab=paste("ori", 1:37))
 
-lab_clust$grp %>% 
+chr21_inversion_clust$grp %>% 
   as.data.frame() %>% 
   rownames_to_column() %>% 
   as_tibble() %>% 
   rename(IndividualID = 1, 
          dapc_group_assignment = 2) %>% 
-  write_csv('~/Charr_Adaptive_Introgression/Charr_Project_1/GeneticData/dapc_Individual_group_assignment.csv')
+  write_csv('DAPCA_analysis_chr21_inversion_region.csv')
 
-
-## MBB and ENG (both southern pops) are clearly clustering on their own
-## I Want to make a heat map with this data and color it by latitude
-## to see if the four clusters are due to a latitudinal gradient
-
-## Need to determine the number of pcs to retain as
-## the number of pcs can really affect the dapc outcome
-# set.seed(666)
-# pramx = xvalDapc(tab(lab_genind, 
-#                       NA.method = "mean"), 
-#                   pop(lab_genind))
-## This was very uninformative due to the large amount of pc
-## axes and variation
 
 ## be careful and pay attention
 ## the number of PC axes you use with this part of the analysis
 ## will largely change the dapc output
-lab_dapc = dapc(lab_genind, 
-                lab_clust$grp)
+dapc_chr21_region = dapc(genind, 
+                chr21_inversion_clust$grp)
 
 ## contribution of individuals to the 2 LDs
 
-as.data.frame(lab_dapc$ind.coord) %>%
+as.data.frame(dapc_chr21_region$ind.coord) %>%
   as_tibble() %>%
-  write_csv('~/Charr_Adaptive_Introgression/Charr_Project_1/GeneticData/Lab_dapc_individual_LD_coordinates.csv')
+  write_csv('Dapc_individual_LD_coordinates.csv')
 
 ## contribution of the groups to the 3 LDs
 
-as.data.frame(lab_dapc$grp.coord) %>%
+as.data.frame(dapc_chr21_region$grp.coord) %>%
   as_tibble() %>%
-  write_csv('~/Charr_Adaptive_Introgression/Charr_Project_1/GeneticData/Lab_dapc_group_LD_coordinates.csv')
+  write_csv('Dapc_group_LD_coordinates.csv')
 
 ## contribution of the individual loci to the 3 LDs
 
-as.data.frame(lab_dapc$var.contr) %>%
+as.data.frame(dapc_chr21_region$var.contr) %>%
   as_tibble() %>%
-  write_csv('~/Charr_Adaptive_Introgression/Charr_Project_1/GeneticData/Lab_dapc_SNP_LD_coordinates.csv')
+  write_csv('Dapc_SNP_LD_coordinates.csv')
 
 ## eigenvalues
-lab_dapc$eig
+dapc_chr21_region$eig
 
 ## individuals are dots
 ## groups are inertia ellipses
-scatter(lab_dapc)
+scatter(dapc_chr21_region)
 
 
 pal = c('#2E4159',
@@ -512,7 +498,7 @@ pal = c('#2E4159',
         # '#F29E38',
         '#F23E2E')
 
-scatter(lab_dapc, 
+scatter(dapc_chr21_region, 
         scree.da=FALSE, 
         bg="white", 
         pch=20, 
@@ -525,7 +511,7 @@ scatter(lab_dapc,
         leg=FALSE)
 # txt.leg=paste("Cluster",1:3))
 
-scatter(lab_dapc,
+scatter(dapc_chr21_region,
         1,
         1, 
         col=pal, 
