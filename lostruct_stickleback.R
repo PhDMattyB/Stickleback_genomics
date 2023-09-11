@@ -555,9 +555,9 @@ individual_data$cluster_group = as.character(individual_data$cluster_group)
 library(ggforce)
 library(patchwork)
 
-pal = c('#2E4159',
-        '#4968A6',
-        '#F23E2E')
+pal = c('#F23E2E',
+        '#2E4159',
+        '#4968A6')
 
 theme_set(theme_bw())
 
@@ -581,10 +581,10 @@ dapc_chr21_plot = ggplot(data = individual_data,
         axis.ticks = element_line(size = 1),
         legend.position = 'none')
 
-dapc_plot3 = ggplot(data = individual_data, 
+dapc_chr21_region_hist = ggplot(data = individual_data, 
                     aes(x = LD1))+
   geom_histogram(col = 'black',
-                 aes(fill = dapc_group_assignment))+
+                 aes(fill = cluster_group))+
   scale_fill_manual(values = pal)+
   labs(x = 'Linear discriminant axis 1', 
        y = 'Count')+
@@ -597,7 +597,7 @@ dapc_plot3 = ggplot(data = individual_data,
 dapc_plot4 = ggplot(data = individual_data, 
                     aes(x = LD2))+
   geom_histogram(col = 'black',
-                 aes(fill = dapc_group_assignment))+
+                 aes(fill = cluster_group))+
   scale_fill_manual(values = pal)+
   labs(x = 'Linear discriminant axis 2', 
        y = 'Count', 
@@ -610,5 +610,4 @@ dapc_plot4 = ggplot(data = individual_data,
         legend.title = element_text(size = 14), 
         legend.text = element_text(size = 12))
 
-combo_plot = (dapc_plot2 + dapc_plot1)/(dapc_plot3 + dapc_plot4)
 
