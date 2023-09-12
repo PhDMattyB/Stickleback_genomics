@@ -1085,23 +1085,31 @@ dapc_chr21_region_hist = ggplot(data = individual_data,
         axis.text =  element_text(size = 12),
         axis.ticks = element_line(size = 1),
         legend.position = 'none')
+# 
+# dapc_plot4 = ggplot(data = individual_data, 
+#                     aes(x = LD2))+
+#   geom_histogram(col = 'black',
+#                  aes(fill = Location))+
+#   scale_fill_manual(values = location_cols)+
+#   labs(x = 'Linear discriminant axis 2', 
+#        y = 'Count', 
+#        fill = 'Cluster')+
+#   theme(panel.grid = element_blank(),
+#         axis.title = element_text(size = 14),
+#         axis.title.y = element_blank(),
+#         axis.text =  element_text(size = 12),
+#         axis.ticks = element_line(size = 1), 
+#         legend.title = element_text(size = 14), 
+#         legend.text = element_text(size = 12))
+# 
+# 
 
-dapc_plot4 = ggplot(data = individual_data, 
-                    aes(x = LD2))+
-  geom_histogram(col = 'black',
-                 aes(fill = Location))+
-  scale_fill_manual(values = location_cols)+
-  labs(x = 'Linear discriminant axis 2', 
-       y = 'Count', 
-       fill = 'Cluster')+
-  theme(panel.grid = element_blank(),
-        axis.title = element_text(size = 14),
-        axis.title.y = element_blank(),
-        axis.text =  element_text(size = 12),
-        axis.ticks = element_line(size = 1), 
-        legend.title = element_text(size = 14), 
-        legend.text = element_text(size = 12))
+combo_plot = dapc_chr21_plot + dapc_chr21_region_hist
 
-
-
-
+ggsave('DAPC_chr21_inversion_NoGTSCSWY.tiff', 
+       plot = combo_plot, 
+       dpi = 'retina', 
+       units = 'cm', 
+       width = 25, 
+       height = 15)
+s
