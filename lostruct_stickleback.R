@@ -1002,37 +1002,6 @@ as.data.frame(dapc_chr21_region$grp) %>%
 ## eigenvalues
 dapc_chr21_region$eig
 
-## individuals are dots
-## groups are inertia ellipses
-scatter(dapc_chr21_region)
-
-
-pal = c('#2E4159',
-        '#4968A6',
-        # '#F29E38',
-        '#F23E2E')
-
-scatter(dapc_chr21_region, 
-        scree.da=FALSE, 
-        bg="white", 
-        pch=20, 
-        cell=0, 
-        cstar=0, 
-        col=pal,
-        solid=.4,
-        cex=3,
-        clab=0, 
-        leg=FALSE)
-# txt.leg=paste("Cluster",1:3))
-
-scatter(dapc_chr21_region,
-        1,
-        1, 
-        col=pal, 
-        bg="white",
-        scree.da=FALSE, 
-        legend=F, 
-        solid=.4)
 
 # Dapca ggplot No GTS or CSWY ------------------------------------------------------
 
@@ -1047,7 +1016,7 @@ identifiers = read_csv('stickleback_identifiers.csv') %>%
 
 individual_data = bind_cols(individual_coords, 
                             individual_groups) %>% 
-  rename(cluster_group = 4)
+  rename(cluster_group = 3)
 
 individual_data$cluster_group = as.character(individual_data$cluster_group)
 
@@ -1080,8 +1049,6 @@ pal = c('#F23E2E',
         '#4968A6')
 
 location_cols = c('#06d6a0',
-                  '#264653',
-                  '#219ebc',
                   '#d62828',
                   '#5f0f40')
 
@@ -1104,8 +1071,7 @@ dapc_chr21_plot = ggplot(data = individual_data,
   theme(panel.grid = element_blank(),
         axis.title = element_text(size = 14),
         axis.text =  element_text(size = 12),
-        axis.ticks = element_line(size = 1),
-        legend.position = 'none')
+        axis.ticks = element_line(size = 1))
 
 dapc_chr21_region_hist = ggplot(data = individual_data, 
                                 aes(x = LD1))+
