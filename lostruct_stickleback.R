@@ -901,12 +901,241 @@ stickleback_pca = stickle_plot %>%
 stickleback_pca
 
 
-ggsave(file = 'PCA_Afvaper_Inversion_region_lostruct_outlier.tiff', 
+ggsave(file = 'PCA_Afvaper_Inversion_region_NoGTSCSWY.tiff', 
        path = '~/Parsons_Postdoc/Stickleback_Genomic/Figures/', 
        plot = stickleback_pca, 
        dpi = 'retina', 
        units = 'cm', 
        width = 20.0, 
        height = 13)
+
+
+
+
+# DAPCA chr21 inversion region no GTS or CSWY --------------------------------------------
+
+library(adegenet)
+
+map = read_tsv('stickleback_No_GTS_CSWY_afvaper_region.map', 
+               col_names = F) %>% 
+  rename(CHR = X1, 
+         SNP = X2, 
+         GPOS = X3, 
+         POS = X4)
+
+chr21_inversion_data = read_table('stickleback_No_GTS_CSWY_afvaper_region.ped', 
+                                col_names = c('population', 
+                                              'ID', 
+                                              'PaternalID', 
+                                              'MaternalID', 
+                                              'Sex', 
+                                              'Phenotype', 
+                                              map$SNP)) %>% 
+  dplyr::select(population, 
+                ID, 
+                contains('chr_'))
+
+
+## Need to change to a data frame from a tibble
+## otherwise we'll get a weird dimension names error
+chr21_inversion_data = as.data.frame(chr21_inversion_data)
+
+genind = df2genind(chr21_inversion_data[,3:length(chr21_inversion_data)], 
+                   ploidy = 2, 
+                   ind.names = chr21_inversion_data[,2], 
+                   sep = '\t', 
+                   pop = chr21_inversion_data[,1])
+set.seed(666)
+chr21_inversion_clust = find.clusters(genind, 
+                                      max.n.clust = 10)
+
+## Figured it out....i'm a coding GOD
+dapc_table = table(pop(genind), 
+                   chr21_inversion_clust$grp)
+
+## write the table to see if the strong clustering 
+## relates chr
+# as.data.frame(dapc_table) %>% 
+#   write_tsv('DAPC_output_three_clusters.txt')
+
+table.value(table(pop(genind), 
+                  chr21_inversion_clust$grp), 
+            col.lab=paste("inf", 1:4),
+            row.lab=paste("ori", 1:37))
+
+chr21_inversion_clust$grp %>% 
+  as.data.frame() %>% 
+  rownames_to_column() %>% 
+  as_tibble() %>% 
+  rename(IndividualID = 1, 
+         dapc_group_assignment = 2) %>% 
+  write_csv('DAPCA_analysis_chr21_inversion_NoGTSCSWY.csv')
+
+
+## be careful and pay attention
+## the number of PC axes you use with this part of the analysis
+## will largely change the dapc output
+dapc_chr21_region = dapc(genind, 
+                         chr21_inversion_clust$grp)
+
+## contribution of individuals to the 2 LDs
+
+as.data.frame(dapc_chr21_region$ind.coord) %>%
+  as_tibble() %>%
+  write_csv('Dapc_individual_LD_coordinates_NoGTSCSWY.csv')
+
+## contribution of the groups to the 3 LDs
+
+as.data.frame(dapc_chr21_region$grp.coord) %>%
+  as_tibble() %>%
+  write_csv('Dapc_group_LD_coordinates_NoGTSCSWY.csv')
+
+## contribution of the individual loci to the 3 LDs
+
+as.data.frame(dapc_chr21_region$var.contr) %>%
+  as_tibble() %>%
+  write_csv('Dapc_SNP_LD_coordinates_NoGTSCSWY.csv')
+
+as.data.frame(dapc_chr21_region$grp) %>% 
+  as_tibble() %>% 
+  write_csv('Dapc_Individual_group_assignment_NoGTSCSWY.csv')
+## eigenvalues
+dapc_chr21_region$eig
+
+## individuals are dots
+## groups are inertia ellipses
+scatter(dapc_chr21_region)
+
+
+pal = c('#2E4159',
+        '#4968A6',
+        # '#F29E38',
+        '#F23E2E')
+
+scatter(dapc_chr21_region, 
+        scree.da=FALSE, 
+        bg="white", 
+        pch=20, 
+        cell=0, 
+        cstar=0, 
+        col=pal,
+        solid=.4,
+        cex=3,
+        clab=0, 
+        leg=FALSE)
+# txt.leg=paste("Cluster",1:3))
+
+scatter(dapc_chr21_region,
+        1,
+        1, 
+        col=pal, 
+        bg="white",
+        scree.da=FALSE, 
+        legend=F, 
+        solid=.4)
+
+# Dapca ggplot No GTS or CSWY ------------------------------------------------------
+
+# individual_coords = read_csv('~/Charr_Adaptive_Introgression/Charr_Project_1/GeneticData/Lab_dapc_individual_LD_coordinates.csv')
+group_coords = read_csv('Dapc_group_LD_coordinates_NoGTSCSWY.csv')
+snp_coords = read_csv('Dapc_SNP_LD_coordinates_NoGTSCSWY.csv')
+individual_coords = read_csv('Dapc_individual_LD_coordinates_NoGTSCSWY.csv')
+individual_groups = read_csv('Dapc_Individual_group_assignment_NoGTSCSWY.csv')
+identifiers = read_csv('stickleback_identifiers.csv') %>% 
+  filter(!population %in% c('GTS', 
+                            'CSWY'))
+
+individual_data = bind_cols(individual_coords, 
+                            individual_groups) %>% 
+  rename(cluster_group = 4)
+
+individual_data$cluster_group = as.character(individual_data$cluster_group)
+
+individual_data = bind_cols(identifiers, 
+                            individual_data)
+
+individual_data = mutate(.data = individual_data,
+                         Location = as.factor(case_when(
+                           population == 'ASHNC' ~ 'Áshildarholtsvatn',
+                           population == 'ASHNW' ~ 'Áshildarholtsvatn',
+                           population == 'MYVC' ~ 'Mývatn',
+                           population == 'MYVW' ~ 'Mývatn',
+                           population == 'SKRC' ~ 'Sauðárkrókur',
+                           population == 'SKRW' ~ 'Sauðárkrókur')))
+
+individual_data = mutate(.data = individual_data, 
+                         Type = as.factor(case_when(
+                           population == 'ASHNC' ~ 'Ambient',
+                           population == 'ASHNW' ~ 'Geothermal',
+                           population == 'MYVC' ~ 'Ambient',
+                           population == 'MYVW' ~ 'Geothermal',
+                           population == 'SKRC' ~ 'Ambient',
+                           population == 'SKRW' ~ 'Geothermal'
+                         )))
+library(ggforce)
+library(patchwork)
+
+pal = c('#F23E2E',
+        '#2E4159',
+        '#4968A6')
+
+location_cols = c('#06d6a0',
+                  '#264653',
+                  '#219ebc',
+                  '#d62828',
+                  '#5f0f40')
+
+
+theme_set(theme_bw())
+
+dapc_chr21_plot = ggplot(data = individual_data,
+                         aes(x = LD1, 
+                             y = LD2))+
+  geom_point(aes(col = Location, 
+                 shape = Type),
+             size = 1.5)+
+  geom_mark_ellipse(expand = 0,
+                    size = 1,
+                    aes(group = cluster_group))+
+  # scale_color_manual(values = pal)+
+  scale_color_manual(values = location_cols)+
+  labs(x = 'Linear discriminant axis 1', 
+       y = 'Linear discriminant axis 2')+
+  theme(panel.grid = element_blank(),
+        axis.title = element_text(size = 14),
+        axis.text =  element_text(size = 12),
+        axis.ticks = element_line(size = 1),
+        legend.position = 'none')
+
+dapc_chr21_region_hist = ggplot(data = individual_data, 
+                                aes(x = LD1))+
+  geom_histogram(col = 'black',
+                 aes(fill = Location))+
+  scale_fill_manual(values = location_cols)+
+  labs(x = 'Linear discriminant axis 1', 
+       y = 'Count')+
+  theme(panel.grid = element_blank(),
+        axis.title = element_text(size = 14),
+        axis.text =  element_text(size = 12),
+        axis.ticks = element_line(size = 1),
+        legend.position = 'none')
+
+dapc_plot4 = ggplot(data = individual_data, 
+                    aes(x = LD2))+
+  geom_histogram(col = 'black',
+                 aes(fill = Location))+
+  scale_fill_manual(values = location_cols)+
+  labs(x = 'Linear discriminant axis 2', 
+       y = 'Count', 
+       fill = 'Cluster')+
+  theme(panel.grid = element_blank(),
+        axis.title = element_text(size = 14),
+        axis.title.y = element_blank(),
+        axis.text =  element_text(size = 12),
+        axis.ticks = element_line(size = 1), 
+        legend.title = element_text(size = 14), 
+        legend.text = element_text(size = 12))
+
+
 
 
