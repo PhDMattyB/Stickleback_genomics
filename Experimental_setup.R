@@ -61,7 +61,7 @@ high_food_warm = treatment_data %>%
             avg_length = mean(Length), 
             density = n()) %>% 
   mutate(high_food_amount = avg_weight*0.3,
-         high_food_amount_density = avg_weight*0.3/density,
+         high_food_amount_density = (avg_weight*0.3)/density,
          high_cond_fac = avg_weight/avg_length^(1/3)*100)
 
 # treatment_data %>% 
@@ -545,7 +545,7 @@ high_food_warm_2nd = treatment_data_2nd %>%
             avg_length = mean(Length), 
             density = n()) %>% 
   mutate(high_food_amount = avg_weight*0.3,
-         high_food_amount_density = avg_weight*0.3/density,
+         high_food_amount_density = (avg_weight*0.3)/density,
          high_cond_fac = avg_weight/avg_length^(1/3)*100)
 
 # treatment_data_2nd %>% 
