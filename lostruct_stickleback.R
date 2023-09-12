@@ -798,6 +798,8 @@ labeled_data %>%
 MDS_outliers = Outlier_hunter(data = labeled_data, 
                               sd_percentile = 3) 
 
+View(MDS_outliers)
+
 Outlier_plots(outlier_data = MDS_outliers, 
               normal_data = Normal_data)
 
