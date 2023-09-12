@@ -31,18 +31,20 @@ low_food_warm = treatment_data %>%
   rename(Pop = Population, 
          Temp = Temperature) %>% 
   summarize(avg_weight = mean(Weight), 
-            avg_length = mean(Length)) %>% 
-  mutate(low_food_amount = avg_weight*0.02, 
+            avg_length = mean(Length), 
+            density = n()) %>% 
+  mutate(low_food_amount = avg_weight*0.02,
+         low_food_amount_density = avg_weight*0.02/density,
          low_cond_fac = avg_weight/avg_length^(1/3)*100)
-
-View(low_food_warm)
-
-treatment_data %>% 
-  filter(Treatment == 'Low Food', 
-         Temperature == '18') %>% 
-  group_by(Population, 
-           Rep) %>% 
-  summarize(Number = n())
+# 
+# View(low_food_warm)
+# 
+# treatment_data %>% 
+#   filter(Treatment == 'Low Food', 
+#          Temperature == '18') %>% 
+#   group_by(Population, 
+#            Rep) %>% 
+#   summarize(Number = n())
 
 
 high_food_warm = treatment_data %>% 
@@ -56,16 +58,18 @@ high_food_warm = treatment_data %>%
   rename(Pop = Population, 
          Temp = Temperature) %>% 
   summarize(avg_weight = mean(Weight), 
-            avg_length = mean(Length)) %>% 
+            avg_length = mean(Length), 
+            density = n()) %>% 
   mutate(high_food_amount = avg_weight*0.3,
+         high_food_amount_density = avg_weight*0.3/density,
          high_cond_fac = avg_weight/avg_length^(1/3)*100)
 
-treatment_data %>% 
-  filter(Treatment == 'High Food', 
-         Temperature == '18') %>% 
-  group_by(Population, 
-           Rep) %>% 
-  summarize(Number = n())
+# treatment_data %>% 
+#   filter(Treatment == 'High Food', 
+#          Temperature == '18') %>% 
+#   group_by(Population, 
+#            Rep) %>% 
+#   summarize(Number = n())
 
 
 # Warm side final ---------------------------------------------------------
@@ -511,18 +515,20 @@ low_food_warm_2nd = treatment_data_2nd %>%
   rename(Pop = Population, 
          Temp = Temperature) %>% 
   summarize(avg_weight = mean(Weight), 
-            avg_length = mean(Length)) %>% 
+            avg_length = mean(Length), 
+            density = n()) %>% 
   mutate(low_food_amount = avg_weight*0.02, 
+         low_food_amoung_density = avg_weight*0.02/density,
          low_cond_fac = avg_weight/avg_length^(1/3)*100)
 
-View(low_food_warm)
-
-treatment_data_2nd %>% 
-  filter(Treatment == 'Low_food', 
-         Temperature == '18') %>% 
-  group_by(Population, 
-           Rep) %>% 
-  summarize(Number = n())
+# View(low_food_warm)
+# 
+# treatment_data_2nd %>% 
+#   filter(Treatment == 'Low_food', 
+#          Temperature == '18') %>% 
+#   group_by(Population, 
+#            Rep) %>% 
+#   summarize(Number = n())
 
 
 high_food_warm_2nd = treatment_data_2nd %>% 
@@ -536,14 +542,16 @@ high_food_warm_2nd = treatment_data_2nd %>%
   rename(Pop = Population, 
          Temp = Temperature) %>% 
   summarize(avg_weight = mean(Weight), 
-            avg_length = mean(Length)) %>% 
+            avg_length = mean(Length), 
+            density = n()) %>% 
   mutate(high_food_amount = avg_weight*0.3,
+         high_food_amount_density = avg_weight*0.3/density,
          high_cond_fac = avg_weight/avg_length^(1/3)*100)
 
-treatment_data_2nd %>% 
-  filter(Treatment == 'High_food', 
-         Temperature == '18') %>% 
-  group_by(Population, 
-           Rep) %>% 
-  summarize(Number = n())
+# treatment_data_2nd %>% 
+#   filter(Treatment == 'High_food', 
+#          Temperature == '18') %>% 
+#   group_by(Population, 
+#            Rep) %>% 
+#   summarize(Number = n())
 
