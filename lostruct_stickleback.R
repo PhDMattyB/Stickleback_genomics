@@ -625,3 +625,180 @@ dapc_plot4 = ggplot(data = individual_data,
         legend.text = element_text(size = 12))
 
 
+
+
+
+# lostruct not GTS or CSWY ------------------------------------------------
+setwd('~/Parsons_Postdoc/Stickleback_Genomic/vcf_filter/')
+
+library(tidyverse)
+library(data.table)
+
+map_data = read_tsv('stickleback_No_GTS_CSWY.map', 
+                    col_names = c('CHR', 
+                                  'SNP', 
+                                  'GPOS', 
+                                  'POS'))
+
+ped_data = read_table('stickleback_No_GTS_CSWY.raw',
+                      col_names = c('PopulationID', 
+                                    'IndividualID', 
+                                    'MaternalID', 
+                                    'PaternalID', 
+                                    'Sex', 
+                                    'Phenotype', 
+                                    map_data$SNP))
+
+tped = Create_tped(ped = ped_data, 
+                   map = map_data)
+
+# tped %>%
+#   write_tsv('stickleback_No_GTS_CSWY.tped',
+#             col_names = F)
+# 
+snps = read_table('stickleback_No_GTS_CSWY.tped', 
+                  col_names = F)
+
+df = snps %>% 
+  dplyr::select(1, 
+                5:length(snps)) %>% 
+  filter(X1 == 'chr_XXI') %>% 
+  dplyr::select(-X1) %>% 
+  dplyr::select(-X5)
+
+eigen = eigen_windows(df, 
+                      win = 50, 
+                      k = 5)
+windist = pc_dist(eigen, 
+                  npc = 5) %>% 
+  as_tibble()
+
+window_data = snps %>% 
+  select(1:4) %>% 
+  filter(X1 == 'chr_XXI') %>% 
+  mutate(window = ceiling(row_number()/50)) %>% 
+  group_by(window) %>% 
+  mutate(mean_window = mean(X4)) %>% 
+  distinct(mean_window, 
+           .keep_all = T) %>% 
+  filter(window %in% 1:nrow(windist))
+
+combo_data = bind_cols(window_data, 
+                       windist)
+
+
+MDS_data = cmdscale(combo_data[7:length(combo_data)], 
+                    eig = TRUE, 
+                    k = 5)
+
+MDS_points = MDS_data$points %>% 
+  as_tibble() %>% 
+  rename(MDS_Points1 = V1, 
+         MDS_Points2 = V2, 
+         MDS_points3 = V3, 
+         MDS_points4 = V4, 
+         MDS_points5 = V5)
+
+combo_data = bind_cols(combo_data, 
+                       MDS_points) %>% 
+  group_by(window)
+
+# View(combo_data)
+
+
+theme_set(theme_bw())
+
+Normal_data = combo_data %>% 
+  filter(!window %in% c('83',
+                        '84', 
+                        '85', 
+                        '86', 
+                        '87', 
+                        '88', 
+                        '89', 
+                        '90', 
+                        '91', 
+                        '92',
+                        '93')) 
+label = rep('Normal_region', 
+            nrow(Normal_data))
+
+Normal_data = cbind(label, 
+                    Normal_data) %>% 
+  as_tibble() %>% 
+  rename(group = 1)%>% 
+  dplyr::select(group, 
+                X4, 
+                window, 
+                MDS_Points1, 
+                MDS_Points2)
+
+afvaper_region = combo_data %>% 
+  filter(window %in% c('83',
+                        '84', 
+                        '85', 
+                        '86', 
+                        '87', 
+                        '88', 
+                        '89', 
+                        '90', 
+                        '91', 
+                        '92',
+                        '93'))
+label = rep('Afvaper_region', 
+            nrow(afvaper_region))
+
+afvaper_region = cbind(label, 
+                    afvaper_region) %>% 
+  as_tibble() %>% 
+  rename(group = 1)%>% 
+  dplyr::select(group, 
+                X4, 
+                window, 
+                MDS_Points1, 
+                MDS_Points2)
+
+# afvaper_region = combo_data %>%
+#   filter(window >= '81',
+#          window <= '95')
+# MDS_points_windows = afvaper_region %>%
+#   dplyr::select(X4,
+#                 window,
+#                 MDS_Points1,
+#                 MDS_Points2)
+
+# MDS_points_windows %>%
+#   write_csv('AFvaper_region_lostruct_NoGTSCSWY.csv')
+
+# afvaper_region = read_csv('AFvaper_region_lostruct_NoGTSCSWY.csv') %>% 
+#   filter(group == 'Afvaper_region')
+
+labeled_data = bind_rows(Normal_data, 
+                         afvaper_region)
+
+# window_distance = afvaper_region %>%
+#   dplyr::select(contains('V'))
+
+labeled_data %>% 
+  ggplot(aes(x = MDS_Points1, 
+             y = MDS_Points2,
+             col = group))+
+  # ggplot(aes(x = MDS_Points1, 
+  #            y = MDS_Points2,
+  #            col = rainbow(nrow(window_distance))))+
+  geom_point(size = 3) +
+  labs(x = 'MDS coordinate 1', 
+       y = 'MDS coordinate 2')
+# +
+#   theme(legend.position = 'none')
+
+
+
+## HOLY SHIT!! window 83-92 are MDS outliers!!!
+MDS_outliers = Outlier_hunter(data = labeled_data, 
+                              sd_percentile = 3) 
+
+Outlier_plots(outlier_data = MDS_outliers, 
+              normal_data = Normal_data)
+
+
