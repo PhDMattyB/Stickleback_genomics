@@ -483,3 +483,67 @@ high_compare_results
 
 low_compare_results
 
+
+
+
+
+# Warm side Second breeding period ----------------------------------------
+
+# Warm side Initial---------------------------------------------------------------
+setwd('~/Parsons_Postdoc/Experiment1/')
+
+# setwd('~/Parsons_Postdoc/Experiment1/')
+
+library(tidyverse)
+
+treatment_data_2nd = read_csv('Experiment1_tagging_F1_Breed2.csv')
+
+
+## quantify condition factor based on that new paper we just read
+low_food_warm_2nd = treatment_data_2nd %>% 
+  # filter(Treatment == 'Low Food', 
+  #        Population == 'ACAC') %>% 
+  filter(Treatment == 'Low_food', 
+         Temperature == '18') %>% 
+  group_by(Population, 
+           Rep, 
+           Temperature)%>% 
+  rename(Pop = Population, 
+         Temp = Temperature) %>% 
+  summarize(avg_weight = mean(Weight), 
+            avg_length = mean(Length)) %>% 
+  mutate(low_food_amount = avg_weight*0.02, 
+         low_cond_fac = avg_weight/avg_length^(1/3)*100)
+
+View(low_food_warm)
+
+treatment_data_2nd %>% 
+  filter(Treatment == 'Low_food', 
+         Temperature == '18') %>% 
+  group_by(Population, 
+           Rep) %>% 
+  summarize(Number = n())
+
+
+high_food_warm_2nd = treatment_data_2nd %>% 
+  # filter(Treatment == 'High Food', 
+  #        Population == 'ACAC') %>% 
+  filter(Treatment == 'High_food', 
+         Temperature == '18') %>% 
+  group_by(Population, 
+           Rep, 
+           Temperature)%>% 
+  rename(Pop = Population, 
+         Temp = Temperature) %>% 
+  summarize(avg_weight = mean(Weight), 
+            avg_length = mean(Length)) %>% 
+  mutate(high_food_amount = avg_weight*0.3,
+         high_cond_fac = avg_weight/avg_length^(1/3)*100)
+
+treatment_data_2nd %>% 
+  filter(Treatment == 'High_food', 
+         Temperature == '18') %>% 
+  group_by(Population, 
+           Rep) %>% 
+  summarize(Number = n())
+
