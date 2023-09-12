@@ -798,9 +798,115 @@ labeled_data %>%
 MDS_outliers = Outlier_hunter(data = labeled_data, 
                               sd_percentile = 3) 
 
-View(MDS_outliers)
+# View(MDS_outliers)
 
 Outlier_plots(outlier_data = MDS_outliers, 
               normal_data = Normal_data)
+
+
+# pca on inversion region no GTS or CSWY ----------------------------------
+
+
+library(pcadapt)
+
+
+chr21_inversion = read.pcadapt('stickleback_No_GTS_CSWY_afvaper_region.bed', 
+                               type = 'bed')
+
+chr21_pca = pcadapt::pcadapt(chr21_inversion, 
+                             K = 10, 
+                             method = 'mahalanobis', 
+                             min.maf = 0.01)
+
+plot(chr21_pca, 
+     option = 'screeplot', 
+     K = 10)
+
+
+## percent variation explained by the three significant axes
+chr21_pca$singular.values
+sum(chr21_pca$singular.values)
+(0.5848398/2.151137)*100
+(0.2493260/2.172823)*100
+## singular values should have already been square root transformed
+
+chr21_pca_scores = as_tibble(chr21_pca$scores) %>%
+  rename(PC1 = 1,
+         PC2 = 2) %>%
+  dplyr::select(PC1,
+                PC2) %>%
+  write_csv('chr21_PCA_scores_NoGTSCSWY.csv')
+
+stickle_plot = read_csv('chr21_PCA_scores_NoGTSCSWY.csv')
+
+identifiers = read_csv('stickleback_identifiers.csv') %>% 
+  filter(!population %in% c('GTS', 
+                           'CSWY'))
+
+stickle_plot = bind_cols(identifiers, 
+                         stickle_plot)
+
+stickle_plot = mutate(.data = stickle_plot,
+                      Location = as.factor(case_when(
+                        population == 'ASHNC' ~ 'Áshildarholtsvatn',
+                        population == 'ASHNW' ~ 'Áshildarholtsvatn',
+                        population == 'MYVC' ~ 'Mývatn',
+                        population == 'MYVW' ~ 'Mývatn',
+                        population == 'SKRC' ~ 'Sauðárkrókur',
+                        population == 'SKRW' ~ 'Sauðárkrókur')))
+
+stickle_plot = mutate(.data = stickle_plot, 
+                      Type = as.factor(case_when(
+                        population == 'ASHNC' ~ 'Ambient',
+                        population == 'ASHNW' ~ 'Geothermal',
+                        population == 'MYVC' ~ 'Ambient',
+                        population == 'MYVW' ~ 'Geothermal',
+                        population == 'SKRC' ~ 'Ambient',
+                        population == 'SKRW' ~ 'Geothermal'
+                      )))
+
+
+theme_set(theme_bw())
+
+location_cols = c('#06d6a0',
+                  '#d62828',
+                  '#5f0f40')
+
+
+stickleback_pca = stickle_plot %>%
+  # arrange(population) %>% 
+  # group_by(population) %>% 
+  ggplot(aes(x = PC1, 
+             y = PC2))+
+  geom_point(aes(col = Location, 
+                 shape = Type),
+             size = 3)+
+  # geom_point(aes(col = population),
+  #            size = 2)+
+  # scale_color_manual(values = cold_warm_cols)+
+  scale_color_manual(values = location_cols)+
+  theme(panel.grid.major = element_blank(),
+        panel.grid.minor = element_blank(), 
+        axis.title = element_text(size = 15), 
+        axis.text = element_text(size = 15), 
+        axis.ticks = element_line(size = 1), 
+        plot.title = element_text(size = 15, 
+                                  hjust = 0), 
+        legend.text = element_text(size = 12),
+        legend.title = element_text(size = 14)) +
+  labs(x = 'Principal component 1 (27.18%)',
+       y = 'Principal component 2 (11.47%)', 
+       col = 'Populations')
+
+stickleback_pca
+
+
+ggsave(file = 'PCA_Afvaper_Inversion_region_lostruct_outlier.tiff', 
+       path = '~/Parsons_Postdoc/Stickleback_Genomic/Figures/', 
+       plot = stickleback_pca, 
+       dpi = 'retina', 
+       units = 'cm', 
+       width = 20.0, 
+       height = 13)
 
 
