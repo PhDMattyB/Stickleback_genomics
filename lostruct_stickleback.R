@@ -1002,6 +1002,7 @@ as.data.frame(dapc_chr21_region$grp) %>%
 ## eigenvalues
 dapc_chr21_region$eig
 
+dapc_chr21_region$pca.loadings
 
 # Dapca ggplot No GTS or CSWY ------------------------------------------------------
 
