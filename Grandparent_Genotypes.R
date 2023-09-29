@@ -87,5 +87,3 @@ whole_genome_snp_test = ped_data %>%
 inner_join(whole_genome_snp_test, 
            Corin_test_snp)
 
-
-is.logical(whole_genome_snp_test$chr_I_77850)
