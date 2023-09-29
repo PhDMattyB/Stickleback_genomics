@@ -77,14 +77,18 @@ Corin_skr_ped = read_table('SKR_plink.ped',
                                          Corin_skr_map$SNP))
 
 Corin_test_snp = Corin_skr_ped %>% 
-  select(starts_with('chr_'))
+  select(starts_with('chr_'))%>%
+  mutate(across(everything(), 
+                as.character))
 
 whole_genome_snp_test = ped_data %>% 
   select(starts_with('chr_')) %>%
   mutate(across(everything(), 
                 as.character))
 
+whole_genome_snp_test$chr_I_20486
+
 ## fuck the inner join didn't work
-inner_join(whole_genome_snp_test, 
+overlapping_snps = inner_join(whole_genome_snp_test, 
            Corin_test_snp)
 
