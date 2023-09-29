@@ -67,9 +67,9 @@ Corin_skr_map = bind_cols(Corin_skr_map,
          GPOS, 
          POS)
 
-# Corin_skr_map %>% 
-#   group_by(CHR) %>% 
-#   summarize(n = n()) %>% 
+# Corin_skr_map %>%
+#   group_by(CHR) %>%
+#   summarize(n = n()) %>%
 #   View()
 
 Corin_skr_ped = read_table('SKR_plink.ped',
@@ -80,18 +80,33 @@ Corin_skr_ped = read_table('SKR_plink.ped',
                                          'Sex', 
                                          'Phenotype', 
                                          Corin_skr_map$SNP))
+Corin_skr_ped %>% 
+  select(PopulationID) %>% 
+  View()
 
 Corin_test_snp = Corin_skr_ped %>% 
   select(starts_with('chr_'))%>%
   mutate(across(everything(), 
                 as.character))
 
-whole_genome_snp_test = ped_data %>% 
-  select(starts_with('chr_')) %>%
+whole_genome_snp_test = ped_data %>%
+  select(PopulationID, 
+         starts_with('chr_')) %>%
+  filter(PopulationID %in% c('Sample_54-SKRW_4', 
+                             'Sample_38-SKRC_4')) %>% 
+  select(-PopulationID) %>% 
   mutate(across(everything(), 
                 as.character))
 
 ## fuck the inner join didn't work
 overlapping_snps = inner_join(whole_genome_snp_test, 
            Corin_test_snp)
+
+Corin_skr_map 
+
+map_data
+
+inner_join(map_data %>% 
+           Corin_skr_map, 
+           by = 'SNP')
 
