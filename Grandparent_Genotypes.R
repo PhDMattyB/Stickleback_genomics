@@ -33,7 +33,39 @@ Corin_skr_map = read_tsv('SKR_plink.map',
                          col_names = c('CHR', 
                                        'SNP', 
                                        'GPOS', 
-                                       'POS'))
+                                       'POS')) %>% 
+  select(-SNP)
+
+## SNP ids are messed up, need to make them myself
+
+sep_map = Corin_skr_map %>% 
+  dplyr::select(CHR, 
+                POS) %>% 
+  separate(col = CHR, 
+           into = c('label', 
+                    'chr_num'), 
+           sep = "r")
+chr_label = rep('chr', 
+                nrow(sep_map)) %>% 
+  as_tibble()
+
+snp_ID = bind_cols(sep_map, 
+          chr_label) %>% 
+  select(value,
+         chr_num, 
+         POS) %>% 
+  unite(col = 'SNP', 
+        c('value', 
+          'chr_num', 
+          'POS'), 
+        sep = '_')
+
+Corin_skr_map = bind_cols(Corin_skr_map, 
+          snp_ID) %>% 
+  select(CHR, 
+         SNP, 
+         GPOS, 
+         POS)
 
 Corin_skr_ped = read_table('SKR_plink.ped',
                            col_names = c('PopulationID', 
