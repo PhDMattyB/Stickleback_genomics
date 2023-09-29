@@ -27,3 +27,19 @@ ped_data = read_table('stickleback_maf0.05_ldpruned_filtered.ped',
                                     'Sex', 
                                     'Phenotype', 
                                     map_data$SNP))
+
+
+Corin_skr_map = read_tsv('SKR_plink.map', 
+                         col_names = c('CHR', 
+                                       'SNP', 
+                                       'GPOS', 
+                                       'POS'))
+
+Corin_skr_ped = read_table('SKR_plink.ped',
+                           col_names = c('PopulationID', 
+                                         'IndividualID', 
+                                         'MaternalID', 
+                                         'PaternalID', 
+                                         'Sex', 
+                                         'Phenotype', 
+                                         Corin_skr_map$SNP))
