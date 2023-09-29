@@ -75,3 +75,17 @@ Corin_skr_ped = read_table('SKR_plink.ped',
                                          'Sex', 
                                          'Phenotype', 
                                          Corin_skr_map$SNP))
+
+Corin_test_snp = Corin_skr_ped %>% 
+  select(starts_with('chr_'))
+
+whole_genome_snp_test = ped_data %>% 
+  select(starts_with('chr_')) %>%
+  mutate(across(everything(), 
+                as.character))
+
+inner_join(whole_genome_snp_test, 
+           Corin_test_snp)
+
+
+is.logical(whole_genome_snp_test$chr_I_77850)
