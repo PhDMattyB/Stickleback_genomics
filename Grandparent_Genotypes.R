@@ -91,8 +91,6 @@ whole_genome_snp_test = ped_data %>%
   mutate(across(everything(), 
                 as.character))
 
-whole_genome_snp_test$chr_I_20486
-
 ## fuck the inner join didn't work
 overlapping_snps = inner_join(whole_genome_snp_test, 
            Corin_test_snp)
