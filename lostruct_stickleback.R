@@ -27,6 +27,10 @@ ped_data = read_table('stickleback_maf0.05_ldprunded_filtered.raw',
                                     'Phenotype', 
                                     map_data$SNP))
 
+# ped_data %>% 
+#   dplyr::select(IndividualID) %>%
+#   write_csv('Whole_genome_IndividualID.csv')
+
 tped = Create_tped(ped = ped_data, 
             map = map_data)
 
