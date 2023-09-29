@@ -84,6 +84,7 @@ whole_genome_snp_test = ped_data %>%
   mutate(across(everything(), 
                 as.character))
 
+## fuck the inner join didn't work
 inner_join(whole_genome_snp_test, 
            Corin_test_snp)
 
