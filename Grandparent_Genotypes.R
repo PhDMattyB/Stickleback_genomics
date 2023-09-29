@@ -67,6 +67,11 @@ Corin_skr_map = bind_cols(Corin_skr_map,
          GPOS, 
          POS)
 
+# Corin_skr_map %>% 
+#   group_by(CHR) %>% 
+#   summarize(n = n()) %>% 
+#   View()
+
 Corin_skr_ped = read_table('SKR_plink.ped',
                            col_names = c('PopulationID', 
                                          'IndividualID', 
