@@ -250,6 +250,14 @@ low_food_cold = treatment_data %>%
   mutate(low_food_amount = avg_weight*0.02, 
          low_cond_fac = avg_weight/avg_length^(1/3)*100)
 
+treatment_data %>% 
+  filter(Temperature == '12') %>% 
+  # group_by(Crosses) %>% 
+  distinct(Crosses, 
+           .keep_all = T) %>% 
+  select(Population, 
+         Crosses) %>% 
+  write_csv('Cold_side_Experimental_Crosses.csv')
 # treatment_data %>% 
 #   filter(Treatment == 'Low Food', 
 #          Temperature == '12') %>% 
