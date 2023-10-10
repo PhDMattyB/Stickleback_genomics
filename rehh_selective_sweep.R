@@ -37,3 +37,45 @@ myvw_ihs = ihh2ihs(myvw_scan,
 myvc_ihs = ihh2ihs(myvc_scan, 
                    freqbin = 1)
 
+## plot the ihs statistic
+ggplot(myvw_ihs$ihs, 
+       aes(POSITION, 
+           IHS))+
+  geom_point()
+
+ggplot(myvc_ihs$ihs, 
+       aes(POSITION, 
+           IHS))+
+  geom_point()
+
+## plot the pvalues
+ggplot(myvw_ihs$ihs, 
+       aes(POSITION, 
+           LOGPVALUE))+
+  geom_point()
+
+ggplot(myvc_ihs$ihs, 
+       aes(POSITION, 
+           LOGPVALUE))+
+  geom_point()
+
+
+
+# xp-ehh analysis (cross population) --------------------------------------
+
+myvw_myvc = ies2xpehh(myvw_scan, 
+                      myvc_scan, 
+                      popname1 = 'MYVW', 
+                      popname2 = 'MYVC', 
+                      include_freq = T)
+
+# plot
+
+ggplot(myvw_myvc, 
+       aes(POSITION, 
+           XPEHH_MYVW_MYVC))+
+  geom_point()
+
+ggplot(myvw_myvc, 
+       aes(POSITION, 
+           LOGPVALUE)) + geom_point()
