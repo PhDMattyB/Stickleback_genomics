@@ -102,16 +102,16 @@ ped_ids %>%
 
 ped_ids %>% 
   filter(population %in% c(
-    # 'GTS'
-                           # 'CSWY'
+    # 'GTS',
+                           # 'CSWY',
                            'MYVW',
-                           'MYVC'
+                           # 'MYVC',
                            # 'SKRC',
-                           # 'SKRW'
-                           # 'ASHNC',
-                           # 'ASHNW'
+                           'SKRW',
+                           # 'ASHNC'
+                           'ASHNW'
                            )) %>% 
-  filter(population == 'MYVW') %>% 
+  # filter(population == 'GTS') %>% 
   # filter(population %in% c('GTS', 
   #                          'CSWY')) %>% 
   # filter(type %in% c('Warm', 
@@ -123,7 +123,7 @@ ped_ids %>%
   #       X2) %>%
   # rename(`#population` = population, 
   # individual_ID = X1) %>% 
-  write_tsv('MYVW_keep_file.txt', 
+  write_tsv('Warm_morphs_NOGTS_keep_file.txt', 
             col_names = F)
 
 ##
