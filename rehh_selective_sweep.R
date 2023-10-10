@@ -28,3 +28,12 @@ myvw = data2haplohh(hap_file = 'MYVW_genotypes.vcf',
 # iHS haplotype scan ------------------------------------------------------
 
 
+myvc_scan = scan_hh(myvc, polarized = F)
+myvw_scan = scan_hh(myvw, polarized = F)
+
+## perform ihs selective scan
+myvw_ihs = ihh2ihs(myvw_scan, 
+                   freqbin = 1)
+myvc_ihs = ihh2ihs(myvc_scan, 
+                   freqbin = 1)
+
