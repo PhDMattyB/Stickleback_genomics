@@ -21,12 +21,14 @@ library(rehh)
 myvc = data2haplohh(hap_file = 'MYVC_genotypes.vcf', 
                     polarize_vcf = F, 
                     min_maf = 0.05, 
-                    chr.name = 'chr_XXI')
+                    chr.name = 'chr_XXI', 
+                    allele_coding = 'map')
 
 myvw = data2haplohh(hap_file = 'MYVW_genotypes.vcf', 
                     polarize_vcf = F, 
                     min_maf = 0.05, 
-                    chr.name = 'chr_XXI')
+                    chr.name = 'chr_XXI', 
+                    allele_coding = 'map')
 
 
 # iHS haplotype scan ------------------------------------------------------
