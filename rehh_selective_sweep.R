@@ -224,3 +224,106 @@ plot(warm_haplen)
 plot(cold_haplen)
 
 
+# Warm vs Cold sweep detect (chr 21) --------------------------------------
+
+warm2 = data2haplohh(hap_file = 'Warm_morphs_NOGTS_genotypes.vcf', 
+                    polarize_vcf = F, 
+                    min_maf = 0.05, 
+                    chr.name = 'chr_XXI', 
+                    allele_coding = 'map')
+
+cold2 = data2haplohh(hap_file = 'Cold_morphs_NOCSWY_genotypes.vcf', 
+                    polarize_vcf = F, 
+                    min_maf = 0.05, 
+                    chr.name = 'chr_XXI', 
+                    allele_coding = 'map')
+
+
+# iHS haplotype scan 
+
+
+cold2_scan = scan_hh(cold2, polarized = F)
+warm2_scan = scan_hh(warm2, polarized = F)
+
+## perform ihs selective scan
+warm2_ihs = ihh2ihs(warm2_scan, 
+                   freqbin = 1)
+cold2_ihs = ihh2ihs(cold2_scan, 
+                   freqbin = 1)
+
+## plot the ihs statistic
+ggplot(warm2_ihs$ihs, 
+       aes(POSITION, 
+           IHS))+
+  geom_point()
+
+ggplot(cold2_ihs$ihs, 
+       aes(POSITION, 
+           IHS))+
+  geom_point()
+
+## plot the pvalues
+ggplot(warm2_ihs$ihs, 
+       aes(POSITION, 
+           LOGPVALUE))+
+  geom_point()
+
+ggplot(cold2_ihs$ihs, 
+       aes(POSITION, 
+           LOGPVALUE))+
+  geom_point()
+
+
+
+# xp-ehh analysis (cross population) 
+
+warm2_cold2 = ies2xpehh(warm2_scan, 
+                      cold2_scan, 
+                      popname1 = 'warm2', 
+                      popname2 = 'cold2', 
+                      include_freq = T)
+
+# plot
+
+ggplot(warm2_cold2, 
+       aes(POSITION, 
+           XPEHH_warm2_cold2))+
+  geom_point()
+
+ggplot(warm2_cold2, 
+       aes(POSITION, 
+           LOGPVALUE)) + geom_point()
+
+
+
+# Haplotype structure around selection target 
+# find the highest hit
+hit = warm2_cold2 %>% 
+  arrange(desc(LOGPVALUE)) %>% 
+  top_n(1)
+
+# get SNP position
+x = hit$POSITION
+
+marker_id_warm2 = which(warm2@positions == x)
+marker_id_cold2 = which(cold2@positions == x)
+
+warm2_furcation = calc_furcation(warm2, 
+                                mrk = marker_id_warm2)
+
+cold2_furcation = calc_furcation(cold2, 
+                                mrk = marker_id_cold2 )
+
+
+plot(warm2_furcation, 
+     xlim = c(58695, 17420697))
+plot(cold2_furcation, 
+     xlim = c(58694, 17420697))
+
+warm2_haplen = calc_haplen(warm2_furcation)
+cold2_haplen = calc_haplen(cold2_furcation)
+
+plot(warm2_haplen)
+plot(cold2_haplen)
+
+
