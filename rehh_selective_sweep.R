@@ -14,6 +14,10 @@ library(tidyverse)
 # install.packages('rehh')
 library(rehh)
 
+
+# MYVATN signatures of selection ------------------------------------------
+
+
 myvc = data2haplohh(hap_file = 'MYVC_genotypes.vcf', 
                     polarize_vcf = F, 
                     min_maf = 0.05, 
@@ -105,3 +109,9 @@ plot(myvw_furcation,
      xlim = c(58695, 17420697))
 plot(myvc_furcation, 
      xlim = c(58695, 17420697))
+
+myvw_haplen = calc_haplen(myvw_furcation)
+myvc_haplen = calc_haplen(myvc_furcation)
+
+plot(myvw_haplen)
+plot(myvc_haplen)
