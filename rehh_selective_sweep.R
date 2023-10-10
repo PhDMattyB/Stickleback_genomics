@@ -14,3 +14,17 @@ library(tidyverse)
 # install.packages('rehh')
 library(rehh)
 
+myvc = data2haplohh(hap_file = 'MYVC_genotypes.vcf', 
+                    polarize_vcf = F, 
+                    min_maf = 0.05, 
+                    chr.name = 'chr_XXI')
+
+myvw = data2haplohh(hap_file = 'MYVW_genotypes.vcf', 
+                    polarize_vcf = F, 
+                    min_maf = 0.05, 
+                    chr.name = 'chr_XXI')
+
+
+# iHS haplotype scan ------------------------------------------------------
+
+
