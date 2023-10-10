@@ -79,3 +79,29 @@ ggplot(myvw_myvc,
 ggplot(myvw_myvc, 
        aes(POSITION, 
            LOGPVALUE)) + geom_point()
+
+
+
+# Haplotype structure around selection target -----------------------------
+# find the highest hit
+hit = myvw_myvc %>% 
+  arrange(desc(LOGPVALUE)) %>% 
+  top_n(1)
+
+# get SNP position
+x = hit$POSITION
+
+marker_id_warm = which(myvw@positions == x)
+marker_id_cold = which(myvc@positions == x)
+
+myvw_furcation = calc_furcation(myvw, 
+                                mrk = marker_id_warm)
+
+myvc_furcation = calc_furcation(myvc, 
+                                mrk = marker_id_cold )
+
+
+plot(myvw_furcation, 
+     xlim = c(58695, 17420697))
+plot(myvc_furcation, 
+     xlim = c(58695, 17420697))
