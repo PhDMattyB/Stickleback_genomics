@@ -49,6 +49,7 @@ ped_ids = bind_cols(ped_ids,
                     identifiers)
 
 ped_ids %>% 
+  filter(lake == 'MYV') %>% 
   dplyr::select(X1, 
                 X2, 
                 type) %>%
@@ -56,7 +57,7 @@ ped_ids %>%
   unite(col = 'vcf_format',
         X1, 
         X2) %>% 
-  write_tsv('stickleback_easysfs_popfile_2pops.txt', 
+  write_tsv('MYV_easysfs_popfile_2pops.txt', 
             col_names = F)
 
 ## Need to split based on GTS vs MYVC
@@ -101,27 +102,31 @@ ped_ids %>%
 
 ped_ids %>% 
   filter(population %in% c(
-    'GTS'
+    # 'GTS'
                            # 'CSWY'
-                           # 'MYVW',
-                           # 'MYVC'
+                           'MYVW',
+                           'MYVC'
                            # 'SKRC',
                            # 'SKRW'
                            # 'ASHNC',
                            # 'ASHNW'
                            )) %>% 
+  filter(population == 'MYVW') %>% 
   # filter(population %in% c('GTS', 
   #                          'CSWY')) %>% 
   # filter(type %in% c('Warm', 
   #                          'Cold')) %>%
   dplyr::select(X1, 
-                X2) %>% 
+                X2) %>%
+  # unite(col = 'vcf_format',
+  #       X1, 
+  #       X2) %>%
   # rename(`#population` = population, 
   # individual_ID = X1) %>% 
-  write_tsv('GTS_pops_keep.txt', 
+  write_tsv('MYVW_keep_file.txt', 
             col_names = F)
 
-s##
+##
 
 
 # GTS vs cold pops FST ---------------------------------------------------------------

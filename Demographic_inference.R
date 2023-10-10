@@ -42,6 +42,10 @@ MYV = read.vcf('MYV_only.vcf',
 MYV_sfs = site.spectrum(MYV, 
                          folded = T)
 
+plot(MYV_sfs)
+
+MYV_sfs
+
 ASHN = read.vcf('ASHN_only.vcf', 
                from = 1, 
                to = 173444)
