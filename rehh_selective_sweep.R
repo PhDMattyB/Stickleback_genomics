@@ -302,6 +302,9 @@ hit = warm2_cold2 %>%
   arrange(desc(LOGPVALUE)) %>% 
   top_n(1)
 
+
+## need to center this around the peak of the inversion site
+## Right now it's picking out the tip of a separate selective sweep
 # get SNP position
 x = hit$POSITION
 
