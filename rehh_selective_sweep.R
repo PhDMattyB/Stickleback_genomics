@@ -300,7 +300,7 @@ ggplot(warm2_cold2,
 # find the highest hit
 hit = warm2_cold2 %>% 
   arrange(desc(LOGPVALUE)) %>% 
-  top_n(1)
+  top_n(10)
 
 
 ## need to center this around the peak of the inversion site
