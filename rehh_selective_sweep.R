@@ -491,6 +491,7 @@ warm2 = data2haplohh(hap_file = 'Warm_morphs_NOGTS_genotypes.vcf',
                     chr.name = 'chr_XXI', 
                     allele_coding = 'map')
 
+
 cold2 = data2haplohh(hap_file = 'Cold_morphs_NOCSWY_genotypes.vcf', 
                     polarize_vcf = F, 
                     min_maf = 0.05, 
