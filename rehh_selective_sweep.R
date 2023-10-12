@@ -549,7 +549,8 @@ ggplot(warm2_cold2,
 
 ggplot(warm2_cold2, 
        aes(POSITION, 
-           LOGPVALUE)) + geom_point()
+           LOGPVALUE)) + 
+  geom_point()
 
 
 
