@@ -316,6 +316,67 @@ ggplot(skrw_skrc,
 # plot(skrw_haplen)
 # plot(skrc_haplen)
 
+# GTS signatures of selection ------------------------------------------
+
+
+gts = data2haplohh(hap_file = 'GTS_genotypes.vcf', 
+                    polarize_vcf = F, 
+                    min_maf = 0.05, 
+                    chr.name = 'chr_XXI', 
+                    allele_coding = 'map')
+
+
+# iHS haplotype scan
+
+gts_scan = scan_hh(gts, polarized = F)
+
+## perform ihs selective scan
+gts_ihs = ihh2ihs(gts_scan, 
+                   freqbin = 1)
+
+## plot the ihs statistic
+ggplot(gts_ihs$ihs, 
+       aes(POSITION, 
+           IHS))+
+  geom_point()
+
+
+## plot the pvalues
+ggplot(gts_ihs$ihs, 
+       aes(POSITION, 
+           LOGPVALUE))+
+  geom_point()
+
+
+# CSWY signatures of selection ------------------------------------------
+
+cswy = data2haplohh(hap_file = 'CSWY_genotypes.vcf', 
+                    polarize_vcf = F, 
+                    min_maf = 0.05, 
+                    chr.name = 'chr_XXI', 
+                    allele_coding = 'map')
+
+# iHS haplotype scan
+
+cswy_scan = scan_hh(cswy, polarized = F)
+
+## perform ihs selective scan
+cswy_ihs = ihh2ihs(cswy_scan, 
+                   freqbin = 1)
+
+## plot the ihs statistic
+ggplot(cswy_ihs$ihs, 
+       aes(POSITION, 
+           IHS))+
+  geom_point()
+
+
+## plot the pvalues
+ggplot(cswy_ihs$ihs, 
+       aes(POSITION, 
+           LOGPVALUE))+
+  geom_point()
+
 
 # Warm vs Cold sweep detect (chr 21) --------------------------------------
 
@@ -390,35 +451,35 @@ ggplot(warm_cold,
 
 
 # Haplotype structure around selection target 
-# find the highest hit
-hit = warm_cold %>% 
-  arrange(desc(LOGPVALUE)) %>% 
-  top_n(1)
-
-# get SNP position
-x = hit$POSITION
-
-marker_id_warm = which(warm@positions == x)
-marker_id_cold = which(cold@positions == x)
-
-warm_furcation = calc_furcation(warm, 
-                                mrk = marker_id_warm)
-
-cold_furcation = calc_furcation(cold, 
-                                mrk = marker_id_cold )
-
-
-plot(warm_furcation, 
-     xlim = c(58695, 17420697))
-plot(cold_furcation, 
-     xlim = c(58694, 17420697))
-
-warm_haplen = calc_haplen(warm_furcation)
-cold_haplen = calc_haplen(cold_furcation)
-
-plot(warm_haplen)
-plot(cold_haplen)
-
+# # find the highest hit
+# hit = warm_cold %>% 
+#   arrange(desc(LOGPVALUE)) %>% 
+#   top_n(1)
+# 
+# # get SNP position
+# x = hit$POSITION
+# 
+# marker_id_warm = which(warm@positions == x)
+# marker_id_cold = which(cold@positions == x)
+# 
+# warm_furcation = calc_furcation(warm, 
+#                                 mrk = marker_id_warm)
+# 
+# cold_furcation = calc_furcation(cold, 
+#                                 mrk = marker_id_cold )
+# 
+# 
+# plot(warm_furcation, 
+#      xlim = c(58695, 17420697))
+# plot(cold_furcation, 
+#      xlim = c(58694, 17420697))
+# 
+# warm_haplen = calc_haplen(warm_furcation)
+# cold_haplen = calc_haplen(cold_furcation)
+# 
+# plot(warm_haplen)
+# plot(cold_haplen)
+# 
 
 # Warm vs Cold sweep detect (chr 21) NO GTS or CSWY --------------------------------------
 
@@ -494,35 +555,35 @@ ggplot(warm2_cold2,
 
 # Haplotype structure around selection target 
 # find the highest hit
-hit = warm2_cold2 %>% 
-  arrange(desc(LOGPVALUE)) %>% 
-  top_n(10)
-
-
-## need to center this around the peak of the inversion site
-## Right now it's picking out the tip of a separate selective sweep
-# get SNP position
-x = hit$POSITION
-
-marker_id_warm2 = which(warm2@positions == x)
-marker_id_cold2 = which(cold2@positions == x)
-
-warm2_furcation = calc_furcation(warm2, 
-                                mrk = marker_id_warm2)
-
-cold2_furcation = calc_furcation(cold2, 
-                                mrk = marker_id_cold2 )
-
-
-plot(warm2_furcation, 
-     xlim = c(58695, 17420697))
-plot(cold2_furcation, 
-     xlim = c(58694, 17420697))
-
-warm2_haplen = calc_haplen(warm2_furcation)
-cold2_haplen = calc_haplen(cold2_furcation)
-
-plot(warm2_haplen)
-plot(cold2_haplen)
+# hit = warm2_cold2 %>% 
+#   arrange(desc(LOGPVALUE)) %>% 
+#   top_n(10)
+# 
+# 
+# ## need to center this around the peak of the inversion site
+# ## Right now it's picking out the tip of a separate selective sweep
+# # get SNP position
+# x = hit$POSITION
+# 
+# marker_id_warm2 = which(warm2@positions == x)
+# marker_id_cold2 = which(cold2@positions == x)
+# 
+# warm2_furcation = calc_furcation(warm2, 
+#                                 mrk = marker_id_warm2)
+# 
+# cold2_furcation = calc_furcation(cold2, 
+#                                 mrk = marker_id_cold2 )
+# 
+# 
+# plot(warm2_furcation, 
+#      xlim = c(58695, 17420697))
+# plot(cold2_furcation, 
+#      xlim = c(58694, 17420697))
+# 
+# warm2_haplen = calc_haplen(warm2_furcation)
+# cold2_haplen = calc_haplen(cold2_furcation)
+# 
+# plot(warm2_haplen)
+# plot(cold2_haplen)
 
 
