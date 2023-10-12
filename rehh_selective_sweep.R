@@ -14,6 +14,8 @@ library(tidyverse)
 # install.packages('rehh')
 library(rehh)
 
+theme_set(theme_bw())
+
 
 # MYVATN signatures of selection ------------------------------------------
 
@@ -542,17 +544,47 @@ warm2_cold2 = ies2xpehh(warm2_scan,
 
 # plot
 
-ggplot(warm2_cold2, 
+warm_cold_xpehh = ggplot(warm2_cold2, 
        aes(POSITION, 
            XPEHH_warm2_cold2))+
-  geom_point()
+  geom_point()+
+  geom_hline(yintercept = 0, 
+             col = '#2a9d8f', 
+             linewidth = 1)+
+  # ylim(-10, 10)+ 
+  labs(x = 'Position (bp)', 
+       y = 'XP-EHH statistic')+
+  theme(panel.grid = element_blank(), 
+        axis.title = element_text(size = 14), 
+        axis.text = element_text(size = 12))
 
-ggplot(warm2_cold2, 
+ggsave('~/Parsons_Postdoc/Stickleback_Genomic/Figures/warm_cold_xpehh_stat.tiff', 
+       plot = warm_cold_xpehh, 
+       dpi = 'retina', 
+       units = 'cm',
+       width = 20.0, 
+       height = 13)
+
+
+warm_cold_xpehh_pvalues = ggplot(warm2_cold2, 
        aes(POSITION, 
            LOGPVALUE)) + 
-  geom_point()
+  geom_point()+
+  geom_hline(yintercept = 5, 
+             col = '#2a9d8f', 
+             linewidth = 1)+
+  labs(x = 'Position (bp)', 
+       y = 'Log p-value')+
+  theme(panel.grid = element_blank(), 
+        axis.title = element_text(size = 14), 
+        axis.text = element_text(size = 12))
 
-
+ggsave('~/Parsons_Postdoc/Stickleback_Genomic/Figures/warm_cold_xpehh_pvalues.tiff', 
+       plot = warm_cold_xpehh_pvalues, 
+       dpi = 'retina', 
+       units = 'cm',
+       width = 20.0, 
+       height = 13)
 
 # Haplotype structure around selection target 
 # find the highest hit
