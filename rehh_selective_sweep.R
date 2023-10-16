@@ -628,14 +628,14 @@ ggsave('~/Parsons_Postdoc/Stickleback_Genomic/Figures/warm_cold_xpehh_pvalues.ti
 
 # Warm vs Cold sweep detect (chr 21) NO GTS or CSWY --------------------------------------
 
-warm2 = data2haplohh(hap_file = 'Warm_morphs_NOGTS_phased_chr21', 
+warm_phased = data2haplohh(hap_file = 'Warm_morphs_NOGTS_phased_chr21', 
                      polarize_vcf = F, 
                      min_maf = 0.05, 
                      chr.name = 'chr_XXI', 
                      allele_coding = 'map')
 
 
-cold2 = data2haplohh(hap_file = 'Cold_morphs_NOCSWY_phased_chr21', 
+cold_phased = data2haplohh(hap_file = 'Cold_morphs_NOCSWY_phased_chr21', 
                      polarize_vcf = F, 
                      min_maf = 0.05, 
                      chr.name = 'chr_XXI', 
@@ -645,33 +645,33 @@ cold2 = data2haplohh(hap_file = 'Cold_morphs_NOCSWY_phased_chr21',
 # iHS haplotype scan 
 
 
-cold2_scan = scan_hh(cold2, polarized = F)
-warm2_scan = scan_hh(warm2, polarized = F)
+cold_phased_scan = scan_hh(cold_phased, polarized = F)
+warm_phased_scan = scan_hh(warm_phased, polarized = F)
 
 ## perform ihs selective scan
-warm2_ihs = ihh2ihs(warm2_scan, 
+warm_phased_ihs = ihh2ihs(warm_phased_scan, 
                     freqbin = 1)
-cold2_ihs = ihh2ihs(cold2_scan, 
+cold_phased_ihs = ihh2ihs(cold_phased_scan, 
                     freqbin = 1)
 
 # ## plot the ihs statistic
-# ggplot(warm2_ihs$ihs, 
+# ggplot(warm_phased_ihs$ihs, 
 #        aes(POSITION, 
 #            IHS))+
 #   geom_point()
 # 
-# ggplot(cold2_ihs$ihs, 
+# ggplot(cold_phased_ihs$ihs, 
 #        aes(POSITION, 
 #            IHS))+
 #   geom_point()
 # 
 # ## plot the pvalues
-# ggplot(warm2_ihs$ihs, 
+# ggplot(warm_phased_ihs$ihs, 
 #        aes(POSITION, 
 #            LOGPVALUE))+
 #   geom_point()
 # 
-# ggplot(cold2_ihs$ihs, 
+# ggplot(cold_phased_ihs$ihs, 
 #        aes(POSITION, 
 #            LOGPVALUE))+
 #   geom_point()
@@ -680,17 +680,17 @@ cold2_ihs = ihh2ihs(cold2_scan,
 
 # xp-ehh analysis (cross population) 
 
-warm2_cold2 = ies2xpehh(warm2_scan, 
-                        cold2_scan, 
-                        popname1 = 'warm2', 
-                        popname2 = 'cold2', 
+warm_phased_cold_phased = ies2xpehh(warm_phased_scan, 
+                        cold_phased_scan, 
+                        popname1 = 'warm_phased', 
+                        popname2 = 'cold_phased', 
                         include_freq = T)
 
 # plot
 
-warm_cold_xpehh_phased = ggplot(warm2_cold2, 
+warm_cold_xpehh_phased = ggplot(warm_phased_cold_phased, 
                          aes(POSITION, 
-                             XPEHH_warm2_cold2))+
+                             XPEHH_warm_phased_cold_phased))+
   geom_point()+
   geom_hline(yintercept = 0, 
              col = '#2a9d8f', 
@@ -710,7 +710,7 @@ ggsave('~/Parsons_Postdoc/Stickleback_Genomic/Figures/warm_cold_xpehh_stat_PHASE
        height = 13)
 
 
-warm_cold_xpehh_pvalues = ggplot(warm2_cold2, 
+warm_cold_xpehh_pvalues = ggplot(warm_phased_cold_phased, 
                                  aes(POSITION, 
                                      LOGPVALUE)) + 
   geom_point()+
@@ -732,7 +732,7 @@ ggsave('~/Parsons_Postdoc/Stickleback_Genomic/Figures/warm_cold_xpehh_pvalues_PH
 
 # Haplotype structure around selection target 
 # find the highest hit
-# hit = warm2_cold2 %>% 
+# hit = warm_phased_cold_phased %>% 
 #   arrange(desc(LOGPVALUE)) %>% 
 #   top_n(10)
 # 
@@ -742,25 +742,301 @@ ggsave('~/Parsons_Postdoc/Stickleback_Genomic/Figures/warm_cold_xpehh_pvalues_PH
 # # get SNP position
 # x = hit$POSITION
 # 
-# marker_id_warm2 = which(warm2@positions == x)
-# marker_id_cold2 = which(cold2@positions == x)
+# marker_id_warm_phased = which(warm_phased@positions == x)
+# marker_id_cold_phased = which(cold_phased@positions == x)
 # 
-# warm2_furcation = calc_furcation(warm2, 
-#                                 mrk = marker_id_warm2)
+# warm_phased_furcation = calc_furcation(warm_phased, 
+#                                 mrk = marker_id_warm_phased)
 # 
-# cold2_furcation = calc_furcation(cold2, 
-#                                 mrk = marker_id_cold2 )
+# cold_phased_furcation = calc_furcation(cold_phased, 
+#                                 mrk = marker_id_cold_phased )
 # 
 # 
-# plot(warm2_furcation, 
+# plot(warm_phased_furcation, 
 #      xlim = c(58695, 17420697))
-# plot(cold2_furcation, 
+# plot(cold_phased_furcation, 
 #      xlim = c(58694, 17420697))
 # 
-# warm2_haplen = calc_haplen(warm2_furcation)
-# cold2_haplen = calc_haplen(cold2_furcation)
+# warm_phased_haplen = calc_haplen(warm_phased_furcation)
+# cold_phased_haplen = calc_haplen(cold_phased_furcation)
 # 
-# plot(warm2_haplen)
-# plot(cold2_haplen)
+# plot(warm_phased_haplen)
+# plot(cold_phased_haplen)
+
+# Warm vs Cold sweep detect (chr 21) NO GTS or CSWY window 0.5 --------------------------------------
+
+warm_0.5 = data2haplohh(hap_file = 'Warm_morphs_NOGTS_phased_chr21_window0.5', 
+                     polarize_vcf = F, 
+                     min_maf = 0.05, 
+                     chr.name = 'chr_XXI', 
+                     allele_coding = 'map')
+
+
+cold_0.5 = data2haplohh(hap_file = 'Cold_morphs_NOCSWY_phased_chr21_window0.5', 
+                     polarize_vcf = F, 
+                     min_maf = 0.05, 
+                     chr.name = 'chr_XXI', 
+                     allele_coding = 'map')
+
+
+# iHS haplotype scan 
+
+
+cold_0.5_scan = scan_hh(cold_0.5, polarized = F)
+warm_0.5_scan = scan_hh(warm_0.5, polarized = F)
+
+## perform ihs selective scan
+warm_0.5_ihs = ihh2ihs(warm_0.5_scan, 
+                    freqbin = 1)
+cold_0.5_ihs = ihh2ihs(cold_0.5_scan, 
+                    freqbin = 1)
+
+# ## plot the ihs statistic
+# ggplot(warm_0.5_ihs$ihs, 
+#        aes(POSITION, 
+#            IHS))+
+#   geom_point()
+# 
+# ggplot(cold_0.5_ihs$ihs, 
+#        aes(POSITION, 
+#            IHS))+
+#   geom_point()
+# 
+# ## plot the pvalues
+# ggplot(warm_0.5_ihs$ihs, 
+#        aes(POSITION, 
+#            LOGPVALUE))+
+#   geom_point()
+# 
+# ggplot(cold_0.5_ihs$ihs, 
+#        aes(POSITION, 
+#            LOGPVALUE))+
+#   geom_point()
+
+
+
+# xp-ehh analysis (cross population) 
+
+warm_0.5_cold_0.5 = ies2xpehh(warm_0.5_scan, 
+                        cold_0.5_scan, 
+                        popname1 = 'warm_0.5', 
+                        popname2 = 'cold_0.5', 
+                        include_freq = T)
+
+# plot
+
+warm_cold_xpehh_phased_win0.5 = ggplot(warm_0.5_cold_0.5, 
+                                aes(POSITION, 
+                                    XPEHH_warm_0.5_cold_0.5))+
+  geom_point()+
+  geom_hline(yintercept = 0, 
+             col = '#2a9d8f', 
+             linewidth = 1)+
+  # ylim(-10, 10)+ 
+  labs(x = 'Position (bp)', 
+       y = 'XP-EHH statistic')+
+  theme(panel.grid = element_blank(), 
+        axis.title = element_text(size = 14), 
+        axis.text = element_text(size = 12))
+
+ggsave('~/Parsons_Postdoc/Stickleback_Genomic/Figures/warm_cold_xpehh_stat_PHASED.tiff', 
+       plot = warm_cold_xpehh_phased, 
+       dpi = 'retina', 
+       units = 'cm',
+       width = 20.0, 
+       height = 13)
+
+
+warm_cold_xpehh_pvalues = ggplot(warm_0.5_cold_0.5, 
+                                 aes(POSITION, 
+                                     LOGPVALUE)) + 
+  geom_point()+
+  geom_hline(yintercept = 5, 
+             col = '#2a9d8f', 
+             linewidth = 1)+
+  labs(x = 'Position (bp)', 
+       y = 'Log p-value')+
+  theme(panel.grid = element_blank(), 
+        axis.title = element_text(size = 14), 
+        axis.text = element_text(size = 12))
+
+ggsave('~/Parsons_Postdoc/Stickleback_Genomic/Figures/warm_cold_xpehh_pvalues_PHASED.tiff', 
+       plot = warm_cold_xpehh_pvalues, 
+       dpi = 'retina', 
+       units = 'cm',
+       width = 20.0, 
+       height = 13)
+
+# Haplotype structure around selection target 
+# find the highest hit
+# hit = warm_0.5_cold_0.5 %>% 
+#   arrange(desc(LOGPVALUE)) %>% 
+#   top_n(10)
+# 
+# 
+# ## need to center this around the peak of the inversion site
+# ## Right now it's picking out the tip of a separate selective sweep
+# # get SNP position
+# x = hit$POSITION
+# 
+# marker_id_warm_0.5 = which(warm_0.5@positions == x)
+# marker_id_cold_0.5 = which(cold_0.5@positions == x)
+# 
+# warm_0.5_furcation = calc_furcation(warm_0.5, 
+#                                 mrk = marker_id_warm_0.5)
+# 
+# cold_0.5_furcation = calc_furcation(cold_0.5, 
+#                                 mrk = marker_id_cold_0.5 )
+# 
+# 
+# plot(warm_0.5_furcation, 
+#      xlim = c(58695, 17420697))
+# plot(cold_0.5_furcation, 
+#      xlim = c(58694, 17420697))
+# 
+# warm_0.5_haplen = calc_haplen(warm_0.5_furcation)
+# cold_0.5_haplen = calc_haplen(cold_0.5_furcation)
+# 
+# plot(warm_0.5_haplen)
+# plot(cold_0.5_haplen)
+
+# Warm vs Cold sweep detect (chr 21) NO GTS or CSWY window 0.25 --------------------------------------
+
+warm_0.25 = data2haplohh(hap_file = 'Warm_morphs_NOGTS_phased_chr21_window0.25', 
+                        polarize_vcf = F, 
+                        min_maf = 0.05, 
+                        chr.name = 'chr_XXI', 
+                        allele_coding = 'map')
+
+
+cold_0.25 = data2haplohh(hap_file = 'Cold_morphs_NOCSWY_phased_chr21_window0.25', 
+                        polarize_vcf = F, 
+                        min_maf = 0.05, 
+                        chr.name = 'chr_XXI', 
+                        allele_coding = 'map')
+
+
+# iHS haplotype scan 
+
+
+cold_0.25_scan = scan_hh(cold_0.25, polarized = F)
+warm_0.25_scan = scan_hh(warm_0.25, polarized = F)
+
+## perform ihs selective scan
+warm_0.25_ihs = ihh2ihs(warm_0.25_scan, 
+                       freqbin = 1)
+cold_0.25_ihs = ihh2ihs(cold_0.25_scan, 
+                       freqbin = 1)
+
+# ## plot the ihs statistic
+# ggplot(warm_0.25_ihs$ihs, 
+#        aes(POSITION, 
+#            IHS))+
+#   geom_point()
+# 
+# ggplot(cold_0.25_ihs$ihs, 
+#        aes(POSITION, 
+#            IHS))+
+#   geom_point()
+# 
+# ## plot the pvalues
+# ggplot(warm_0.25_ihs$ihs, 
+#        aes(POSITION, 
+#            LOGPVALUE))+
+#   geom_point()
+# 
+# ggplot(cold_0.25_ihs$ihs, 
+#        aes(POSITION, 
+#            LOGPVALUE))+
+#   geom_point()
+
+
+
+# xp-ehh analysis (cross population) 
+
+warm_0.25_cold_0.25 = ies2xpehh(warm_0.25_scan, 
+                              cold_0.25_scan, 
+                              popname1 = 'warm_0.25', 
+                              popname2 = 'cold_0.25', 
+                              include_freq = T)
+
+# plot
+
+warm_cold_xpehh_phased_win0.25 = ggplot(warm_0.25_cold_0.25, 
+                                       aes(POSITION, 
+                                           XPEHH_warm_0.25_cold_0.25))+
+  geom_point()+
+  geom_hline(yintercept = 0, 
+             col = '#2a9d8f', 
+             linewidth = 1)+
+  # ylim(-10, 10)+ 
+  labs(x = 'Position (bp)', 
+       y = 'XP-EHH statistic')+
+  theme(panel.grid = element_blank(), 
+        axis.title = element_text(size = 14), 
+        axis.text = element_text(size = 12))
+
+ggsave('~/Parsons_Postdoc/Stickleback_Genomic/Figures/warm_cold_xpehh_stat_PHASED.tiff', 
+       plot = warm_cold_xpehh_phased, 
+       dpi = 'retina', 
+       units = 'cm',
+       width = 20.0, 
+       height = 13)
+
+
+warm_cold_xpehh_pvalues = ggplot(warm_0.25_cold_0.25, 
+                                 aes(POSITION, 
+                                     LOGPVALUE)) + 
+  geom_point()+
+  geom_hline(yintercept = 5, 
+             col = '#2a9d8f', 
+             linewidth = 1)+
+  labs(x = 'Position (bp)', 
+       y = 'Log p-value')+
+  theme(panel.grid = element_blank(), 
+        axis.title = element_text(size = 14), 
+        axis.text = element_text(size = 12))
+
+ggsave('~/Parsons_Postdoc/Stickleback_Genomic/Figures/warm_cold_xpehh_pvalues_PHASED.tiff', 
+       plot = warm_cold_xpehh_pvalues, 
+       dpi = 'retina', 
+       units = 'cm',
+       width = 20.0, 
+       height = 13)
+
+# Haplotype structure around selection target 
+# find the highest hit
+# hit = warm_0.25_cold_0.25 %>% 
+#   arrange(desc(LOGPVALUE)) %>% 
+#   top_n(10)
+# 
+# 
+# ## need to center this around the peak of the inversion site
+# ## Right now it's picking out the tip of a separate selective sweep
+# # get SNP position
+# x = hit$POSITION
+# 
+# marker_id_warm_0.25 = which(warm_0.25@positions == x)
+# marker_id_cold_0.25 = which(cold_0.25@positions == x)
+# 
+# warm_0.25_furcation = calc_furcation(warm_0.25, 
+#                                 mrk = marker_id_warm_0.25)
+# 
+# cold_0.25_furcation = calc_furcation(cold_0.25, 
+#                                 mrk = marker_id_cold_0.25 )
+# 
+# 
+# plot(warm_0.25_furcation, 
+#      xlim = c(58695, 17420697))
+# plot(cold_0.25_furcation, 
+#      xlim = c(58694, 17420697))
+# 
+# warm_0.25_haplen = calc_haplen(warm_0.25_furcation)
+# cold_0.25_haplen = calc_haplen(cold_0.25_furcation)
+# 
+# plot(warm_0.25_haplen)
+# plot(cold_0.25_haplen)
+
+
 
 
