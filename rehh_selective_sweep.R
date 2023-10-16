@@ -16,7 +16,7 @@ library(rehh)
 
 theme_set(theme_bw())
 
-
+#
 # MYVATN signatures of selection ------------------------------------------
 
 
@@ -511,27 +511,27 @@ warm2_ihs = ihh2ihs(warm2_scan,
 cold2_ihs = ihh2ihs(cold2_scan, 
                    freqbin = 1)
 
-## plot the ihs statistic
-ggplot(warm2_ihs$ihs, 
-       aes(POSITION, 
-           IHS))+
-  geom_point()
-
-ggplot(cold2_ihs$ihs, 
-       aes(POSITION, 
-           IHS))+
-  geom_point()
-
-## plot the pvalues
-ggplot(warm2_ihs$ihs, 
-       aes(POSITION, 
-           LOGPVALUE))+
-  geom_point()
-
-ggplot(cold2_ihs$ihs, 
-       aes(POSITION, 
-           LOGPVALUE))+
-  geom_point()
+# ## plot the ihs statistic
+# ggplot(warm2_ihs$ihs, 
+#        aes(POSITION, 
+#            IHS))+
+#   geom_point()
+# 
+# ggplot(cold2_ihs$ihs, 
+#        aes(POSITION, 
+#            IHS))+
+#   geom_point()
+# 
+# ## plot the pvalues
+# ggplot(warm2_ihs$ihs, 
+#        aes(POSITION, 
+#            LOGPVALUE))+
+#   geom_point()
+# 
+# ggplot(cold2_ihs$ihs, 
+#        aes(POSITION, 
+#            LOGPVALUE))+
+#   geom_point()
 
 
 
@@ -654,27 +654,27 @@ warm2_ihs = ihh2ihs(warm2_scan,
 cold2_ihs = ihh2ihs(cold2_scan, 
                     freqbin = 1)
 
-## plot the ihs statistic
-ggplot(warm2_ihs$ihs, 
-       aes(POSITION, 
-           IHS))+
-  geom_point()
-
-ggplot(cold2_ihs$ihs, 
-       aes(POSITION, 
-           IHS))+
-  geom_point()
-
-## plot the pvalues
-ggplot(warm2_ihs$ihs, 
-       aes(POSITION, 
-           LOGPVALUE))+
-  geom_point()
-
-ggplot(cold2_ihs$ihs, 
-       aes(POSITION, 
-           LOGPVALUE))+
-  geom_point()
+# ## plot the ihs statistic
+# ggplot(warm2_ihs$ihs, 
+#        aes(POSITION, 
+#            IHS))+
+#   geom_point()
+# 
+# ggplot(cold2_ihs$ihs, 
+#        aes(POSITION, 
+#            IHS))+
+#   geom_point()
+# 
+# ## plot the pvalues
+# ggplot(warm2_ihs$ihs, 
+#        aes(POSITION, 
+#            LOGPVALUE))+
+#   geom_point()
+# 
+# ggplot(cold2_ihs$ihs, 
+#        aes(POSITION, 
+#            LOGPVALUE))+
+#   geom_point()
 
 
 
