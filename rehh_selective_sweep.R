@@ -541,7 +541,8 @@ warm2_cold2 = ies2xpehh(warm2_scan,
                       cold2_scan, 
                       popname1 = 'warm2', 
                       popname2 = 'cold2', 
-                      include_freq = T)
+                      include_freq = T,
+                      p.adjust.method = 'bonferroni')
 
 # plot
 
@@ -571,7 +572,7 @@ warm_cold_xpehh_pvalues = ggplot(warm2_cold2,
        aes(POSITION, 
            LOGPVALUE)) + 
   geom_point()+
-  geom_hline(yintercept = 5, 
+  geom_hline(yintercept = 1.39, 
              col = '#2a9d8f', 
              linewidth = 1)+
   labs(x = 'Position (bp)', 
@@ -586,6 +587,22 @@ ggsave('~/Parsons_Postdoc/Stickleback_Genomic/Figures/warm_cold_xpehh_pvalues.ti
        units = 'cm',
        width = 20.0, 
        height = 13)
+
+
+
+unphased_sweep_outliers = warm2_cold2 %>% 
+  as_tibble() %>% 
+  dplyr::select(CHR, 
+                POSITION, 
+                XPEHH_warm2_cold2, 
+                LOGPVALUE) %>% 
+  mutate(pvalue = 10**-LOGPVALUE) %>% 
+  na.omit() %>% 
+  # filter(LOGPVALUE >= 1.39)
+  filter(pvalue <= 0.05)
+
+View(unphased_sweep_outliers)
+
 
 # Haplotype structure around selection target 
 # find the highest hit
@@ -684,7 +701,8 @@ warm_phased_cold_phased = ies2xpehh(warm_phased_scan,
                         cold_phased_scan, 
                         popname1 = 'warm_phased', 
                         popname2 = 'cold_phased', 
-                        include_freq = T)
+                        include_freq = T, 
+                        p.adjust.method = 'bonferroni')
 
 # plot
 
@@ -729,6 +747,16 @@ ggsave('~/Parsons_Postdoc/Stickleback_Genomic/Figures/warm_cold_xpehh_pvalues_PH
        units = 'cm',
        width = 20.0, 
        height = 13)
+
+phased_sweep_outliers = warm_phased_cold_phased %>% 
+  as_tibble() %>% 
+  dplyr::select(CHR, 
+                POSITION, 
+                XPEHH_warm_phased_cold_phased, 
+                LOGPVALUE) %>% 
+  mutate(pvalue = 10**-LOGPVALUE) %>% 
+  na.omit() %>% 
+  filter(pvalue <= 0.05)
 
 # Haplotype structure around selection target 
 # find the highest hit
