@@ -600,16 +600,25 @@ apply(qmatrix, 1, which.max) %>%
   dplyr::rename(Genetic_group = value) %>%
   write_tsv('stickleback_snmf_k5.txt')
 
+## See if we can make this plot look nice 
+## Needs colour and a legend
+## internet is out due to a dickhead electrician
 ## shitty base R plot
+
+location_cols = c('#5f0f40',
+                  '#d62828',
+                  '#06d6a0',
+                  '#264653',
+                  '#219ebc')
 plot = barchart(project,
                K = 5, 
                run = best_ce, 
                border = NA, 
                space = 0, 
-               # col = my.colors, 
+               col = location_cols,
+               # sort.by.Q = T,
                # xlab = "Individuals",
-               ylab = "Ancestry proportions", 
-               main = "Ancestry matrix")
+               ylab = "Ancestry proportions")
 axis(1, at = 1:length(plot$order), 
      labels = plot$order, 
      las = 3, 
@@ -644,6 +653,7 @@ identifiers = identifiers %>%
   rowid_to_column() %>% 
   rename(order = rowid)
 
+View(identifiers)
 # View(identifiers)
 # View(plot_order)
 snmf_data = left_join(snmf_data, 
@@ -687,12 +697,11 @@ data_group1 = snmf_melted %>%
 data_group2 = snmf_melted %>% 
   ungroup() %>% 
   arrange(individual_id) %>% 
-  slice(430:545) %>% 
-  View()
+  slice(430:545) 
 
 snmf_melted_fixed = bind_rows(data_group1, 
           data_group2) %>% 
-  arrange(individual_id)
+  arrange(order)
 
 View(snmf_melted_fixed)
 
