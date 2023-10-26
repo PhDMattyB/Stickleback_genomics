@@ -64,17 +64,6 @@ cross_num %>%
   View()
 
 
-# convert chr for admixture -----------------------------------------------
-setwd('~/Parsons_Postdoc/Stickleback_Genomic/afvaper/')
-
-
-map_chr_fix = read_tsv('strickle_No_GTS_CSWY_chr_fix.map', 
-                       col_names = c('CHR', 
-                                     'SNP', 
-                                     'GPOS', 
-                                     'POS'))
-
-ped_fix = read_table('stickle_filtered_chr_fix.ped')
 
 ##
 # pcadapt analysis --------------------------------------------------------
