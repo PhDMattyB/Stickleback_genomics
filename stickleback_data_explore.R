@@ -611,7 +611,7 @@ location_cols = c('#5f0f40',
                   '#264653',
                   '#219ebc')
 plot = barchart(project,
-               K = 5, 
+               K = 4, 
                run = best_ce, 
                border = NA, 
                space = 0, 
