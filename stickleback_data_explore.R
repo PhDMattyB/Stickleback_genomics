@@ -72,11 +72,9 @@ setwd('Parsons_Postdoc/Stickleback_Genomic/vcf_filter/')
 ## K4 CV error is 0.47944
 ## Pretty close. K3 makes sense based off of the PCA
 
-location_cols = c('#5f0f40',
+K3_cols = c('#219ebc',
                   '#d62828',
-                  '#06d6a0',
-                  '#264653',
-                  '#219ebc')
+                  '#14213d')
 
 K3_Qval = read_table('stickleback_maf0.05_ldpruned_filter_chr_fix.3.Q', 
                    col_names = c('Q1', 
@@ -101,29 +99,100 @@ K3_melted_data = melt(K3_data,
                                 'individual_id')) %>% 
   as_tibble() 
 
-ggplot(data = K3_melted_data, 
+admixture_k3_plot = ggplot(data = K3_melted_data, 
        aes(x = reorder(order, 
                        individual_id),
            y = value, 
            fill = variable))+
   geom_bar(stat = "identity", 
            width = 1)+
-  scale_fill_manual(values = location_cols)+
+  scale_fill_manual(values = K3_cols)+
   # scale_fill_manual(values = magma(n = 4))+
   labs(x = 'Individuals', 
        y = 'Ancestry proportion')+
   theme(axis.text.y = element_text(color = 'black'),
-        # axis.text.x = element_blank(),
+        axis.text.x = element_blank(),
         axis.title.x = element_blank(),
+        axis.ticks.x = element_blank(),
         ## can add xaxis labels if needed
-        axis.text.x = element_text(angle = 90,
-                                   hjust = 1,
-                                   vjust = -0.09,
-                                   size = 8,
-                                   color = 'black'),
+        # axis.text.x = element_text(angle = 90,
+        #                            hjust = 1,
+        #                            vjust = -0.09,
+        #                            size = 8,
+        #                            color = 'black'),
         legend.position = 'none')+
   scale_x_discrete(guide = guide_axis(n.dodge = 5))+
   scale_y_continuous(expand = c(0,0))
+
+ggsave('admixture_k3_GTS_MYV_other.tiff',
+       plot = admixture_k3_plot, 
+       dpi = 'retina', 
+       units = 'cm', 
+       width = 35, 
+       height = 10)
+
+
+
+K4_cols = c('#06d6a0',
+            '#5f0f40',
+            '#d62828',
+            '#219ebc')
+
+K4_Qval = read_table('stickleback_maf0.05_ldpruned_filter_chr_fix.4.Q', 
+                     col_names = c('Q1', 
+                                   'Q2', 
+                                   'Q3', 
+                                   'Q4'))
+# K4_Pval = read_tsv('stickleback_maf0.05_ldpruned_filter_chr_fix.3.P', 
+#                    col_names = c('P1', 
+#                                  'P2', 
+#                                  'P3'))
+
+identifiers = read_csv('stickleback_identifiers.csv')
+identifiers = identifiers %>% 
+  rowid_to_column() %>% 
+  rename(order = rowid)
+
+K4_data = bind_cols(identifiers, 
+                    K4_Qval)
+
+K4_melted_data = melt(K4_data, 
+                      id.vars = c('order', 
+                                  'population', 
+                                  'individual_id')) %>% 
+  as_tibble() 
+
+admixture_K4_plot = ggplot(data = K4_melted_data, 
+       aes(x = reorder(order, 
+                       individual_id),
+           y = value, 
+           fill = variable))+
+  geom_bar(stat = "identity", 
+           width = 1)+
+  scale_fill_manual(values = K4_cols)+
+  # scale_fill_manual(values = magma(n = 4))+
+  labs(x = 'Individuals', 
+       y = 'Ancestry proportion')+
+  theme(axis.text.y = element_text(color = 'black'),
+        axis.text.x = element_blank(),
+        axis.title.x = element_blank(),
+        axis.ticks.x = element_blank(),
+        ## can add xaxis labels if needed
+        # axis.text.x = element_text(angle = 90,
+        #                            hjust = 1,
+        #                            vjust = -0.09,
+        #                            size = 8,
+        #                            color = 'black'),
+        legend.position = 'none')+
+  scale_x_discrete(guide = guide_axis(n.dodge = 5))+
+  scale_y_continuous(expand = c(0,0))
+
+ggsave('admixture_k4_GTS_MYV_SkR_other.tiff',
+       plot = admixture_K4_plot, 
+       dpi = 'retina', 
+       units = 'cm', 
+       width = 35, 
+       height = 10)
 
 
 ##
