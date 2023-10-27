@@ -167,6 +167,7 @@ Fst_manhattan = function(non_outs,
           axis.text.y = element_text(size = 12))
 }
 
+
 LFMM_manhattan = function(non_outs, 
                          outs, 
                          axisdf,
