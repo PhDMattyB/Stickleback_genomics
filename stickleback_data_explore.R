@@ -116,7 +116,10 @@ admixture_k3_plot = ggplot(data = K3_melted_data,
   # scale_fill_manual(values = magma(n = 4))+
   labs(x = 'Individuals', 
        y = 'Ancestry proportion')+
-  theme(axis.text.y = element_text(color = 'black'),
+  theme(axis.text.y = element_text(color = 'black', 
+                                   size = 12),
+        axis.title.y = element_text(color = 'black', 
+                                    size = 14),
         axis.text.x = element_blank(),
         axis.title.x = element_blank(),
         axis.ticks.x = element_blank(),
@@ -355,21 +358,21 @@ stickle_plot = mutate(.data = stickle_plot,
 
 theme_set(theme_bw())
 
-cold_warm_cols = c('#264653',
-         '#e63946', 
-         '#386641', 
-         '#6a994e', 
-         '#457b9d', 
-         '#e76f51',
-         '#6d6875', 
-         '#c1121f')
+# cold_warm_cols = c('#264653',
+#          '#e63946', 
+#          '#386641', 
+#          '#6a994e', 
+#          '#457b9d', 
+#          '#e76f51',
+#          '#6d6875', 
+#          '#c1121f')
 
 
-location_cols = c('#06d6a0',
-                  '#264653',
-                  '#219ebc',
-                  '#d62828',
-                  '#5f0f40')
+location_cols = c('#00798c',
+                  '#003d5b',
+                  '#edae49',
+                  '#d1495b',
+                  '#30638e')
 
 
 stickleback_pca = stickle_plot %>%
@@ -408,6 +411,17 @@ ggsave(file = 'stickleback_pca_cold_warm_11.08.2023.tiff',
        width = 20.0, 
        height = 13)
 
+# Combine PCA and Admixture -----------------------------------------------
+
+pop_structure_plot = stickleback_pca + admixture_k3_plot
+
+ggsave(file = 'stickleback_population_structure.tiff', 
+       path = '~/Parsons_Postdoc/Stickleback_Genomic/Figures/', 
+       plot = pop_structure_plot, 
+       dpi = 'retina', 
+       units = 'cm', 
+       width = 50.0, 
+       height = 20)
 
 ##
 # pcadapt outliers --------------------------------------------------------
