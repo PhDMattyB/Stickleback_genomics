@@ -72,10 +72,6 @@ setwd('Parsons_Postdoc/Stickleback_Genomic/vcf_filter/')
 ## K4 CV error is 0.47944
 ## Pretty close. K3 makes sense based off of the PCA
 
-K3_cols = c('#219ebc',
-                  '#d62828',
-                  '#14213d')
-
 K3_Qval = read_table('stickleback_maf0.05_ldpruned_filter_chr_fix.3.Q', 
                    col_names = c('Q1', 
                                  'Q2', 
@@ -98,6 +94,10 @@ K3_melted_data = melt(K3_data,
                                 'population', 
                                 'individual_id')) %>% 
   as_tibble() 
+
+K3_cols = c('#0081a7',
+            '#d62828',
+            '#4c956c')
 
 admixture_k3_plot = ggplot(data = K3_melted_data, 
        aes(x = reorder(order, 
@@ -123,6 +123,8 @@ admixture_k3_plot = ggplot(data = K3_melted_data,
         legend.position = 'none')+
   scale_x_discrete(guide = guide_axis(n.dodge = 5))+
   scale_y_continuous(expand = c(0,0))
+
+admixture_k3_plot
 
 ggsave('admixture_k3_GTS_MYV_other.tiff',
        plot = admixture_k3_plot, 
