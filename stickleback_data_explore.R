@@ -1101,21 +1101,21 @@ GTS_CSWY_top_dist %>%
 ##
 # FST distribution plots --------------------------------------------------
 
-location_cols = c('#06d6a0',
-                  '#264653',
-                  '#219ebc',
-                  '#d62828',
-                  '#5f0f40')
+location_cols = c('#00798c',
+                  '#003d5b',
+                  '#edae49',
+                  '#d1495b',
+                  '#30638e')
 
 ASHN_Fst_dist_plot = ASHN_Fst %>% 
   ggplot()+
   geom_density(aes(x = FST_zero), 
-               col = '#06d6a0', 
-               fill = '#06d6a0')+
+               col = '#00798c', 
+               fill = '#00798c')+
   geom_density(data = ASHN_top_dist, 
                aes(x = FST_zero),
-               col = '#000000',
-               fill = '#000000')+
+               col = '#00798c',
+               fill = '#00798c')+
   labs(x = 'Fst', 
        y = 'Density', 
        title = 'A)')+
@@ -1127,12 +1127,12 @@ ASHN_Fst_dist_plot = ASHN_Fst %>%
 MYV_Fst_dist_plot = MYV_Fst %>% 
   ggplot()+
   geom_density(aes(x = FST_zero), 
-               col = '#d62828', 
-               fill = '#d62828')+
+               col = '#d1495b', 
+               fill = '#d1495b')+
   geom_density(data = MYV_top_dist, 
                aes(x = FST_zero),
-               col = '#000000',
-               fill = '#000000')+
+               col = '#d1495b',
+               fill = '#d1495b')+
   labs(x = 'Fst', 
        y = 'Density', 
        title = 'B)')+
@@ -1145,12 +1145,12 @@ MYV_Fst_dist_plot = MYV_Fst %>%
 SKR_Fst_dist_plot = SKR_Fst %>% 
   ggplot()+
   geom_density(aes(x = FST_zero), 
-               col = '#5f0f40', 
-               fill = '#5f0f40')+
+               col = '#30638e', 
+               fill = '#30638e')+
   geom_density(data = SKR_top_dist, 
                aes(x = FST_zero),
-               col = '#000000',
-               fill = '#000000')+
+               col = '#30638e',
+               fill = '#30638e')+
   labs(x = 'Fst', 
        y = 'Density', 
        title = 'C)')+
@@ -1163,12 +1163,12 @@ SKR_Fst_dist_plot = SKR_Fst %>%
 GTS_CSWY_Fst_dist_plot = GTS_CSWY_Fst %>% 
   ggplot()+
   geom_density(aes(x = FST_zero), 
-               col = '#264653', 
-               fill = '#264653')+
+               col = '#edae49', 
+               fill = '#edae49')+
   geom_density(data = GTS_CSWY_top_dist, 
                aes(x = FST_zero),
-               col = '#000000',
-               fill = '#000000')+
+               col = '#edae49',
+               fill = '#edae49')+
   labs(x = 'Fst', 
        y = 'Density', 
        title = 'D)')+
@@ -1181,12 +1181,12 @@ GTS_CSWY_Fst_dist_plot = GTS_CSWY_Fst %>%
 WC_Fst_dist_plot = WC_Fst %>% 
   ggplot()+
   geom_density(aes(x = FST_zero), 
-               col = '#fb8500', 
-               fill = '#fb8500')+
+               col = '#439a86', 
+               fill = '#439a86')+
   geom_density(data = WC_top_dist, 
                aes(x = FST_zero),
-               col = '#000000',
-               fill = '#000000')+
+               col = '#439a86',
+               fill = '#439a86')+
   labs(x = 'Fst', 
        y = 'Density', 
        title = 'E)')+
@@ -1207,21 +1207,21 @@ ggsave(file = 'stickleback_FST_Distribution_plots.tiff',
        height = 15)
 
 # Fst distribution per chromosome plot ------------------------------------
-location_cols = c('#06d6a0',
-                  '#264653',
-                  '#219ebc',
-                  '#d62828',
-                  '#5f0f40')
+location_cols = c('#00798c',
+                  '#003d5b',
+                  '#edae49',
+                  '#d1495b',
+                  '#30638e')
 
 ASHN_per_chrom = ASHN_Fst %>% 
   ggplot()+
   geom_density(aes(x = FST_zero), 
-               col = '#06d6a0', 
-               fill = '#06d6a0')+
+               col = '#00798c', 
+               fill = '#00798c')+
   geom_density(data = ASHN_top_dist, 
                aes(x = FST_zero),
-               col = '#000000',
-               fill = '#000000')+
+               col = '#00798c',
+               fill = '#00798c')+
   facet_grid(~CHR)+
   labs(x = 'Fst', 
        y = 'Density', 
@@ -1238,12 +1238,12 @@ ASHN_per_chrom = ASHN_Fst %>%
 MYV_per_chrom = MYV_Fst %>% 
   ggplot()+
   geom_density(aes(x = FST_zero), 
-               col = '#d62828', 
-               fill = '#d62828')+
+               col = '#d1495b', 
+               fill = '#d1495b')+
   geom_density(data = MYV_top_dist, 
                aes(x = FST_zero),
-               col = '#000000',
-               fill = '#000000')+
+               col = '#d1495b',
+               fill = '#d1495b')+
   facet_grid(~CHR)+
   labs(x = 'Fst', 
        y = 'Density', 
@@ -1259,12 +1259,12 @@ MYV_per_chrom = MYV_Fst %>%
 SKR_per_chrom = SKR_Fst %>% 
   ggplot()+
   geom_density(aes(x = FST_zero), 
-               col = '#5f0f40', 
-               fill = '#5f0f40')+
+               col = '#30638e', 
+               fill = '#30638e')+
   geom_density(data = SKR_top_dist, 
                aes(x = FST_zero),
-               col = '#000000',
-               fill = '#000000')+
+               col = '#30638e',
+               fill = '#30638e')+
   facet_grid(~CHR)+
   labs(x = 'Fst', 
        y = 'Density', 
@@ -1280,8 +1280,8 @@ SKR_per_chrom = SKR_Fst %>%
 GTS_CSWY_per_chrom = GTS_CSWY_Fst %>% 
   ggplot()+
   geom_density(aes(x = FST_zero), 
-               col = '#264653', 
-               fill = '#264653')+
+               col = '#edae49', 
+               fill = '#edae49')+
   geom_density(data = GTS_CSWY_top_dist, 
                aes(x = FST_zero),
                col = '#000000',
@@ -1301,12 +1301,12 @@ GTS_CSWY_per_chrom = GTS_CSWY_Fst %>%
 WC_per_chrom = WC_Fst %>% 
   ggplot()+
   geom_density(aes(x = FST_zero), 
-               col = '#fb8500', 
-               fill = '#fb8500')+
+               col = '#439a86', 
+               fill = '#439a86')+
   geom_density(data = WC_top_dist, 
                aes(x = FST_zero),
-               col = '#000000',
-               fill = '#000000')+
+               col = '#439a86',
+               fill = '#439a86')+
   facet_grid(~CHR)+
   labs(x = 'Fst', 
        y = 'Density', 
@@ -1390,27 +1390,26 @@ axisdf = axis_df(WC_Fst_clean)
 
 non_outs = 
   # WC_Fst_clean %>%
-  ASHN_Fst_clean %>%
+  # ASHN_Fst_clean %>%
   # MYV_Fst_clean %>%
   # SKR_Fst_clean %>%
-  # GTS_CSWY_Fst_clean %>%
+  GTS_CSWY_Fst_clean %>%
   filter(value == 'Neutral') 
 
 ## Get the outliers
 outs = 
   # WC_Fst_clean %>%
-  ASHN_Fst_clean %>%
+  # ASHN_Fst_clean %>%
   # MYV_Fst_clean %>%
   # SKR_Fst_clean %>%
-  # GTS_CSWY_Fst_clean %>%
+  GTS_CSWY_Fst_clean %>%
   filter(value == 'Outlier') 
 
-
-## ASHN colour = #06d6a0
-## MYV colour = #d62828
-## SKR colour = #5f0f40
-## GTS_CSWY colour = #264653
-## WC colour = #ef233c
+## ASHN colour = #00798c
+## MYV colour = #d1495b
+## SKR colour = #30638e
+## GTS_CSWY colour = #edae49
+## WC colour = #439a86
 
 WC_Fst_manhattan = Fst_manhattan(non_outs = non_outs, 
                                  outs = outs, 
@@ -1418,7 +1417,7 @@ WC_Fst_manhattan = Fst_manhattan(non_outs = non_outs,
                                  xval = BPcum, 
                                  yval = FST_zero, 
                                  chr = non_outs$CHR, 
-                                 out_col = '#fb8500', 
+                                 out_col = '#439a86', 
                                  plot_letter = 'E) Geothermal-Ambient comparison')
 
 
@@ -1428,8 +1427,8 @@ ASHN_Fst_manhattan = Fst_manhattan(non_outs = non_outs,
                                        xval = BPcum, 
                                        yval = FST_zero, 
                                        chr = non_outs$CHR, 
-                                       out_col = '#06d6a0', 
-                                       plot_letter = 'A) Áshildarholtsvatn geothermal-ambient comparison')
+                                       out_col = '#00798c', 
+                                       plot_letter = 'A) Áshildarholtsvatn')
 
 MYV_Fst_manhattan = Fst_manhattan(non_outs = non_outs, 
                                    outs = outs, 
@@ -1437,7 +1436,7 @@ MYV_Fst_manhattan = Fst_manhattan(non_outs = non_outs,
                                    xval = BPcum, 
                                    yval = FST_zero, 
                                    chr = non_outs$CHR, 
-                                   out_col = '#d62828', 
+                                   out_col = '#d1495b', 
                                    plot_letter = 'B) Mývatn')
 
 SKR_Fst_manhattan = Fst_manhattan(non_outs = non_outs, 
@@ -1446,7 +1445,7 @@ SKR_Fst_manhattan = Fst_manhattan(non_outs = non_outs,
                                   xval = BPcum, 
                                   yval = FST_zero, 
                                   chr = non_outs$CHR, 
-                                  out_col = '#5f0f40', 
+                                  out_col = '#30638e', 
                                   plot_letter = 'C) Sauðárkrókur')
 
 GTS_CSWY_Fst_manhattan = Fst_manhattan(non_outs = non_outs,
@@ -1455,8 +1454,8 @@ GTS_CSWY_Fst_manhattan = Fst_manhattan(non_outs = non_outs,
               xval = BPcum, 
               yval = FST_zero, 
               chr = non_outs$CHR, 
-              out_col = '#264653', 
-              plot_letter = 'D) Grettislaug-Garðsvatn comparison')
+              out_col = '#edae49', 
+              plot_letter = 'D) Grettislaug-Garðsvatn')
 
 
 Fst_man_combo = (ASHN_Fst_manhattan|MYV_Fst_manhattan)/(SKR_Fst_manhattan|GTS_CSWY_Fst_manhattan)|WC_Fst_manhattan
@@ -1756,12 +1755,12 @@ intersect(GTS_CSWY_25_top5,
 # FST 25kb manhattan plot -------------------------------------------------
 
 
-WC_25_top5 %>% 
-  filter(FST_mean >= 0.04) %>%
-  # filter(FST_mean >= 0.03) %>% 
-  # filter(FST_mean >= 0.018, 
-  #        CHR == 'chr_XIX') %>% 
-  View()
+# WC_25_top5 %>% 
+#   filter(FST_mean >= 0.04) %>%
+#   # filter(FST_mean >= 0.03) %>% 
+#   # filter(FST_mean >= 0.018, 
+#   #        CHR == 'chr_XIX') %>% 
+#   View()
 
 WC_25_top5 = read_csv('WC_25Kb_Fst_outlier.csv') 
 WC_25kb = read_tsv('WC_Fst_25Kb_3obs_window.txt') 
