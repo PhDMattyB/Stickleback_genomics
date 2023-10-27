@@ -1920,27 +1920,60 @@ ggsave(file = 'common_adapt_stickleback_FST_25KB_manhattan_plot.tiff',
        height = 15)
 
 
-# Chr XXI per population --------------------------------------------------
+# Chr XXI SNPS per population --------------------------------------------------
 
-WC_25_top5 = read_csv('WC_25Kb_Fst_outlier.csv') 
-WC_25kb = read_tsv('WC_Fst_25Kb_3obs_window.txt') 
-
-WC_25_window_xxi = Fst_manhatan_format(Fst_data = WC_25kb, 
-                                   Fst_outliers = WC_25_top5) %>% 
+ASHN_Fst_clean = read_csv('ASHN_Fst_clean.csv') %>% 
   stickle_CHR_reorder() %>% 
-  SW_dist_cal() %>% 
+  dist_cal()
+MYV_Fst_clean = read_csv('MYV_Fst_clean.csv') %>% 
+  stickle_CHR_reorder() %>% 
+  dist_cal()
+SKR_Fst_clean = read_csv('SKR_Fst_clean.csv') %>% 
+  stickle_CHR_reorder() %>% 
+  dist_cal()
+GTS_CSWY_Fst_clean = read_csv('GTS_CSWY_Fst_clean.csv') %>% 
+  stickle_CHR_reorder() %>% 
+  dist_cal()
+WC_Fst_clean = read_csv('WC_Fst_clean.csv') %>% 
+  stickle_CHR_reorder() %>% 
+  dist_cal()
+## calculate the center of the chromosome
+axisdf = axis_df(ASHN_Fst_clean)
+axisdf = axis_df(MYV_Fst_clean)
+axisdf = axis_df(SKR_Fst_clean)
+axisdf = axis_df(GTS_CSWY_Fst_clean)
+axisdf = axis_df(WC_Fst_clean)
+
+non_outs = 
+  WC_Fst_clean %>%
+  # ASHN_Fst_clean %>%
+  # MYV_Fst_clean %>%
+  # SKR_Fst_clean %>%
+  # GTS_CSWY_Fst_clean %>%
+  filter(value == 'Neutral') %>% 
   filter(CHR == 'chr_XXI')
-WC_25_axis_df = axis_df(WC_25_window_xxi)
 
-outs = WC_25_window_xxi %>% 
-  filter(value == 'Outlier')
-neutral = WC_25_window_xxi %>% 
-  filter(value == 'Neutral')
+## Get the outliers
+outs = 
+  WC_Fst_clean %>%
+  # ASHN_Fst_clean %>%
+  # MYV_Fst_clean %>%
+  # SKR_Fst_clean %>%
+  # GTS_CSWY_Fst_clean %>%
+  filter(value == 'Outlier') %>% 
+  filter(CHR == 'chr_XXI')
+
+## ASHN colour = #00798c
+## MYV colour = #d1495b
+## SKR colour = #30638e
+## GTS_CSWY colour = #edae49
+## WC colour = #439a86
 
 
-ggplot(neutral, 
-       aes(x = BPcum, 
-           y = FST_mean))+
+
+ggplot(non_outs, 
+       aes(x = POS, 
+           y = FST_zero))+
   # plot the non outliers in grey
   geom_point(color = 'grey', 
              alpha = 0.8, 
