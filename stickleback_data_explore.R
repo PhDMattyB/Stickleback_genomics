@@ -96,8 +96,8 @@ K3_melted_data = melt(K3_data,
   as_tibble() 
 
 K3_cols = c('#0081a7',
-            '#d62828',
-            '#4c956c')
+            '#f07167',
+            '#fed9b7')
 
 admixture_k3_plot = ggplot(data = K3_melted_data, 
        aes(x = reorder(order, 
