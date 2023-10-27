@@ -95,17 +95,19 @@ K3_melted_data = melt(K3_data,
                                 'individual_id')) %>% 
   as_tibble() 
 
-K3_cols = c('#0081a7',
-            '#f07167',
-            '#fed9b7')
+K3_cols = c('#edae49',
+            '#d1495b',
+            '#00798c')
 
 admixture_k3_plot = ggplot(data = K3_melted_data, 
        aes(x = reorder(order, 
                        individual_id),
            y = value, 
-           fill = variable))+
+           fill = variable), 
+       col = 'black')+
   geom_bar(stat = "identity", 
-           width = 1)+
+           width = 1, 
+           col = 'black')+
   scale_fill_manual(values = K3_cols)+
   # scale_fill_manual(values = magma(n = 4))+
   labs(x = 'Individuals', 
