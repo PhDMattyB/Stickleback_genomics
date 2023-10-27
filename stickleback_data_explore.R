@@ -1938,16 +1938,40 @@ neutral = WC_25_window_xxi %>%
   filter(value == 'Neutral')
 
 
-WC_25_region_xxi = Fst_manhattan(non_outs = neutral, 
-                                 outs = outs, 
-                                 axisdf = WC_25_axis_df, 
-                                 xval = BPcum, 
-                                 yval = FST_mean, 
-                                 chr = neutral$CHR,
-                                 out_col = '#439a86', 
-                                 plot_letter = 'E) Geothermal-Ambient comparison')
-
-
+ggplot(neutral, 
+       aes(x = BPcum, 
+           y = FST_mean))+
+  # plot the non outliers in grey
+  geom_point(color = 'grey', 
+             alpha = 0.8, 
+             size = 1.3)+
+  ## alternate colors per chromosome
+  ## plot the outliers on top of everything
+  ## currently digging this hot pink colour
+  geom_point(data = outs,
+             col = '#439a86',
+             alpha=0.8, 
+             size=1.3)+
+  scale_y_continuous(expand = c(0, 0), 
+                     limits = c(0,1.0))+
+  # geom_hline(yintercept = 0.00043, 
+  #            linetype = 2, 
+  #            col = 'Black')+
+  # ylim(0,1.0)+
+  # scale_y_reverse(expand = c(0, 0))+
+  # remove space between plot area and x axis
+  labs(x = 'Base pair', 
+       y = 'Fst', 
+       title = 'E)')+
+  theme(legend.position="none",
+        # panel.border = element_blank(),
+        panel.grid.major.x = element_blank(),
+        panel.grid.minor.x = element_blank(), 
+        axis.text.x = element_text(size = 9, 
+                                   angle = 90), 
+        axis.title = element_text(size = 14),
+        axis.title.x = element_blank(),
+        axis.text.y = element_text(size = 12))
 
 ##
 # FST 50kb region manhattan plot ------------------------------------------
