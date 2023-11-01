@@ -15,6 +15,12 @@ setwd('~/Parsons_Postdoc/')
 df = read_csv('AQ9_Tank_map_R.csv')
 
 
+tank_lookup = function(df, Side = 'all', Tank_num = "all"){
+  df %>% 
+    filter(Side == 'Cold') %>% 
+    filter(Tank_num == '249')
+}
+
 df %>% 
   filter(Side == 'Cold') %>% 
   filter(Tank_num == '249')
