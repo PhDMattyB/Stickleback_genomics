@@ -30,9 +30,9 @@ tank_lookup = function(data, Side, Side_room, Tank_num, num){
 
 tank_lookup(data = df, 
             Side,
-            Side_room = 'Cold', 
+            Side_room = 'Warm', 
             Tank_room,
-            num = '250')
+            num = '1')
 
 # 
 # 
