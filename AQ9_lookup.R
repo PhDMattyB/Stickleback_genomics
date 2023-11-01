@@ -25,7 +25,7 @@ tank_lookup = function(data, Tank_num, num){
 
 tank_lookup(data = df, 
             T,
-            num = '162')
+            num = '2')
 
 
 cross_lookup = function(data, Cross_num, num){
@@ -39,4 +39,4 @@ cross_lookup = function(data, Cross_num, num){
 
 cross_lookup(data = df, 
              T,
-             num = '95')
+             num = '214')
