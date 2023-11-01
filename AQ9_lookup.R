@@ -14,22 +14,29 @@ setwd('~/Parsons_Postdoc/')
 
 df = read_csv('AQ9_Tank_map_R.csv')
 
-tank_lookup = function(data, Side, Side_room, Tank_num, num){
-  
-  # Side <- enquo(Side)
-  # Tank_num <- enquo(Tank_num)
-  Side = rlang::parse_expr(quo_name(enquo(Side)))
+tank_lookup = function(data, Tank_num, num){
   Tank_num = rlang::parse_expr(quo_name(enquo(Tank_num)))
   
   data %>% 
-    filter(Side == Side_room, 
-           Tank_num == num) 
+    filter(Tank_num == num) 
   
 }
 
 
 tank_lookup(data = df, 
-            Side,
-            Side_room = 'Warm', 
-            Tank_room,
-            num = '1')
+            T,
+            num = '162')
+
+
+cross_lookup = function(data, Cross_num, num){
+  
+  Cross_num = rlang::parse_expr(quo_name(enquo(Cross_num)))
+  
+  data %>% 
+    filter(Cross_num == num) 
+  
+}
+
+cross_lookup(data = df, 
+             T,
+             num = '95')
