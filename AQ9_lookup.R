@@ -22,7 +22,6 @@ tank_lookup = function(data, Tank_num, num){
   
 }
 
-
 tank_lookup(data = df, 
             T,
             num = '2')
