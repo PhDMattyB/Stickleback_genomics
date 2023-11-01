@@ -33,9 +33,3 @@ tank_lookup(data = df,
             Side_room = 'Warm', 
             Tank_room,
             num = '1')
-
-# 
-# 
-# df %>% 
-#   filter(Side == 'Cold') %>% 
-#   filter(Cross_num == '203')
