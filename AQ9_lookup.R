@@ -24,7 +24,7 @@ tank_lookup = function(data, Tank_num, num){
 
 tank_lookup(data = df, 
             T,
-            num = '2')
+            num = '11')
 
 
 cross_lookup = function(data, Cross_num, num){
@@ -38,4 +38,6 @@ cross_lookup = function(data, Cross_num, num){
 
 cross_lookup(data = df, 
              T,
-             num = '214')
+             num = '64')
+
+df %>% filter(Cross_num == '64')
