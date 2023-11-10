@@ -38,6 +38,6 @@ cross_lookup = function(data, Cross_num, num){
 
 cross_lookup(data = df, 
              T,
-             num = '64')
+             num = '182')
 
-df %>% filter(Cross_num == '64')
+df %>% filter(Cross_num == '182')
