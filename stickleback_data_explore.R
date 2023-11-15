@@ -1921,7 +1921,7 @@ ggsave(file = 'common_adapt_stickleback_FST_25KB_manhattan_plot.tiff',
        plot = common_adapt, 
        dpi = 'retina', 
        units = 'cm', 
-       width = 15, 
+       width = 30, 
        height = 15)
 
 

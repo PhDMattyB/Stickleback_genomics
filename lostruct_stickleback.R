@@ -196,7 +196,10 @@ labeled_data = bind_rows(Normal_data,
 # window_distance = afvaper_region %>%
 #   dplyr::select(contains('V'))
 
-labeled_data %>% 
+MDS_cols = c('#ef476f', 
+             '#023e8a')
+
+MDS_outlier_ggplot = labeled_data %>% 
   ggplot(aes(x = MDS_Points1, 
              y = MDS_Points2,
              col = group))+
@@ -204,8 +207,25 @@ labeled_data %>%
   #            y = MDS_Points2,
   #            col = rainbow(nrow(window_distance))))+
   geom_point(size = 3) +
+  scale_color_manual(values = MDS_cols, 
+                     labels = c('MDS outlier', 
+                                'Non-outlier'))+
   labs(x = 'MDS coordinate 1', 
-       y = 'MDS coordinate 2')
+       y = 'MDS coordinate 2',)+
+  # scale_color_discrete(labels = c('MDS outlier', 
+  #                                'Non-outlier'))+
+  theme(panel.grid = element_blank(),
+        axis.title = element_text(size = 14), 
+        axis.text = element_text(size = 12), 
+        legend.title = element_blank())
+
+ggsave(file = 'Lostruct_MDS_outliers.tiff', 
+       path = '~/Parsons_Postdoc/Stickleback_Genomic/Figures/', 
+       plot = MDS_outlier_ggplot, 
+       dpi = 'retina', 
+       units = 'cm', 
+       width = 15, 
+       height = 10)
 # +
 #   theme(legend.position = 'none')
 
