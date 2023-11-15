@@ -544,6 +544,14 @@ warm2_cold2 = ies2xpehh(warm2_scan,
                       include_freq = T,
                       p.adjust.method = 'bonferroni')
 
+calc_candidate_regions(warm2_cold2,
+                       threshold = 2.313087,
+                       pval = TRUE,
+                       window_size = 1E6,
+                       overlap = 1E5,
+                       min_n_extr_mrk = 2)
+
+
 # plot
 
 warm_cold_xpehh = ggplot(warm2_cold2, 
@@ -551,7 +559,7 @@ warm_cold_xpehh = ggplot(warm2_cold2,
            XPEHH_warm2_cold2))+
   geom_point()+
   geom_hline(yintercept = 0, 
-             col = '#2a9d8f', 
+             col = '#d00000', 
              linewidth = 1)+
   # ylim(-10, 10)+ 
   labs(x = 'Position (bp)', 
@@ -564,17 +572,18 @@ ggsave('~/Parsons_Postdoc/Stickleback_Genomic/Figures/warm_cold_xpehh_stat.tiff'
        plot = warm_cold_xpehh, 
        dpi = 'retina', 
        units = 'cm',
-       width = 20.0, 
-       height = 13)
+       width = 15, 
+       height = 10)
 
 
-warm_cold_xpehh_pvalues = ggplot(warm2_cold2, 
+warm_cold_xpehh_pval = ggplot(warm2_cold2, 
        aes(POSITION, 
-           LOGPVALUE)) + 
+           LOGPVALUE))+
   geom_point()+
-  geom_hline(yintercept = 1.39, 
-             col = '#2a9d8f', 
+  geom_hline(yintercept = 2.313087, 
+             col = '#d00000', 
              linewidth = 1)+
+  # ylim(-10, 10)+ 
   labs(x = 'Position (bp)', 
        y = 'Log p-value')+
   theme(panel.grid = element_blank(), 
@@ -582,11 +591,11 @@ warm_cold_xpehh_pvalues = ggplot(warm2_cold2,
         axis.text = element_text(size = 12))
 
 ggsave('~/Parsons_Postdoc/Stickleback_Genomic/Figures/warm_cold_xpehh_pvalues.tiff', 
-       plot = warm_cold_xpehh_pvalues, 
+       plot = warm_cold_xpehh_pval, 
        dpi = 'retina', 
        units = 'cm',
-       width = 20.0, 
-       height = 13)
+       width = 15, 
+       height = 10)
 
 
 
