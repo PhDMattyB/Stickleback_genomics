@@ -45,24 +45,24 @@ myvc_ihs = ihh2ihs(myvc_scan,
                    freqbin = 1)
 
 ## plot the ihs statistic
-ggplot(myvw_ihs$ihs, 
-       aes(POSITION, 
+ggplot(myvw_ihs$ihs,
+       aes(POSITION,
            IHS))+
   geom_point()
 
-ggplot(myvc_ihs$ihs, 
-       aes(POSITION, 
+ggplot(myvc_ihs$ihs,
+       aes(POSITION,
            IHS))+
   geom_point()
 
 ## plot the pvalues
-ggplot(myvw_ihs$ihs, 
-       aes(POSITION, 
+ggplot(myvw_ihs$ihs,
+       aes(POSITION,
            LOGPVALUE))+
   geom_point()
 
-ggplot(myvc_ihs$ihs, 
-       aes(POSITION, 
+ggplot(myvc_ihs$ihs,
+       aes(POSITION,
            LOGPVALUE))+
   geom_point()
 
@@ -84,38 +84,58 @@ ggplot(myvw_myvc,
 
 ggplot(myvw_myvc, 
        aes(POSITION, 
-           LOGPVALUE)) + geom_point()
+           LOGPVALUE)) + 
+  geom_point()+
+  geom_hline(yintercept = 2.313087)
 
 
 
-# Haplotype structure around selection target 
-hit = myvw_myvc %>% 
-  arrange(desc(LOGPVALUE)) %>% 
-  top_n(1)
 
-# get SNP position
-x = hit$POSITION
-
-marker_id_warm = which(myvw@positions == x)
-marker_id_cold = which(myvc@positions == x)
-
-myvw_furcation = calc_furcation(myvw, 
-                                mrk = marker_id_warm)
-
-myvc_furcation = calc_furcation(myvc, 
-                                mrk = marker_id_cold )
+rsb_myvw_myvc <- ines2rsb(scan_pop1 = myvw_scan,
+                        scan_pop2 = myvc_scan,
+                        popname1 = "MYVW",
+                        popname2 = "MYVC")
 
 
-plot(myvw_furcation, 
-     xlim = c(58695, 17420697))
-plot(myvc_furcation, 
-     xlim = c(58695, 17420697))
+ggplot(data = rsb_myvw_myvc, 
+       aes(x = POSITION, 
+           y = RSB_MYVW_MYVC))+
+  geom_point()
 
-myvw_haplen = calc_haplen(myvw_furcation)
-myvc_haplen = calc_haplen(myvc_furcation)
+ggplot(data = rsb_myvw_myvc, 
+       aes(x = POSITION, 
+           y = LOGPVALUE))+
+  geom_point()+
+  geom_hline(yintercept = 2.313087)
 
-plot(myvw_haplen)
-plot(myvc_haplen)
+# # Haplotype structure around selection target 
+# hit = myvw_myvc %>% 
+#   arrange(desc(LOGPVALUE)) %>% 
+#   top_n(1)
+# 
+# # get SNP position
+# x = hit$POSITION
+# 
+# marker_id_warm = which(myvw@positions == x)
+# marker_id_cold = which(myvc@positions == x)
+# 
+# myvw_furcation = calc_furcation(myvw, 
+#                                 mrk = marker_id_warm)
+# 
+# myvc_furcation = calc_furcation(myvc, 
+#                                 mrk = marker_id_cold )
+# 
+# 
+# plot(myvw_furcation, 
+#      xlim = c(58695, 17420697))
+# plot(myvc_furcation, 
+#      xlim = c(58695, 17420697))
+# 
+# myvw_haplen = calc_haplen(myvw_furcation)
+# myvc_haplen = calc_haplen(myvc_furcation)
+# 
+# plot(myvw_haplen)
+# plot(myvc_haplen)
 
 
 # ASHN signatures of selection ------------------------------------------
@@ -146,26 +166,26 @@ ashnc_ihs = ihh2ihs(ashnc_scan,
                    freqbin = 1)
 
 ## plot the ihs statistic
-ggplot(ashnw_ihs$ihs, 
-       aes(POSITION, 
-           IHS))+
-  geom_point()
-
-ggplot(ashnc_ihs$ihs, 
-       aes(POSITION, 
-           IHS))+
-  geom_point()
-
-## plot the pvalues
-ggplot(ashnw_ihs$ihs, 
-       aes(POSITION, 
-           LOGPVALUE))+
-  geom_point()
-
-ggplot(ashnc_ihs$ihs, 
-       aes(POSITION, 
-           LOGPVALUE))+
-  geom_point()
+# ggplot(ashnw_ihs$ihs, 
+#        aes(POSITION, 
+#            IHS))+
+#   geom_point()
+# 
+# ggplot(ashnc_ihs$ihs, 
+#        aes(POSITION, 
+#            IHS))+
+#   geom_point()
+# 
+# ## plot the pvalues
+# ggplot(ashnw_ihs$ihs, 
+#        aes(POSITION, 
+#            LOGPVALUE))+
+#   geom_point()
+# 
+# ggplot(ashnc_ihs$ihs, 
+#        aes(POSITION, 
+#            LOGPVALUE))+
+#   geom_point()
 
 
 
@@ -246,26 +266,26 @@ skrc_ihs = ihh2ihs(skrc_scan,
                    freqbin = 1)
 
 ## plot the ihs statistic
-ggplot(skrw_ihs$ihs, 
-       aes(POSITION, 
-           IHS))+
-  geom_point()
-
-ggplot(skrc_ihs$ihs, 
-       aes(POSITION, 
-           IHS))+
-  geom_point()
-
-## plot the pvalues
-ggplot(skrw_ihs$ihs, 
-       aes(POSITION, 
-           LOGPVALUE))+
-  geom_point()
-
-ggplot(skrc_ihs$ihs, 
-       aes(POSITION, 
-           LOGPVALUE))+
-  geom_point()
+# ggplot(skrw_ihs$ihs, 
+#        aes(POSITION, 
+#            IHS))+
+#   geom_point()
+# 
+# ggplot(skrc_ihs$ihs, 
+#        aes(POSITION, 
+#            IHS))+
+#   geom_point()
+# 
+# ## plot the pvalues
+# ggplot(skrw_ihs$ihs, 
+#        aes(POSITION, 
+#            LOGPVALUE))+
+#   geom_point()
+# 
+# ggplot(skrc_ihs$ihs, 
+#        aes(POSITION, 
+#            LOGPVALUE))+
+#   geom_point()
 
 
 
