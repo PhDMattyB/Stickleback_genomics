@@ -239,6 +239,35 @@ Outlier_plots(outlier_data = MDS_outliers,
               normal_data = Normal_data)
 
 
+MDS_Outlier_basepair = Normal_data %>% 
+  ggplot(aes(x = X4, 
+             y = abs(MDS_Points1)))+
+  geom_point(col = 'Grey', 
+             size = 3)+
+  geom_point(data = MDS_outliers, 
+             aes(x = X4, 
+                 y = abs(MDS_Points1)),
+             col = '#ef476f',
+             size = 3)+
+  labs(x = 'Mean window position (bp)', 
+       y = 'MDS score (axis 1)')+
+  theme(
+    legend.position = 'none',
+    panel.grid.major = element_blank(), 
+    panel.grid.minor = element_blank(), 
+    axis.title = element_text(size = 14), 
+    axis.text = element_text(size = 12)
+  )
+
+ggsave(file = 'Lostruct_MDS_outliers_basepair_position.tiff', 
+       path = '~/Parsons_Postdoc/Stickleback_Genomic/Figures/', 
+       plot = MDS_Outlier_basepair, 
+       dpi = 'retina', 
+       units = 'cm', 
+       width = 15, 
+       height = 10)
+
+
 
 # Calculate window size - 50 snp windows ----------------------------------
 
