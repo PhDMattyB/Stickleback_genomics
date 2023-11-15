@@ -1728,14 +1728,14 @@ fst_25_position = fst_25_position %>%
 # MYV_50kb = read_tsv('MYV_Fst_50Kb_3obs_window.txt')
 # SKR_50kb = read_tsv('SKR_Fst_50Kb_3obs_window.txt')
 # GTS_CSWY_50kb = read_tsv('GTS_CSWY_Fst_50Kb_3obs_window.txt')
-# WC_25kb = read_tsv('WC_Fst_25Kb_3obs_window.txt')
+WC_25kb = read_tsv('WC_Fst_25Kb_3obs_window.txt')
 ASHN_25kb = read_tsv('ASHN_Fst_25Kb_3obs_window.txt')
 MYV_25kb = read_tsv('MYV_Fst_25Kb_3obs_window.txt')
 SKR_25kb = read_tsv('SKR_Fst_25Kb_3obs_window.txt')
 GTS_CSWY_25kb = read_tsv('GTS_CSWY_Fst_25Kb_3obs_window.txt')
-GTS_CSWY_25kb %>% 
-  SW_top_5_outliers() %>% 
-  write_csv('GTS_CSWY_25Kb_Fst_outlier.csv')
+# GTS_CSWY_25kb %>% 
+#   SW_top_5_outliers() %>% 
+#   write_csv('GTS_CSWY_25Kb_Fst_outlier.csv')
 
 
 
@@ -1761,6 +1761,11 @@ intersect(GTS_CSWY_25_top5,
 #   # filter(FST_mean >= 0.018, 
 #   #        CHR == 'chr_XIX') %>% 
 #   View()
+# location_cols = c('#00798c',
+#                   '#003d5b',
+#                   '#edae49',
+#                   '#d1495b',
+#                   '#30638e')
 
 WC_25_top5 = read_csv('WC_25Kb_Fst_outlier.csv') 
 WC_25kb = read_tsv('WC_Fst_25Kb_3obs_window.txt') 
@@ -1783,8 +1788,8 @@ WC_25_region_man = Fst_manhattan(non_outs = neutral,
                               xval = BPcum, 
                               yval = FST_mean, 
                               chr = neutral$CHR,
-                              out_col = '#439a86', 
-                              plot_letter = 'E) Geothermal-Ambient comparison')
+                              out_col = '#fb6f92', 
+                              plot_letter = 'E) Common geothermal-Ambient comparison')
  
 ASHN_25_top5 = read_csv('ASHN_25Kb_Fst_outlier.csv') 
 ASHN_25kb = read_tsv('ASHN_Fst_25Kb_3obs_window.txt') 
