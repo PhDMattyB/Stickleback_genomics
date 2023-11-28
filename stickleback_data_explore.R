@@ -92,6 +92,12 @@ K3_data = bind_cols(identifiers,
 
 K3_data = read_csv('Admixture_K3_Data.csv')
 
+K3_data %>% 
+  group_by(population) %>% 
+  summarize(n = n())
+
+
+
 K3_melted_data = melt(K3_data, 
                     id.vars = c('Plot_order', 
                                 'order',
@@ -352,6 +358,12 @@ stickle_plot = mutate(.data = stickle_plot,
                         population == 'SKRC' ~ 'Ambient',
                         population == 'SKRW' ~ 'Geothermal'
                       )))
+
+
+stickle_plot %>% 
+  group_by(Location) %>% 
+  summarize(n = n())
+
 
 ##
 # pca plot ----------------------------------------------------------------
