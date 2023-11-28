@@ -23,9 +23,13 @@ iceland_map = ggplot(map_data) +
            aes(x = long, 
                y = lat, 
                map_id = region), 
-           col = 'black', 
-           fill = 'white')
+           col = 'black',
+           size = 1,
+           fill = 'white')+
+  theme(panel.grid = element_blank(), 
+        axis.title = element_blank(), 
+        axis.text = element_blank())
 
-ggsave('Iceland_map.tiff', 
+ggsave('Iceland_map_skinny.tiff', 
        plot = iceland_map, 
        dpi = 'retina')
