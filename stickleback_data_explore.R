@@ -159,6 +159,78 @@ ggsave('admixture_k3_GTS_MYV_other.tiff',
        width = 35, 
        height = 10)
 
+
+# admixture k3 inversion region -------------------------------------------
+K3_Qval = read_table('chr21_inversion_region.3.Q', 
+                     col_names = c('Q1', 
+                                   'Q2', 
+                                   'Q3'))
+
+identifiers = read_csv('stickleback_identifiers.csv')
+identifiers = identifiers %>% 
+  rowid_to_column() %>% 
+  rename(order = rowid)
+
+K3_data = bind_cols(identifiers, 
+                    K3_Qval)%>% 
+  write_csv('Admixture_inversion_region_K3.csv')
+
+
+K3_data = read_csv('Admixture_inversion_region_K3.csv')
+
+K3_melted_data = melt(K3_data, 
+                      id.vars = c('Plot_order',
+                                  'order',
+                                  'population', 
+                                  'individual_id')) %>% 
+  as_tibble() 
+
+location_cols = c('#edae49',
+                  '#d1495b',
+                  '#00798c')
+                  
+
+K3_inversion_plot = ggplot(data = K3_melted_data, 
+                           aes(x = reorder(Plot_order, 
+                                           individual_id),
+                               y = value, 
+                               fill = variable), 
+                           col = 'black')+
+  geom_bar(stat = "identity", 
+           width = 1, 
+           col = 'black')+
+  scale_fill_manual(values = location_cols)+
+  # scale_fill_manual(values = magma(n = 4))+
+  labs(x = 'Individuals', 
+       y = 'Ancestry proportion')+
+  theme(axis.text.y = element_text(color = 'black', 
+                                   size = 12),
+        axis.title.y = element_text(color = 'black', 
+                                    size = 14),
+        axis.text.x = element_blank(),
+        axis.title.x = element_blank(),
+        axis.ticks.x = element_blank(),
+        ## can add xaxis labels if needed
+        # axis.text.x = element_text(angle = 90,
+        #                            hjust = 1,
+        #                            vjust = -0.09,
+        #                            size = 8,
+        #                            color = 'black'),
+        legend.position = 'none')+
+  scale_x_discrete(guide = guide_axis(n.dodge = 5))+
+  scale_y_continuous(expand = c(0,0))
+
+K3_inversion_plot
+
+ggsave('admixture_k3_GTS_MYV_other.tiff',
+       plot = admixture_k3_plot, 
+       dpi = 'retina', 
+       units = 'cm', 
+       width = 35, 
+       height = 10)
+
+
+
 # admixture results -------------------------------------------------------
 setwd('Parsons_Postdoc/Stickleback_Genomic/vcf_filter/')
 
