@@ -65,6 +65,100 @@ cross_num %>%
 
 
 
+# admixture inversion region ----------------------------------------------
+
+inversion_map = read_tsv('chr21_inversion_region.map', 
+                         col_names = c('Chromosome', 
+                                       'SNP',
+                                       'GPos', 
+                                       'PPos')) %>% 
+  Chr_convert() %>% 
+  select(-Chromosome) %>% 
+  select(chr_num, 
+         SNP, 
+         GPos, 
+         PPos) %>% 
+  write_tsv('chr21_inversion_map_fixed.map', 
+            col_names = F)
+
+inversion_ped = read_table('chr21_inversion_region.ped', 
+                           col_names = F)
+
+
+
+# admixture K4 chr21 inversion regions ---------------------------------------
+## the cv error for K4 is the best. 
+## check what k5 looks like as well. 
+
+K4_Qval = read_table('chr21_inversion_region.4.Q', 
+                     col_names = c('Q1', 
+                                   'Q2', 
+                                   'Q3', 
+                                   'Q4'))
+
+identifiers = read_csv('stickleback_identifiers.csv')
+identifiers = identifiers %>% 
+  rowid_to_column() %>% 
+  rename(order = rowid)
+
+K4_data = bind_cols(identifiers, 
+                    K4_Qval)%>% 
+  write_csv('Admixture_inversion_region_K4.csv')
+
+
+K4_data = read_csv('Admixture_inversion_region_K4.csv')
+
+K4_melted_data = melt(K4_data, 
+                      id.vars = c('Plot_order',
+                        'order',
+                                  'population', 
+                                  'individual_id')) %>% 
+  as_tibble() 
+
+K4_cols = c('#00798c',
+            '#003d5b',
+            '#edae49',
+            '#d1495b')
+
+k4_inversion_plot = ggplot(data = K4_melted_data, 
+                           aes(x = reorder(Plot_order, 
+                                           individual_id),
+                               y = value, 
+                               fill = variable), 
+                           col = 'black')+
+  geom_bar(stat = "identity", 
+           width = 1, 
+           col = 'black')+
+  scale_fill_manual(values = K4_cols)+
+  # scale_fill_manual(values = magma(n = 4))+
+  labs(x = 'Individuals', 
+       y = 'Ancestry proportion')+
+  theme(axis.text.y = element_text(color = 'black', 
+                                   size = 12),
+        axis.title.y = element_text(color = 'black', 
+                                    size = 14),
+        axis.text.x = element_blank(),
+        axis.title.x = element_blank(),
+        axis.ticks.x = element_blank(),
+        ## can add xaxis labels if needed
+        # axis.text.x = element_text(angle = 90,
+        #                            hjust = 1,
+        #                            vjust = -0.09,
+        #                            size = 8,
+        #                            color = 'black'),
+        legend.position = 'none')+
+  scale_x_discrete(guide = guide_axis(n.dodge = 5))+
+  scale_y_continuous(expand = c(0,0))
+
+k4_inversion_plot
+
+ggsave('admixture_k3_GTS_MYV_other.tiff',
+       plot = admixture_k3_plot, 
+       dpi = 'retina', 
+       units = 'cm', 
+       width = 35, 
+       height = 10)
+
 # admixture results -------------------------------------------------------
 setwd('Parsons_Postdoc/Stickleback_Genomic/vcf_filter/')
 
@@ -76,9 +170,9 @@ K3_Qval = read_table('stickleback_maf0.05_ldpruned_filter_chr_fix.3.Q',
                    col_names = c('Q1', 
                                  'Q2', 
                                  'Q3'))
-# K3_Pval = read_tsv('stickleback_maf0.05_ldpruned_filter_chr_fix.3.P', 
-#                    col_names = c('P1', 
-#                                  'P2', 
+# K3_Pval = read_table('stickleback_maf0.05_ldpruned_filter_chr_fix.3.P',
+#                    col_names = c('P1',
+#                                  'P2',
 #                                  'P3'))
 
 identifiers = read_csv('stickleback_identifiers.csv')
