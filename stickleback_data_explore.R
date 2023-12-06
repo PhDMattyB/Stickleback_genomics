@@ -2151,7 +2151,6 @@ WC_25_window = Fst_manhatan_format(Fst_data = WC_25kb,
                                    Fst_outliers = WC_25_top5) %>% 
   stickle_CHR_reorder() %>% 
   SW_dist_cal()
-WC_25_axis_df = axis_df(WC_25_window)
 
 outs = WC_25_window %>% 
   filter(value == 'Outlier')
@@ -2159,6 +2158,15 @@ neutral = WC_25_window %>%
   filter(value == 'Neutral')
 
 
+outs %>% 
+  group_by(CHR) %>% 
+  summarize(out_num_chr = n(),
+            mean_win_spot = mean(BPcum),
+    FST_mean_chr = mean(FST_mean)) %>% 
+  View()
+
+
+##
 # Chr XXI SNPS per population --------------------------------------------------
 
 ASHN_Fst_clean = read_csv('ASHN_Fst_clean.csv') %>% 
