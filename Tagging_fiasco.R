@@ -121,3 +121,55 @@ body_length_plot = ggplot(data = fiasco_data)+
 ggsave('body_length_plot.tiff', 
        plot = body_length_plot, 
        dpi = 'retina')
+
+
+
+# Fiasco Round 2 ----------------------------------------------------------
+
+# 06.12.2023 --------------------------------------------------------------
+
+tag_data = read_csv('Tagging_Scar_data.csv')
+
+## In Aquarium 5, How many fish have scars? 
+tag_data %>% 
+  filter(Aquarium == 'AQ5') %>% 
+  summarize(sum(Num_scarred))
+
+## Whats the proportion of all fish that have scars? 
+
+tag_data %>% 
+  filter(Aquarium == 'AQ5') %>% 
+  summarize(sum(Num_Tank))
+## total number of fish is 465
+
+tag_data %>% 
+  filter(Aquarium == 'AQ5') %>% 
+  group_by(Tagged) %>% 
+  mutate(prop_scar_all = Num_scarred/465) %>% 
+  summarize(mean_prop_scar = mean(prop_scar_all)) %>% 
+  mutate(percent_scarring = mean_prop_scar*100)
+
+## Less then a percentage of all fish in AQ5 have a scar from tagging
+
+
+## What is the proportion of tagged fish that have scars? 
+tag_data %>% 
+  filter(Aquarium == 'AQ5', 
+         Tagged == 'Yes') %>% 
+  summarize(sum(Num_Tank))
+## total number of tagged fish is 228
+
+tag_data %>% 
+  filter(Aquarium == 'AQ5') %>% 
+  group_by(Tagged) %>% 
+  mutate(prop_scar_all = Num_scarred/228) %>% 
+  summarize(mean_prop_scar = mean(prop_scar_all)) %>% 
+  mutate(percent_scarring = mean_prop_scar*100)
+
+## Even out of the tagged fish in AQ5
+## the amount of scaring is less than 1% of the population
+
+
+
+
+
