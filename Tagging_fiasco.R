@@ -125,7 +125,6 @@ ggsave('body_length_plot.tiff',
 
 
 # Fiasco Round 2 ----------------------------------------------------------
-
 # 06.12.2023 --------------------------------------------------------------
 
 tag_data = read_csv('Tagging_Scar_data.csv')
@@ -170,6 +169,23 @@ tag_data %>%
 ## the amount of scaring is less than 1% of the population
 
 
+## Out of the tagged fish in AQ9, whats the proportion of scarring? 
+
+tag_data %>% 
+  filter(Aquarium == 'AQ9', 
+         Tagged == 'Yes') %>% 
+  summarize(sum(Num_Tank))
+## total number of tagged fish is 119
+
+tag_data %>% 
+  filter(Aquarium == 'AQ9') %>% 
+  group_by(Tagged) %>% 
+  mutate(prop_scar_all = Num_scarred/119) %>% 
+  summarize(mean_prop_scar = mean(prop_scar_all)) %>% 
+  mutate(percent_scarring = mean_prop_scar*100)
+
+## In AQ9 the chance that a fish gets a scar when it's tagged
+## is still under 1% of the tagged fish
 
 
 
