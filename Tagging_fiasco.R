@@ -147,7 +147,6 @@ tag_data %>%
 
 
 ## Whats the proportion of all fish that have scars? 
-
 tag_data %>% 
   filter(Aquarium == 'AQ5') %>% 
   summarize(sum(Num_Tank))
