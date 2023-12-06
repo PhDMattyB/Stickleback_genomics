@@ -152,8 +152,8 @@ k4_inversion_plot = ggplot(data = K4_melted_data,
 
 k4_inversion_plot
 
-ggsave('admixture_k3_GTS_MYV_other.tiff',
-       plot = admixture_k3_plot, 
+ggsave('Chr21_inversion_admixture_K4.tiff',
+       plot = k4_inversion_plot, 
        dpi = 'retina', 
        units = 'cm', 
        width = 35, 
@@ -1959,6 +1959,45 @@ outs = WC_25_window %>%
 neutral = WC_25_window %>% 
   filter(value == 'Neutral')
 
+WC_25_Zoomed_plot = ggplot(neutral, 
+       aes(x = BPcum, 
+           y = FST_mean))+
+  # plot the non outliers in grey
+  geom_point(aes(color = as.factor(CHR)), 
+             alpha = 0.8, 
+             size = 1.3)+
+  ## alternate colors per chromosome
+  scale_color_manual(values = rep(c("grey", "dimgrey"), 39))+
+  ## plot the outliers on top of everything
+  ## currently digging this hot pink colour
+  geom_point(data = outs,
+             col = '#fb6f92',
+             alpha=0.8, 
+             size=1.3)+
+  scale_x_continuous(label = WC_25_axis_df$CHR, 
+                     breaks = WC_25_axis_df$center)+
+  scale_y_continuous(expand = c(0, 0), 
+                     limits = c(0,0.10))+
+  labs(x = 'Cumulative base pair', 
+       y = 'Fst', 
+       title = 'A)')+
+  theme(legend.position="none",
+        # panel.border = element_blank(),
+        panel.grid.major.x = element_blank(),
+        panel.grid.minor.x = element_blank(), 
+        axis.text.x = element_text(size = 9, 
+                                   angle = 90), 
+        axis.title = element_text(size = 14),
+        axis.title.x = element_blank(),
+        axis.text.y = element_text(size = 12))
+
+ggsave(file = 'Zoomed_common_adapt_stickleback_FST_25KB_manhattan_plot.tiff', 
+       path = '~/Parsons_Postdoc/Stickleback_Genomic/Figures/', 
+       plot = WC_25_Zoomed_plot, 
+       dpi = 'retina', 
+       units = 'cm', 
+       width = 30, 
+       height = 15)
 
 WC_25_region_man = Fst_manhattan(non_outs = neutral, 
                               outs = outs, 
@@ -2101,6 +2140,23 @@ ggsave(file = 'common_adapt_stickleback_FST_25KB_manhattan_plot.tiff',
        units = 'cm', 
        width = 30, 
        height = 15)
+
+
+# WC_outliers_per_chr -----------------------------------------------------
+
+WC_25_top5 = read_csv('WC_25Kb_Fst_outlier.csv') 
+WC_25kb = read_tsv('WC_Fst_25Kb_3obs_window.txt') 
+
+WC_25_window = Fst_manhatan_format(Fst_data = WC_25kb, 
+                                   Fst_outliers = WC_25_top5) %>% 
+  stickle_CHR_reorder() %>% 
+  SW_dist_cal()
+WC_25_axis_df = axis_df(WC_25_window)
+
+outs = WC_25_window %>% 
+  filter(value == 'Outlier')
+neutral = WC_25_window %>% 
+  filter(value == 'Neutral')
 
 
 # Chr XXI SNPS per population --------------------------------------------------
