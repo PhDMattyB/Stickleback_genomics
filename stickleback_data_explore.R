@@ -2158,11 +2158,14 @@ neutral = WC_25_window %>%
   filter(value == 'Neutral')
 
 
-outs %>% 
-  group_by(CHR) %>% 
+## Need the ratio of outlier loci to neutral loci across each chromsome
+WC_25_window %>% 
+  group_by(CHR, 
+           value) %>% 
   summarize(out_num_chr = n(),
-            mean_win_spot = mean(BPcum),
+            mean_win_spot = mean(win_mid),
     FST_mean_chr = mean(FST_mean)) %>% 
+  mutate()
   View()
 
 
