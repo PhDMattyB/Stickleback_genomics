@@ -133,6 +133,18 @@ tag_data = read_csv('Tagging_Scar_data.csv')
 tag_data %>% 
   filter(Aquarium == 'AQ5') %>% 
   summarize(sum(Num_scarred))
+## 10 fish have scars in AQ5
+
+## Whats the total amount of tagged fish? 
+tag_data %>% 
+  filter(Aquarium == 'AQ5', 
+         Tagged == 'Yes') %>% 
+  summarize(sum(Num_Tank))
+## there are 228 tagged fish in AQ5
+
+10/228*100
+## The percentage of tagged fish with scars is 4%
+
 
 ## Whats the proportion of all fish that have scars? 
 
@@ -141,51 +153,26 @@ tag_data %>%
   summarize(sum(Num_Tank))
 ## total number of fish is 465
 
+10/465*100
+
+## The percentage of scarring out of all fish is 2%
+
+## Aquarium 9
+## Number of Fish with scars? 
 tag_data %>% 
-  filter(Aquarium == 'AQ5') %>% 
-  group_by(Tagged) %>% 
-  mutate(prop_scar_all = Num_scarred/465) %>% 
-  summarize(mean_prop_scar = mean(prop_scar_all)) %>% 
-  mutate(percent_scarring = mean_prop_scar*100)
-
-## Less then a percentage of all fish in AQ5 have a scar from tagging
-
-
-## What is the proportion of tagged fish that have scars? 
-tag_data %>% 
-  filter(Aquarium == 'AQ5', 
-         Tagged == 'Yes') %>% 
+  filter(Aquarium == 'AQ9', 
+         Scar == 'Yes') %>% 
   summarize(sum(Num_Tank))
-## total number of tagged fish is 228
 
-tag_data %>% 
-  filter(Aquarium == 'AQ5') %>% 
-  group_by(Tagged) %>% 
-  mutate(prop_scar_all = Num_scarred/228) %>% 
-  summarize(mean_prop_scar = mean(prop_scar_all)) %>% 
-  mutate(percent_scarring = mean_prop_scar*100)
-
-## Even out of the tagged fish in AQ5
-## the amount of scaring is less than 1% of the population
-
-
-## Out of the tagged fish in AQ9, whats the proportion of scarring? 
-
+## Number of fish that are tagged? 
 tag_data %>% 
   filter(Aquarium == 'AQ9', 
          Tagged == 'Yes') %>% 
   summarize(sum(Num_Tank))
-## total number of tagged fish is 119
 
-tag_data %>% 
-  filter(Aquarium == 'AQ9') %>% 
-  group_by(Tagged) %>% 
-  mutate(prop_scar_all = Num_scarred/119) %>% 
-  summarize(mean_prop_scar = mean(prop_scar_all)) %>% 
-  mutate(percent_scarring = mean_prop_scar*100)
+## percentage of tagged fish with scars? 
+8/119*100
 
-## In AQ9 the chance that a fish gets a scar when it's tagged
-## is still under 1% of the tagged fish
-
+## The percentage of tagged fish in scars in AQ9 is 6%
 
 
