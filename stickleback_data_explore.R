@@ -2190,8 +2190,56 @@ WC_25_window_sum %>%
 
 ## We want the concentration of outliers along the chromosome. 
 
+chr21_outs = outs %>% 
+  filter(CHR == 'chr_XXI')
 
+chr21_neut = neutral %>% 
+  filter(CHR == 'chr_XXI')
 
+chr21_axis_df = WC_25_axis_df %>% 
+  filter(CHR == 'chr_XXI')
+
+chr21_Fst_25kb_win = ggplot(chr21_neut, 
+                           aes(x = BPcum, 
+                               y = FST_mean))+
+  # plot the non outliers in grey
+  geom_point(aes(color = as.factor(CHR)), 
+             alpha = 0.8, 
+             size = 1.3)+
+  ## alternate colors per chromosome
+  scale_color_manual(values = rep(c("grey", "dimgrey"), 39))+
+  ## plot the outliers on top of everything
+  ## currently digging this hot pink colour
+  geom_point(data = chr21_outs,
+             col = '#fb6f92',
+             alpha=0.8, 
+             size=1.3)+
+  scale_x_continuous(label = chr21_axis_df$CHR, 
+                     breaks = chr21_axis_df$center)+
+  scale_y_continuous(expand = c(0, 0), 
+                     limits = c(0,0.05))+
+  labs(x = 'Cumulative base pair', 
+       y = 'Fst', 
+       title = 'A)')+
+  theme(legend.position="none",
+        # panel.border = element_blank(),
+        panel.grid.major.x = element_blank(),
+        panel.grid.minor.x = element_blank(), 
+        # axis.text.x = element_text(size = 9, 
+        #                            angle = 90), 
+        axis.title = element_text(size = 14),
+        axis.title.x = element_blank(),
+        axis.text.y = element_text(size = 12), 
+        axis.text.x = element_blank(), 
+        axis.ticks.x = element_blank())
+
+ggsave(file = 'Zoomed_common_adapt_stickleback_FST_25KB_manhattan_plot.tiff', 
+       path = '~/Parsons_Postdoc/Stickleback_Genomic/Figures/', 
+       plot = WC_25_Zoomed_plot, 
+       dpi = 'retina', 
+       units = 'cm', 
+       width = 30, 
+       height = 15)
 ##
 # Chr XXI SNPS per population --------------------------------------------------
 
