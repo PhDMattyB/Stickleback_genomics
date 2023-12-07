@@ -2204,11 +2204,11 @@ chr21_Fst_25kb_win = ggplot(chr21_neut,
                                y = FST_mean))+
   geom_point(col = 'grey', 
              alpha = 0.8, 
-             size = 1.3)+
+             size = 2)+
   geom_point(data = chr21_outs,
              col = '#fb6f92',
              alpha=0.8, 
-             size=1.3)+
+             size=2)+
   scale_y_continuous(expand = c(0, 0), 
                      limits = c(0,0.05))+
   labs(x = 'Base pair position', 
@@ -2220,13 +2220,13 @@ chr21_Fst_25kb_win = ggplot(chr21_neut,
         axis.title = element_text(size = 14),
         axis.text = element_text(size = 12))
 
-ggsave(file = 'Zoomed_common_adapt_stickleback_FST_25KB_manhattan_plot.tiff', 
+ggsave(file = 'Zoomed_chr21_FST_25KB_manhattan_plot.tiff', 
        path = '~/Parsons_Postdoc/Stickleback_Genomic/Figures/', 
-       plot = WC_25_Zoomed_plot, 
+       plot = chr21_Fst_25kb_win, 
        dpi = 'retina', 
        units = 'cm', 
-       width = 30, 
-       height = 15)
+       width = 15, 
+       height = 10)
 ##
 # Chr XXI SNPS per population --------------------------------------------------
 
