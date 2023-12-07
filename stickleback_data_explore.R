@@ -2159,14 +2159,37 @@ neutral = WC_25_window %>%
 
 
 ## Need the ratio of outlier loci to neutral loci across each chromsome
-WC_25_window %>% 
-  group_by(CHR, 
-           value) %>% 
-  summarize(out_num_chr = n(),
-            mean_win_spot = mean(win_mid),
-    FST_mean_chr = mean(FST_mean)) %>% 
-  mutate()
-  View()
+
+out_dat = outs %>%
+  group_by(CHR) %>% 
+  summarize(out_num_chr_out = n(), 
+            mean_win_spot_out = mean(win_mid), 
+            FST_mean_chr_out = mean(FST_mean))
+
+neutral_dat = neutral %>% 
+  group_by(CHR) %>% 
+  summarize(out_num_chr_neutral = n(), 
+            mean_win_spot_neutral = mean(win_mid), 
+            FST_mean_chr_neutral = mean(FST_mean))
+
+WC_25_window_sum = full_join(out_dat, 
+          neutral_dat)
+
+WC_25_window_sum %>% 
+  group_by(CHR) %>% 
+  mutate(ratio_outs_neutral = out_num_chr_out/out_num_chr_neutral) %>% 
+  select(CHR, 
+         FST_mean_chr_out, 
+         FST_mean_chr_neutral, 
+         ratio_outs_neutral) 
+## Third most outliers compared to neutral snps
+
+## But we want to see if it has the most SNPs within a given location
+## That's what matters, are all of the outlier snps that we see within
+## a specific genomic range along the chromosome. 
+
+## We want the concentration of outliers along the chromosome. 
+
 
 
 ##
