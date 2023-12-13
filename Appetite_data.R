@@ -34,7 +34,10 @@ appetite_means = appetite_data %>%
            Type) %>% 
   summarise(mean_pellets = mean(pellets_eaten))
 
-
+appetite_data %>% 
+  group_by(pair, 
+           source_temp) %>% 
+  summarize(n = n())
 
 # statistical test --------------------------------------------------------
 ## geothermal fish eat more pellets than ambient fish
