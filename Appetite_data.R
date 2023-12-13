@@ -127,11 +127,12 @@ eating_time_plot = ggplot(data = Time_format,
   theme(panel.grid = element_blank(), 
         axis.title.x = element_blank(), 
         axis.title.y = element_text(size = 14), 
-        axis.text = element_text(size = 12))
+        axis.text = element_text(size = 12), 
+        legend.position = 'none')
 
 eating_time_plot
 
-ggsave('Time_spent_eating_difference.tiff', 
+ggsave('~/Parsons_Postdoc/Stickleback_Genomic/Figures/Time_spent_eating.tiff', 
        plot = eating_time_plot, 
        dpi = 'retina', 
        units = 'cm', 
