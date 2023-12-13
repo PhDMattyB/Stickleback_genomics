@@ -70,10 +70,11 @@ appetite_plot = ggplot(data = appetite_data,
     theme(panel.grid = element_blank(), 
           axis.title.x = element_blank(), 
           axis.title.y = element_text(size = 14), 
-          axis.text = element_text(size = 12))
+          axis.text = element_text(size = 12), 
+          legend.position = 'none')
 
 
-ggsave('Appetite_difference.tiff', 
+ggsave('~/Parsons_Postdoc/Stickleback_Genomic/Figures/appetite_plot.tiff', 
        plot = appetite_plot, 
        dpi = 'retina', 
        units = 'cm', 
