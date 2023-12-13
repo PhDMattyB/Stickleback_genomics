@@ -25,8 +25,7 @@ low_food_warm = treatment_data %>%
   #        Population == 'ACAC') %>% 
   filter(Treatment == 'Low Food', 
          Temperature == '18') %>% 
-  group_by(Population, 
-           Rep, 
+  group_by(Rep, 
            Temperature)%>% 
   rename(Pop = Population, 
          Temp = Temperature) %>% 
@@ -52,8 +51,7 @@ high_food_warm = treatment_data %>%
   #        Population == 'ACAC') %>% 
   filter(Treatment == 'High Food', 
          Temperature == '18') %>% 
-  group_by(Population, 
-           Rep, 
+  group_by(Rep, 
            Temperature)%>% 
   rename(Pop = Population, 
          Temp = Temperature) %>% 
@@ -240,8 +238,7 @@ low_food_cold = treatment_data %>%
   #        Population == 'ACAC') %>% 
   filter(Treatment == 'Low Food', 
          Temperature == '12') %>% 
-  group_by(Population, 
-           Rep, 
+  group_by(Rep, 
            Temperature)%>% 
   rename(Pop = Population, 
          Temp = Temperature) %>% 
@@ -271,8 +268,7 @@ high_food_cold = treatment_data %>%
   #        Population == 'ACAC') %>% 
   filter(Treatment == 'High Food', 
          Temperature == '12') %>% 
-  group_by(Population, 
-           Rep, 
+  group_by(Rep, 
            Temperature)%>% 
   rename(Pop = Population, 
          Temp = Temperature) %>% 
