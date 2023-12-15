@@ -41,10 +41,10 @@ appetite_data %>%
 
 # statistical test --------------------------------------------------------
 ## geothermal fish eat more pellets than ambient fish
-aov_test = aov(pellets_eaten ~ pair*source_temp, 
+pellet_aov = aov(pellets_eaten ~ pair*source_temp, 
                data = appetite_data)
 
-summary(aov_test)
+summary(pellet_aov)
 
 
 # plot it up --------------------------------------------------------------
