@@ -9,13 +9,16 @@
 
 library(pcadapt)
 library(viridis)
-library(LEA)
+# library(LEA)
 library(reshape2)
+library(devtools)
+# install_github("jdstorey/qvalue")
 library(qvalue)
 library(tidyverse)
 library(umap)
 library(vcfR)
 library(Rcpp)
+# install_github('tavareshugo/windowscanr')
 library(windowscanr)
 
 # 
