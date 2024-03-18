@@ -1227,9 +1227,13 @@ WC_Fst = read_tsv('Warm_Cold_Fst.fst') %>%
 ##
 # FST outliers ------------------------------------------------------------
 
+## Top 5% of the distribution of Fst values
+# WC_top_dist = WC_Fst[WC_Fst$FST_zero > quantile(WC_Fst$FST_zero, 
+#                                                       prob = 1-5/100),]
+## The top 5% might not be restrictive enough to be honest
+## What does the top 0.5% look like? 
 WC_top_dist = WC_Fst[WC_Fst$FST_zero > quantile(WC_Fst$FST_zero, 
-                                                      prob = 1-5/100),]
-
+                                                prob = 1-0.5/100),]
 # ASHN_top_dist %>% write_csv('ASHN_FST_Outliers.csv')
 WC_top_dist %>% 
   # group_by(CHR) %>% 
@@ -1239,8 +1243,11 @@ WC_top_dist %>%
 
 
 ## snps that are the top 5% fst distribution
+# ASHN_top_dist = ASHN_Fst[ASHN_Fst$FST_zero > quantile(ASHN_Fst$FST_zero, 
+#                                     prob = 1-5/100),]
+
 ASHN_top_dist = ASHN_Fst[ASHN_Fst$FST_zero > quantile(ASHN_Fst$FST_zero, 
-                                    prob = 1-5/100),]
+                                                      prob = 1-0.5/100),]
 
 # ASHN_top_dist %>% write_csv('ASHN_FST_Outliers.csv')
 ASHN_top_dist %>% 
@@ -1249,8 +1256,12 @@ ASHN_top_dist %>%
             max_fst = max(FST_zero), 
             mean_fst = mean(FST_zero)) 
 
+# MYV_top_dist = MYV_Fst[MYV_Fst$FST_zero > quantile(MYV_Fst$FST_zero, 
+#                                                       prob = 1-5/100),]
+
 MYV_top_dist = MYV_Fst[MYV_Fst$FST_zero > quantile(MYV_Fst$FST_zero, 
-                                                      prob = 1-5/100),]
+                                                   prob = 1-0.5/100),]
+
 # MYV_top_dist %>% write_csv('MYV_FST_Outliers.csv')
 MYV_top_dist %>% 
   # group_by(CHR) %>% 
@@ -1258,8 +1269,10 @@ MYV_top_dist %>%
             max_fst = max(FST_zero), 
             mean_fst = mean(FST_zero))
 
+# SKR_top_dist = SKR_Fst[SKR_Fst$FST_zero > quantile(SKR_Fst$FST_zero, 
+#                                                    prob = 1-5/100),]
 SKR_top_dist = SKR_Fst[SKR_Fst$FST_zero > quantile(SKR_Fst$FST_zero, 
-                                                   prob = 1-5/100),]
+                                                   prob = 1-0.5/100),]
 # SKR_top_dist %>% write_csv('SKR_FST_Outliers.csv')
 
 SKR_top_dist %>% 
@@ -1268,8 +1281,12 @@ SKR_top_dist %>%
             max_fst = max(FST_zero), 
             mean_fst = mean(FST_zero))
 
+# GTS_CSWY_top_dist = GTS_CSWY_Fst[GTS_CSWY_Fst$FST_zero > quantile(GTS_CSWY_Fst$FST_zero, 
+#                                                    prob = 1-5/100),]
+
 GTS_CSWY_top_dist = GTS_CSWY_Fst[GTS_CSWY_Fst$FST_zero > quantile(GTS_CSWY_Fst$FST_zero, 
-                                                   prob = 1-5/100),]
+                                                                  prob = 1-0.5/100),]
+
 # GTS_CSWY_top_dist %>% write_csv('GTS_CSWY_FST_Outliers.csv')
 
 GTS_CSWY_top_dist %>% 
@@ -1379,7 +1396,7 @@ WC_Fst_dist_plot = WC_Fst %>%
 
 Fst_dist_combo = (ASHN_Fst_dist_plot|MYV_Fst_dist_plot)/(SKR_Fst_dist_plot|GTS_CSWY_Fst_dist_plot) | WC_Fst_dist_plot 
 
-ggsave(file = 'stickleback_FST_Distribution_plots.tiff', 
+ggsave(file = 'stickleback_0.5%_FST_Distribution_plots.tiff', 
        path = 'C:/Stickleback_Genomic/Figures/', 
        plot = Fst_dist_combo, 
        dpi = 'retina', 
@@ -1508,7 +1525,7 @@ per_chrom_combo = ASHN_per_chrom/MYV_per_chrom/SKR_per_chrom/GTS_CSWY_per_chrom/
 
 
 
-ggsave(file = 'stickleback_FST_Distribution_per_chrome.tiff', 
+ggsave(file = 'stickleback_0.5%_FST_Distribution_per_chrome.tiff', 
        path = 'C:/Stickleback_Genomic/Figures/', 
        plot = per_chrom_combo, 
        dpi = 'retina', 
@@ -1563,7 +1580,7 @@ WC_Fst_clean = read_csv('WC_Fst_clean.csv') %>%
   stickle_CHR_reorder() %>% 
   dist_cal()
   ## calculate the center of the chromosome
-axisdf = axis_df(ASHN_Fst_clean)
+axisdf_ASHN = axis_df(ASHN_Fst_clean)
 axisdf = axis_df(MYV_Fst_clean)
 axisdf = axis_df(SKR_Fst_clean)
 axisdf = axis_df(GTS_CSWY_Fst_clean)
