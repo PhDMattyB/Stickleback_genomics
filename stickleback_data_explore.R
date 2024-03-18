@@ -1932,9 +1932,9 @@ MYV_25kb = read_tsv('MYV_Fst_25Kb_3obs_window.txt')
 SKR_25kb = read_tsv('SKR_Fst_25Kb_3obs_window.txt')
 GTS_CSWY_25kb = read_tsv('GTS_CSWY_Fst_25Kb_3obs_window.txt')
 
-GTS_CSWY_25kb %>%
+SKR_25kb %>%
   SW_top_0.5_outliers() %>%
-  write_csv('GTS_CSWY_25Kb_0.5%_Fst_outlier.csv')
+  write_csv('SKR_25Kb_0.5%_Fst_outlier.csv')
 
 # ASHN_25kb %>%
 #   SW_top_5_outliers() %>%
@@ -1943,17 +1943,21 @@ GTS_CSWY_25kb %>%
 
 
 # Fst 25kb outlier overlap ------------------------------------------------
-WC_25_top5 = read_csv('WC_25Kb_Fst_outlier.csv') 
-MYV_25_top5 = read_csv('MYV_25Kb_Fst_outlier.csv') 
-ASHN_25_top5 = read_csv('ASHN_25Kb_Fst_outlier.csv') 
-SKR_25_top5 = read_csv('SKR_25Kb_Fst_outlier.csv') 
-GTS_CSWY_25_top5 = read_csv('GTS_CSWY_25Kb_Fst_outlier.csv') 
+WC_25_top5 = read_csv('WC_25Kb_0.5%_Fst_outlier.csv') 
+MYV_25_top5 = read_csv('MYV_25Kb_0.5%_Fst_outlier.csv') 
+ASHN_25_top5 = read_csv('ASHN_25Kb_0.5%_Fst_outlier.csv') 
+SKR_25_top5 = read_csv('SKR_25Kb_0.5%_Fst_outlier.csv') 
+GTS_CSWY_25_top5 = read_csv('GTS_CSWY_25Kb_0.5%_Fst_outlier.csv') 
 
-intersect(GTS_CSWY_25_top5,
-          SKR_25_top5, 
+intersect(ASHN_25_top5,
+          MYV_25_top5, 
           by = c('CHR',
                  'win_mid'))
 
+inner_join(GTS_CSWY_25_top5,
+          WC_25_top5, 
+          by = c('CHR',
+                 'win_mid')) 
 
 # FST 25kb manhattan plot -------------------------------------------------
 
