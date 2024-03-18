@@ -1167,3 +1167,362 @@ ggsave('DAPC_chr21_inversion_NoGTSCSWY.tiff',
        width = 25, 
        height = 15)
 s
+
+
+# CHR XV for Corin --------------------------------------------------------
+
+tped = Create_tped(ped = ped_data, 
+                   map = map_data)
+
+# tped %>%
+#   write_tsv('stickleback_maf0.05_ldpruned_filtered.tped', 
+#             col_names = F)
+# 
+snps = read_table('stickleback_maf0.05_ldpruned_filtered.tped', 
+                  col_names = F)
+
+df = snps %>% 
+  dplyr::select(1, 
+                5:length(snps)) %>% 
+  filter(X1 == 'chr_XV') %>% 
+  dplyr::select(-X1) %>% 
+  dplyr::select(-X5)
+
+eigen = eigen_windows(df, 
+                      win = 50, 
+                      k = 5)
+windist = pc_dist(eigen, 
+                  npc = 5) %>% 
+  as_tibble()
+
+window_data = snps %>% 
+  select(1:4) %>% 
+  filter(X1 == 'chr_XV') %>% 
+  mutate(window = ceiling(row_number()/50)) %>% 
+  group_by(window) %>% 
+  mutate(mean_window = mean(X4)) %>% 
+  distinct(mean_window, 
+           .keep_all = T) %>% 
+  filter(window %in% 1:nrow(windist))
+
+combo_data = bind_cols(window_data, 
+                       windist)
+
+
+MDS_data = cmdscale(combo_data[7:length(combo_data)], 
+                    eig = TRUE, 
+                    k = 5)
+
+MDS_points = MDS_data$points %>% 
+  as_tibble() %>% 
+  rename(MDS_Points1 = V1, 
+         MDS_Points2 = V2, 
+         MDS_points3 = V3, 
+         MDS_points4 = V4, 
+         MDS_points5 = V5)
+
+combo_data = bind_cols(combo_data, 
+                       MDS_points) %>% 
+  group_by(window)
+
+View(combo_data)
+
+
+
+## Need to plot the MDS structure for the regions 
+## flanking the potential inversion
+
+theme_set(theme_bw())
+
+# Normal_data = combo_data %>% 
+#   filter(!window %in% c('83',
+#                         '84', 
+#                         '85', 
+#                         '86', 
+#                         '87', 
+#                         '88', 
+#                         '89', 
+#                         '90', 
+#                         '91', 
+#                         '92',
+#                         '93')) 
+# label = rep('Normal_region', 
+#             nrow(Normal_data))
+# 
+# Normal_data = cbind(label, 
+#                     Normal_data) %>% 
+#   as_tibble() %>% 
+#   rename(group = 1)%>% 
+#   dplyr::select(group, 
+#                 X4, 
+#                 window, 
+#                 MDS_Points1, 
+#                 MDS_Points2)
+# afvaper_region = combo_data %>%
+#   filter(window >= '81',
+#          window <= '95')
+# MDS_points_windows = afvaper_region %>% 
+#   dplyr::select(X4, 
+#                 window, 
+#                 MDS_Points1, 
+#                 MDS_Points2)
+# 
+# MDS_points_windows %>% 
+#   write_csv('AFvaper_region_lostruct_survey.csv')
+
+# afvaper_region = read_csv('AFvaper_region_lostruct_survey.csv') %>% 
+#   filter(group == 'Afvaper_region')
+# 
+# labeled_data = bind_rows(Normal_data, 
+#                          afvaper_region)
+
+# window_distance = afvaper_region %>%
+#   dplyr::select(contains('V'))
+
+MDS_cols = c('#ef476f', 
+             '#023e8a')
+
+MDS_outlier_ggplot = combo_data %>%
+  ggplot(aes(x = MDS_Points1, 
+             y = MDS_Points2))+
+  # ggplot(aes(x = MDS_Points1, 
+  #            y = MDS_Points2,
+  #            col = rainbow(nrow(window_distance))))+
+  geom_point(size = 3) +
+  scale_color_manual(values = MDS_cols, 
+                     labels = c('MDS outlier', 
+                                'Non-outlier'))+
+  labs(x = 'MDS coordinate 1', 
+       y = 'MDS coordinate 2',)+
+  # scale_color_discrete(labels = c('MDS outlier', 
+  #                                'Non-outlier'))+
+  theme(panel.grid = element_blank(),
+        axis.title = element_text(size = 14), 
+        axis.text = element_text(size = 12), 
+        legend.title = element_blank())
+
+ggsave(file = 'Lostruct_MDS_outliers.tiff', 
+       path = '~/Parsons_Postdoc/Stickleback_Genomic/Figures/', 
+       plot = MDS_outlier_ggplot, 
+       dpi = 'retina', 
+       units = 'cm', 
+       width = 15, 
+       height = 10)
+# +
+#   theme(legend.position = 'none')
+
+
+
+## HOLY SHIT!! window 83-92 are MDS outliers!!!
+MDS_outliers = Outlier_hunter(data = combo_data, 
+                              sd_percentile = 3) 
+
+Outlier_plots(outlier_data = MDS_outliers, 
+              normal_data = combo_data)
+
+
+MDS_Outlier_basepair = combo_data %>% 
+  ggplot(aes(x = X4, 
+             y = abs(MDS_Points1)))+
+  geom_point(col = 'Grey', 
+             size = 3)+
+  geom_point(data = MDS_outliers, 
+             aes(x = X4, 
+                 y = abs(MDS_Points1)),
+             col = '#ef476f',
+             size = 3)+
+  labs(x = 'Mean window position (bp)', 
+       y = 'MDS score (axis 1)')+
+  theme(
+    legend.position = 'none',
+    panel.grid.major = element_blank(), 
+    panel.grid.minor = element_blank(), 
+    axis.title = element_text(size = 14), 
+    axis.text = element_text(size = 12)
+  )
+
+ggsave(file = 'Lostruct_MDS_outliers_basepair_position.tiff', 
+       path = '~/Parsons_Postdoc/Stickleback_Genomic/Figures/', 
+       plot = MDS_Outlier_basepair, 
+       dpi = 'retina', 
+       units = 'cm', 
+       width = 15, 
+       height = 10)
+
+
+
+# CHR XIX for Corin -------------------------------------------------------
+
+tped = Create_tped(ped = ped_data, 
+                   map = map_data)
+
+# tped %>%
+#   write_tsv('stickleback_maf0.05_ldpruned_filtered.tped', 
+#             col_names = F)
+# 
+snps = read_table('stickleback_maf0.05_ldpruned_filtered.tped', 
+                  col_names = F)
+
+df = snps %>% 
+  dplyr::select(1, 
+                5:length(snps)) %>% 
+  filter(X1 == 'chr_XIX') %>% 
+  dplyr::select(-X1) %>% 
+  dplyr::select(-X5)
+
+eigen = eigen_windows(df, 
+                      win = 50, 
+                      k = 5)
+windist = pc_dist(eigen, 
+                  npc = 5) %>% 
+  as_tibble()
+
+window_data = snps %>% 
+  select(1:4) %>% 
+  filter(X1 == 'chr_XIX') %>% 
+  mutate(window = ceiling(row_number()/50)) %>% 
+  group_by(window) %>% 
+  mutate(mean_window = mean(X4)) %>% 
+  distinct(mean_window, 
+           .keep_all = T) %>% 
+  filter(window %in% 1:nrow(windist))
+
+combo_data = bind_cols(window_data, 
+                       windist)
+
+
+MDS_data = cmdscale(combo_data[7:length(combo_data)], 
+                    eig = TRUE, 
+                    k = 5)
+
+MDS_points = MDS_data$points %>% 
+  as_tibble() %>% 
+  rename(MDS_Points1 = V1, 
+         MDS_Points2 = V2, 
+         MDS_points3 = V3, 
+         MDS_points4 = V4, 
+         MDS_points5 = V5)
+
+combo_data = bind_cols(combo_data, 
+                       MDS_points) %>% 
+  group_by(window)
+
+# View(combo_data)
+
+
+
+# Normal_data = combo_data %>% 
+#   filter(!window %in% c('83',
+#                         '84', 
+#                         '85', 
+#                         '86', 
+#                         '87', 
+#                         '88', 
+#                         '89', 
+#                         '90', 
+#                         '91', 
+#                         '92',
+#                         '93')) 
+# label = rep('Normal_region', 
+#             nrow(Normal_data))
+# 
+# Normal_data = cbind(label, 
+#                     Normal_data) %>% 
+#   as_tibble() %>% 
+#   rename(group = 1)%>% 
+#   dplyr::select(group, 
+#                 X4, 
+#                 window, 
+#                 MDS_Points1, 
+#                 MDS_Points2)
+# afvaper_region = combo_data %>%
+#   filter(window >= '81',
+#          window <= '95')
+# MDS_points_windows = afvaper_region %>% 
+#   dplyr::select(X4, 
+#                 window, 
+#                 MDS_Points1, 
+#                 MDS_Points2)
+# 
+# MDS_points_windows %>% 
+#   write_csv('AFvaper_region_lostruct_survey.csv')
+
+# afvaper_region = read_csv('AFvaper_region_lostruct_survey.csv') %>% 
+#   filter(group == 'Afvaper_region')
+# 
+# labeled_data = bind_rows(Normal_data, 
+#                          afvaper_region)
+
+# window_distance = afvaper_region %>%
+#   dplyr::select(contains('V'))
+
+MDS_cols = c('#ef476f', 
+             '#023e8a')
+
+MDS_outlier_ggplot = combo_data %>%
+  ggplot(aes(x = MDS_Points1, 
+             y = MDS_Points2))+
+  # ggplot(aes(x = MDS_Points1, 
+  #            y = MDS_Points2,
+  #            col = rainbow(nrow(window_distance))))+
+  geom_point(size = 3) +
+  scale_color_manual(values = MDS_cols, 
+                     labels = c('MDS outlier', 
+                                'Non-outlier'))+
+  labs(x = 'MDS coordinate 1', 
+       y = 'MDS coordinate 2',)+
+  # scale_color_discrete(labels = c('MDS outlier', 
+  #                                'Non-outlier'))+
+  theme(panel.grid = element_blank(),
+        axis.title = element_text(size = 14), 
+        axis.text = element_text(size = 12), 
+        legend.title = element_blank())
+
+ggsave(file = 'Lostruct_MDS_outliers.tiff', 
+       path = '~/Parsons_Postdoc/Stickleback_Genomic/Figures/', 
+       plot = MDS_outlier_ggplot, 
+       dpi = 'retina', 
+       units = 'cm', 
+       width = 15, 
+       height = 10)
+# +
+#   theme(legend.position = 'none')
+
+
+
+## HOLY SHIT!! window 83-92 are MDS outliers!!!
+MDS_outliers = Outlier_hunter(data = combo_data, 
+                              sd_percentile = 3) 
+
+Outlier_plots(outlier_data = MDS_outliers, 
+              normal_data = combo_data)
+
+
+MDS_Outlier_basepair = combo_data %>% 
+  ggplot(aes(x = X4, 
+             y = abs(MDS_Points1)))+
+  geom_point(col = 'Grey', 
+             size = 3)+
+  geom_point(data = MDS_outliers, 
+             aes(x = X4, 
+                 y = abs(MDS_Points1)),
+             col = '#ef476f',
+             size = 3)+
+  labs(x = 'Mean window position (bp)', 
+       y = 'MDS score (axis 1)')+
+  theme(
+    legend.position = 'none',
+    panel.grid.major = element_blank(), 
+    panel.grid.minor = element_blank(), 
+    axis.title = element_text(size = 14), 
+    axis.text = element_text(size = 12)
+  )
+
+ggsave(file = 'Lostruct_MDS_outliers_basepair_position.tiff', 
+       path = '~/Parsons_Postdoc/Stickleback_Genomic/Figures/', 
+       plot = MDS_Outlier_basepair, 
+       dpi = 'retina', 
+       units = 'cm', 
+       width = 15, 
+       height = 10)
+
