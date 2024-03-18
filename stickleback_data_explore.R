@@ -1581,10 +1581,10 @@ WC_Fst_clean = read_csv('WC_Fst_clean.csv') %>%
   dist_cal()
   ## calculate the center of the chromosome
 axisdf_ASHN = axis_df(ASHN_Fst_clean)
-axisdf = axis_df(MYV_Fst_clean)
-axisdf = axis_df(SKR_Fst_clean)
-axisdf = axis_df(GTS_CSWY_Fst_clean)
-axisdf = axis_df(WC_Fst_clean)
+axisdf_MYV = axis_df(MYV_Fst_clean)
+axisdf_SKR = axis_df(SKR_Fst_clean)
+axisdf_GTS = axis_df(GTS_CSWY_Fst_clean)
+axisdf_WC = axis_df(WC_Fst_clean)
 
 non_outs = 
   # WC_Fst_clean %>%
@@ -1611,7 +1611,7 @@ outs =
 
 WC_Fst_manhattan = Fst_manhattan(non_outs = non_outs, 
                                  outs = outs, 
-                                 axisdf = axisdf, 
+                                 axisdf = axisdf_WC, 
                                  xval = BPcum, 
                                  yval = FST_zero, 
                                  chr = non_outs$CHR, 
@@ -1621,7 +1621,7 @@ WC_Fst_manhattan = Fst_manhattan(non_outs = non_outs,
 
 ASHN_Fst_manhattan = Fst_manhattan(non_outs = non_outs, 
                                        outs = outs, 
-                                       axisdf = axisdf, 
+                                       axisdf = axisdf_ASHN, 
                                        xval = BPcum, 
                                        yval = FST_zero, 
                                        chr = non_outs$CHR, 
@@ -1630,7 +1630,7 @@ ASHN_Fst_manhattan = Fst_manhattan(non_outs = non_outs,
 
 MYV_Fst_manhattan = Fst_manhattan(non_outs = non_outs, 
                                    outs = outs, 
-                                   axisdf = axisdf, 
+                                   axisdf = axisdf_MYV, 
                                    xval = BPcum, 
                                    yval = FST_zero, 
                                    chr = non_outs$CHR, 
@@ -1639,7 +1639,7 @@ MYV_Fst_manhattan = Fst_manhattan(non_outs = non_outs,
 
 SKR_Fst_manhattan = Fst_manhattan(non_outs = non_outs, 
                                   outs = outs, 
-                                  axisdf = axisdf, 
+                                  axisdf = axisdf_SKR, 
                                   xval = BPcum, 
                                   yval = FST_zero, 
                                   chr = non_outs$CHR, 
@@ -1648,7 +1648,7 @@ SKR_Fst_manhattan = Fst_manhattan(non_outs = non_outs,
 
 GTS_CSWY_Fst_manhattan = Fst_manhattan(non_outs = non_outs,
               outs = outs, 
-              axisdf = axisdf, 
+              axisdf = axisdf_GTS, 
               xval = BPcum, 
               yval = FST_zero, 
               chr = non_outs$CHR, 
@@ -1661,7 +1661,7 @@ Fst_man_combo = (ASHN_Fst_manhattan|MYV_Fst_manhattan)/(SKR_Fst_manhattan|GTS_CS
 
 ## ggsave that plot
 
-ggsave(file = 'stickleback_FST_manhattan_plot.tiff', 
+ggsave(file = 'stickleback_0.5%_FST_manhattan_plot.tiff', 
        path = 'C:/Stickleback_Genomic/Figures/', 
        plot = Fst_man_combo, 
        dpi = 'retina', 
