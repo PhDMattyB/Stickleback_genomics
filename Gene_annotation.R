@@ -43,7 +43,11 @@ gene_annotation = read_tsv('stickleback_v5_ensembl_genes.gff3.gz',
 
 genes = gene_annotation %>% 
   arrange(chromosome) %>% 
-  filter(feature == 'gene')
+  filter(feature == 'gene') %>% 
+  select(chromosome, 
+         feature, 
+         gene_id, 
+         position)
 
 WC_Fst_regions = read_csv('WC_25Kb_0.5%_Fst_outlier.csv') %>% 
   rename(start = win_start, 
@@ -60,6 +64,12 @@ inner_join(WC_Fst_regions,
                   'end'))
 
 
+gene_test = genes %>% 
+  filter(chromosome == 'chrI')
+
+
+test_data = WC_Fst_regions %>% 
+  filter(chromosome == 'chr_I')
 
 
 # Methylation outliers ----------------------------------------------------
