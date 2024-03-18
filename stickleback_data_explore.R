@@ -1932,9 +1932,10 @@ MYV_25kb = read_tsv('MYV_Fst_25Kb_3obs_window.txt')
 SKR_25kb = read_tsv('SKR_Fst_25Kb_3obs_window.txt')
 GTS_CSWY_25kb = read_tsv('GTS_CSWY_Fst_25Kb_3obs_window.txt')
 
-SKR_25kb %>%
+GTS_CSWY_25kb %>%
   SW_top_0.5_outliers() %>%
-  write_csv('SKR_25Kb_0.5%_Fst_outlier.csv')
+  # write_csv('SKR_25Kb_0.5%_Fst_outlier.csv')
+  write_tsv('GTS_CSWY_25Kb_0.5%_Fst_outlier.tsv')
 
 # ASHN_25kb %>%
 #   SW_top_5_outliers() %>%
