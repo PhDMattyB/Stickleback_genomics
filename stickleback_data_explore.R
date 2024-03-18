@@ -1853,18 +1853,18 @@ Three_analysis_outs %>%
 # Fst sliding window ------------------------------------------------------
 
 ## per population FST outliers
-# ASHN_Fst_clean = read_csv('ASHN_Fst_clean.csv') %>%
-#   stickle_CHR_reorder() %>%
-# dist_cal()
+ASHN_Fst_clean = read_csv('ASHN_Fst_clean.csv') %>%
+  stickle_CHR_reorder() %>%
+dist_cal()
 # MYV_Fst_clean = read_csv('MYV_Fst_clean.csv') %>%
 #   stickle_CHR_reorder() %>%
 #   dist_cal()
 # SKR_Fst_clean = read_csv('SKR_Fst_clean.csv') %>%
 #   stickle_CHR_reorder() %>%
 #   dist_cal()
-GTS_CSWY_Fst_clean = read_csv('GTS_CSWY_Fst_clean.csv') %>%
-  stickle_CHR_reorder() %>%
-  dist_cal()
+# GTS_CSWY_Fst_clean = read_csv('GTS_CSWY_Fst_clean.csv') %>%
+#   stickle_CHR_reorder() %>%
+#   dist_cal()
 
 ##Common FST outliers
 # WC_Fst_clean_all = read_csv('WC_Fst_clean.csv') %>%
@@ -1872,7 +1872,7 @@ GTS_CSWY_Fst_clean = read_csv('GTS_CSWY_Fst_clean.csv') %>%
 #   dist_cal()
 
 ## 25kb
-fst_25_position = winScan(x = GTS_CSWY_Fst_clean, 
+fst_25_position = winScan(x = ASHN_Fst_clean, 
                        groups = 'CHR', 
                        position = 'POS',
                        values = 'FST', 
@@ -1883,7 +1883,7 @@ fst_25_position = winScan(x = GTS_CSWY_Fst_clean,
 fst_25_position = fst_25_position %>%
   as_tibble() %>% 
   filter(FST_n >= 3) %>% 
-  write_tsv('GTS_CSWY_Fst_25kb_3obs_window.txt')
+  write_tsv('ASHN_Fst_25kb_3obs_window.txt')
 ## Write the txt file for each window size. 
 ## Need to compare the different window sizes to see which one
 ## is the most appropriate. 
@@ -1931,8 +1931,13 @@ ASHN_25kb = read_tsv('ASHN_Fst_25Kb_3obs_window.txt')
 MYV_25kb = read_tsv('MYV_Fst_25Kb_3obs_window.txt')
 SKR_25kb = read_tsv('SKR_Fst_25Kb_3obs_window.txt')
 GTS_CSWY_25kb = read_tsv('GTS_CSWY_Fst_25Kb_3obs_window.txt')
-# GTS_CSWY_25kb %>% 
-#   SW_top_5_outliers() %>% 
+
+GTS_CSWY_25kb %>%
+  SW_top_0.5_outliers() %>%
+  write_csv('GTS_CSWY_25Kb_0.5%_Fst_outlier.csv')
+
+# ASHN_25kb %>%
+#   SW_top_5_outliers() %>%
 #   write_csv('GTS_CSWY_25Kb_Fst_outlier.csv')
 
 
