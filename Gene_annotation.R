@@ -57,6 +57,11 @@ WC_Fst_regions = read_csv('WC_25Kb_0.5%_Fst_outlier.csv') %>%
   group_by(chromosome)
 
 
+## Cannot figure this out right now
+## Need to find out if the average positions of each gene
+## lies within the window range
+## my brain hurts
+
 inner_join(WC_Fst_regions, 
            genes, 
            by = c('chromosome', 
