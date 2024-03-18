@@ -12,17 +12,16 @@ setwd('~/Parsons_Postdoc/Stickleback_Genomic/Stickleback_Annotation_features/')
 
 library(tidyverse)
 
-
 read_tsv('stickleback_v5_ensembl_genes.gff3.gz', 
          col_names = F, 
-         skip = 8) %>% 
+         skip = 1) %>% 
   select(X3) %>% 
   distinct()
 
 
 gene_annotation = read_tsv('stickleback_v5_ensembl_genes.gff3.gz', 
                      col_names = F, 
-                     skip = 8) %>% 
+                     skip = 1) %>% 
   # filter(X3 %in% c('gene', 
   #                  'exon', 
   #                  'CDS')) %>% 
@@ -41,6 +40,13 @@ gene_annotation = read_tsv('stickleback_v5_ensembl_genes.gff3.gz',
          gene_id = X9, 
          position = mid) %>% 
   na.omit()
+
+gene_annotation
+
+
+
+# Methylation outliers ----------------------------------------------------
+
 
 methy_outliers = read_tsv('~/Parsons_Postdoc/Stickleback_Genomic/Methylation_outliers.txt')%>% 
   separate(col = TETWarm, 
