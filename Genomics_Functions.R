@@ -267,6 +267,11 @@ SW_top_5_outliers = function(data){
                                 prob = 1-5/100),]
 }
 
+SW_top_0.5_outliers = function(data){
+  
+  data[data$FST_mean > quantile(data$FST_mean, 
+                                prob = 1-0.5/100),]
+}
 
 
 # Create tped -------------------------------------------------------------
