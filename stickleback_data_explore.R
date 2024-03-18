@@ -1974,7 +1974,7 @@ inner_join(GTS_CSWY_25_top5,
 #                   '#d1495b',
 #                   '#30638e')
 
-WC_25_top5 = read_csv('WC_25Kb_Fst_outlier.csv') 
+WC_25_top5 = read_csv('WC_25Kb_0.5%_Fst_outlier.csv') 
 WC_25kb = read_tsv('WC_Fst_25Kb_3obs_window.txt') 
 
 WC_25_window = Fst_manhatan_format(Fst_data = WC_25kb, 
@@ -2009,7 +2009,7 @@ WC_25_Zoomed_plot = ggplot(neutral,
                      limits = c(0,0.10))+
   labs(x = 'Cumulative base pair', 
        y = 'Fst', 
-       title = 'A)')+
+       title = 'A) Common geothermal-Ambient comparison')+
   theme(legend.position="none",
         # panel.border = element_blank(),
         panel.grid.major.x = element_blank(),
@@ -2020,7 +2020,7 @@ WC_25_Zoomed_plot = ggplot(neutral,
         axis.title.x = element_blank(),
         axis.text.y = element_text(size = 12))
 
-ggsave(file = 'Zoomed_common_adapt_stickleback_FST_25KB_manhattan_plot.tiff', 
+ggsave(file = 'Zoomed_common_adapt_stickleback_0.5%_FST_25KB_manhattan_plot.tiff', 
        path = '~/Parsons_Postdoc/Stickleback_Genomic/Figures/', 
        plot = WC_25_Zoomed_plot, 
        dpi = 'retina', 
@@ -2037,7 +2037,7 @@ WC_25_region_man = Fst_manhattan(non_outs = neutral,
                               out_col = '#fb6f92', 
                               plot_letter = 'E) Common geothermal-Ambient comparison')
  
-ASHN_25_top5 = read_csv('ASHN_25Kb_Fst_outlier.csv') 
+ASHN_25_top5 = read_csv('ASHN_25Kb_0.5%_Fst_outlier.csv') 
 ASHN_25kb = read_tsv('ASHN_Fst_25Kb_3obs_window.txt') 
 
 ASHN_25_window = Fst_manhatan_format(Fst_data = ASHN_25kb, 
@@ -2063,7 +2063,7 @@ ASHN_25_region_man = Fst_manhattan(non_outs = neutral,
 
 
 
-MYV_25_top5 = read_csv('MYV_25Kb_Fst_outlier.csv') 
+MYV_25_top5 = read_csv('MYV_25Kb_0.5%_Fst_outlier.csv') 
 
 MYV_25kb = read_tsv('MYV_Fst_25Kb_3obs_window.txt') 
 
@@ -2088,7 +2088,7 @@ MYV_25_region_man = Fst_manhattan(non_outs = neutral,
                                    out_col = '#d1495b', 
                                    plot_letter = 'B) Mývatn geothermal-ambient comparison')
 
-SKR_25_top5 = read_csv('SKR_25Kb_Fst_outlier.csv') 
+SKR_25_top5 = read_csv('SKR_25Kb_0.5%_Fst_outlier.csv') 
 SKR_25kb = read_tsv('SKR_Fst_25Kb_3obs_window.txt') 
 
 SKR_25_window = Fst_manhatan_format(Fst_data = SKR_25kb, 
@@ -2113,7 +2113,7 @@ SKR_25_region_man = Fst_manhattan(non_outs = neutral,
                                   plot_letter = 'C) Sauðárkrókur geothermal-ambient comparison')
 
 
-GTS_CSWY_25_top5 = read_csv('GTS_CSWY_25Kb_Fst_outlier.csv') 
+GTS_CSWY_25_top5 = read_csv('GTS_CSWY_25Kb_0.5%_Fst_outlier.csv') 
 GTS_CSWY_25kb = read_tsv('GTS_CSWY_Fst_25Kb_3obs_window.txt') 
 
 GTS_CSWY_25_window = Fst_manhatan_format(Fst_data = GTS_CSWY_25kb, 
@@ -2143,7 +2143,7 @@ Fst_region_combo = (ASHN_25_region_man|MYV_25_region_man)/(SKR_25_region_man|GTS
 
 ## ggsave that plot
 
-ggsave(file = 'stickleback_FST_25KB_manhattan_plot.tiff', 
+ggsave(file = 'stickleback_0.5%_FST_25KB_manhattan_plot.tiff', 
        path = '~/Parsons_Postdoc/Stickleback_Genomic/Figures/', 
        plot = Fst_region_combo, 
        dpi = 'retina', 
@@ -2153,7 +2153,7 @@ ggsave(file = 'stickleback_FST_25KB_manhattan_plot.tiff',
 
 local_adapt = (ASHN_25_region_man|MYV_25_region_man)/(SKR_25_region_man|GTS_CSWY_25_region_man)
 
-ggsave(file = 'local_adapt_stickleback_FST_25KB_manhattan_plot.tiff', 
+ggsave(file = 'local_adapt_stickleback_0.5%_FST_25KB_manhattan_plot.tiff', 
        path = '~/Parsons_Postdoc/Stickleback_Genomic/Figures/', 
        plot = local_adapt, 
        dpi = 'retina', 
@@ -2161,8 +2161,8 @@ ggsave(file = 'local_adapt_stickleback_FST_25KB_manhattan_plot.tiff',
        width = 30, 
        height = 20)
 
-common_adapt = WC_25_region_man
-ggsave(file = 'common_adapt_stickleback_FST_25KB_manhattan_plot.tiff', 
+common_adapt = WC_25_Zoomed_plot
+ggsave(file = 'common_adapt_stickleback_0.5%_FST_25KB_manhattan_plot.tiff', 
        path = '~/Parsons_Postdoc/Stickleback_Genomic/Figures/', 
        plot = common_adapt, 
        dpi = 'retina', 
@@ -2173,7 +2173,7 @@ ggsave(file = 'common_adapt_stickleback_FST_25KB_manhattan_plot.tiff',
 
 # WC_outliers_per_chr -----------------------------------------------------
 
-WC_25_top5 = read_csv('WC_25Kb_Fst_outlier.csv') 
+WC_25_top5 = read_csv('WC_25Kb_0.5%_Fst_outlier.csv') 
 WC_25kb = read_tsv('WC_Fst_25Kb_3obs_window.txt') 
 
 WC_25_window = Fst_manhatan_format(Fst_data = WC_25kb, 
@@ -2249,7 +2249,7 @@ chr21_Fst_25kb_win = ggplot(chr21_neut,
         axis.title = element_text(size = 14),
         axis.text = element_text(size = 12))
 
-ggsave(file = 'Zoomed_chr21_FST_25KB_manhattan_plot.tiff', 
+ggsave(file = 'Zoomed_chr21_0.5%_FST_25KB_manhattan_plot.tiff', 
        path = '~/Parsons_Postdoc/Stickleback_Genomic/Figures/', 
        plot = chr21_Fst_25kb_win, 
        dpi = 'retina', 
