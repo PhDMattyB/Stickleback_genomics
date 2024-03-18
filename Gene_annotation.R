@@ -41,7 +41,24 @@ gene_annotation = read_tsv('stickleback_v5_ensembl_genes.gff3.gz',
          position = mid) %>% 
   na.omit()
 
-gene_annotation
+genes = gene_annotation %>% 
+  arrange(chromosome) %>% 
+  filter(feature == 'gene')
+
+WC_Fst_regions = read_csv('WC_25Kb_0.5%_Fst_outlier.csv') %>% 
+  rename(start = win_start, 
+         end = win_end, 
+         position = win_mid, 
+         chromosome = CHR) %>% 
+  group_by(chromosome)
+
+
+inner_join(WC_Fst_regions, 
+           genes, 
+           by = c('chromosome', 
+                  'start', 
+                  'end'))
+
 
 
 
