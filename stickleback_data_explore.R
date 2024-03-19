@@ -1256,6 +1256,8 @@ ASHN_top_dist %>%
             max_fst = max(FST_zero), 
             mean_fst = mean(FST_zero)) 
 
+ASHN_top_dist %>% arrange(FST) %>% View()
+
 # MYV_top_dist = MYV_Fst[MYV_Fst$FST_zero > quantile(MYV_Fst$FST_zero, 
 #                                                       prob = 1-5/100),]
 
@@ -1281,6 +1283,8 @@ SKR_top_dist %>%
             max_fst = max(FST_zero), 
             mean_fst = mean(FST_zero))
 
+SKR_top_dist %>% 
+  filter(FST_zero > 0.1)
 # GTS_CSWY_top_dist = GTS_CSWY_Fst[GTS_CSWY_Fst$FST_zero > quantile(GTS_CSWY_Fst$FST_zero, 
 #                                                    prob = 1-5/100),]
 
@@ -1547,7 +1551,7 @@ WC_Fst_clean = Fst_manhatan_format(WC_Fst,
   write_csv('WC_Fst_clean.csv')
 
 ASHN_Fst_clean = Fst_manhatan_format(ASHN_Fst, 
-                                     ASHN_top_dist) %>% 
+                                     ASHN_top_dist) %>%
   write_csv('ASHN_Fst_clean.csv')
 
 MYV_Fst_clean = Fst_manhatan_format(MYV_Fst, 
@@ -1587,20 +1591,20 @@ axisdf_GTS = axis_df(GTS_CSWY_Fst_clean)
 axisdf_WC = axis_df(WC_Fst_clean)
 
 non_outs = 
-  # WC_Fst_clean %>%
+  WC_Fst_clean %>%
   # ASHN_Fst_clean %>%
   # MYV_Fst_clean %>%
   # SKR_Fst_clean %>%
-  GTS_CSWY_Fst_clean %>%
+  # GTS_CSWY_Fst_clean %>%
   filter(value == 'Neutral') 
 
 ## Get the outliers
 outs = 
-  # WC_Fst_clean %>%
+  WC_Fst_clean %>%
   # ASHN_Fst_clean %>%
   # MYV_Fst_clean %>%
   # SKR_Fst_clean %>%
-  GTS_CSWY_Fst_clean %>%
+  # GTS_CSWY_Fst_clean %>%
   filter(value == 'Outlier') 
 
 ## ASHN colour = #00798c
@@ -1669,6 +1673,19 @@ ggsave(file = 'stickleback_0.5%_FST_manhattan_plot.tiff',
        width = 40, 
        height = 20)
 
+
+local_adaptation = (ASHN_Fst_manhattan|MYV_Fst_manhattan)/(SKR_Fst_manhattan|GTS_CSWY_Fst_manhattan)
+
+
+## ggsave that plot
+
+ggsave(file = 'local_adaptation_stickleback_0.5%_FST_manhattan_plot.tiff', 
+       path = '~/Parsons_Postdoc/Stickleback_Genomic/Figures/', 
+       plot = local_adaptation, 
+       dpi = 'retina', 
+       units = 'cm', 
+       width = 40, 
+       height = 20)
 
 
 
