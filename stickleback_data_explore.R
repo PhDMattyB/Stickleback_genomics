@@ -1256,7 +1256,11 @@ ASHN_top_dist %>%
             max_fst = max(FST_zero), 
             mean_fst = mean(FST_zero)) 
 
-ASHN_top_dist %>% arrange(FST) %>% View()
+ASHN_Top_Dawg_Outs = ASHN_top_dist %>% 
+  filter(FST_zero >= 0.235) %>% 
+  arrange(CHR, 
+          POS) 
+
 
 # MYV_top_dist = MYV_Fst[MYV_Fst$FST_zero > quantile(MYV_Fst$FST_zero, 
 #                                                       prob = 1-5/100),]
@@ -1271,6 +1275,11 @@ MYV_top_dist %>%
             max_fst = max(FST_zero), 
             mean_fst = mean(FST_zero))
 
+MYV_Top_Dawg_Outs = MYV_top_dist %>% 
+  filter(FST_zero >= 0.238) %>% 
+  arrange(CHR, 
+          POS)
+
 # SKR_top_dist = SKR_Fst[SKR_Fst$FST_zero > quantile(SKR_Fst$FST_zero, 
 #                                                    prob = 1-5/100),]
 SKR_top_dist = SKR_Fst[SKR_Fst$FST_zero > quantile(SKR_Fst$FST_zero, 
@@ -1283,8 +1292,12 @@ SKR_top_dist %>%
             max_fst = max(FST_zero), 
             mean_fst = mean(FST_zero))
 
-SKR_top_dist %>% 
-  filter(FST_zero > 0.1)
+SKR_Top_Dawg_Outs = SKR_top_dist %>% 
+  filter(FST_zero <= 0.306) %>% 
+  arrange(CHR, 
+          POS)
+
+
 # GTS_CSWY_top_dist = GTS_CSWY_Fst[GTS_CSWY_Fst$FST_zero > quantile(GTS_CSWY_Fst$FST_zero, 
 #                                                    prob = 1-5/100),]
 
@@ -1298,6 +1311,160 @@ GTS_CSWY_top_dist %>%
   summarise(min_fst = min(FST_zero), 
             max_fst = max(FST_zero), 
             mean_fst = mean(FST_zero))
+
+GTS_CSWY_Top_Dawg_Outs = GTS_CSWY_top_dist %>% 
+  filter(FST_zero >= 0.706) %>% 
+  arrange(CHR, 
+          POS)
+
+##### TOP DAWG OUTS Fst manhattan set up ----------------------------------------------------
+  
+  
+  # intersect(ASHN_Fst$SNP, 
+  #           ASHN_top_dist$SNP) %>% as_tibble()
+  
+  
+  WC_Fst_clean = Fst_manhatan_format(WC_Fst, 
+                                     WC_top_dist) %>% 
+  write_csv('WC_Fst_clean.csv')
+
+ASHN_Fst_clean = Fst_manhatan_format(ASHN_Fst, 
+                                     ASHN_top_dist) %>%
+  write_csv('ASHN_Fst_clean.csv')
+
+MYV_Fst_clean = Fst_manhatan_format(MYV_Fst, 
+                                    MYV_top_dist) %>% 
+  write_csv('MYV_Fst_clean.csv')
+
+SKR_Fst_clean = Fst_manhatan_format(SKR_Fst, 
+                                    SKR_top_dist) %>% 
+  write_csv('SKR_Fst_clean.csv')
+
+GTS_CSWY_Fst_clean = Fst_manhatan_format(GTS_CSWY_Fst, 
+                                         GTS_CSWY_top_dist) %>% 
+  write_csv('GTS_CSWY_Fst_clean.csv')
+
+# TOP DAWG OUTS FST outlier manhattan plot ----------------------------------------------
+
+ASHN_Fst_clean = read_csv('ASHN_Fst_clean.csv') %>% 
+  stickle_CHR_reorder() %>% 
+  dist_cal()
+MYV_Fst_clean = read_csv('MYV_Fst_clean.csv') %>% 
+  stickle_CHR_reorder() %>% 
+  dist_cal()
+SKR_Fst_clean = read_csv('SKR_Fst_clean.csv') %>% 
+  stickle_CHR_reorder() %>% 
+  dist_cal()
+GTS_CSWY_Fst_clean = read_csv('GTS_CSWY_Fst_clean.csv') %>% 
+  stickle_CHR_reorder() %>% 
+  dist_cal()
+WC_Fst_clean = read_csv('WC_Fst_clean.csv') %>% 
+  stickle_CHR_reorder() %>% 
+  dist_cal()
+## calculate the center of the chromosome
+axisdf_ASHN = axis_df(ASHN_Fst_clean)
+axisdf_MYV = axis_df(MYV_Fst_clean)
+axisdf_SKR = axis_df(SKR_Fst_clean)
+axisdf_GTS = axis_df(GTS_CSWY_Fst_clean)
+axisdf_WC = axis_df(WC_Fst_clean)
+
+non_outs = 
+  WC_Fst_clean %>%
+  # ASHN_Fst_clean %>%
+  # MYV_Fst_clean %>%
+  # SKR_Fst_clean %>%
+  # GTS_CSWY_Fst_clean %>%
+  filter(value == 'Neutral') 
+
+## Get the outliers
+outs = 
+  WC_Fst_clean %>%
+  # ASHN_Fst_clean %>%
+  # MYV_Fst_clean %>%
+  # SKR_Fst_clean %>%
+  # GTS_CSWY_Fst_clean %>%
+  filter(value == 'Outlier') 
+
+## ASHN colour = #00798c
+## MYV colour = #d1495b
+## SKR colour = #30638e
+## GTS_CSWY colour = #edae49
+## WC colour = #439a86
+
+WC_Fst_manhattan = Fst_manhattan(non_outs = non_outs, 
+                                 outs = outs, 
+                                 axisdf = axisdf_WC, 
+                                 xval = BPcum, 
+                                 yval = FST_zero, 
+                                 chr = non_outs$CHR, 
+                                 out_col = '#439a86', 
+                                 plot_letter = 'E) Geothermal-Ambient comparison')
+
+
+ASHN_Fst_manhattan = Fst_manhattan(non_outs = non_outs, 
+                                   outs = outs, 
+                                   axisdf = axisdf_ASHN, 
+                                   xval = BPcum, 
+                                   yval = FST_zero, 
+                                   chr = non_outs$CHR, 
+                                   out_col = '#00798c', 
+                                   plot_letter = 'A) Áshildarholtsvatn')
+
+MYV_Fst_manhattan = Fst_manhattan(non_outs = non_outs, 
+                                  outs = outs, 
+                                  axisdf = axisdf_MYV, 
+                                  xval = BPcum, 
+                                  yval = FST_zero, 
+                                  chr = non_outs$CHR, 
+                                  out_col = '#d1495b', 
+                                  plot_letter = 'B) Mývatn')
+
+SKR_Fst_manhattan = Fst_manhattan(non_outs = non_outs, 
+                                  outs = outs, 
+                                  axisdf = axisdf_SKR, 
+                                  xval = BPcum, 
+                                  yval = FST_zero, 
+                                  chr = non_outs$CHR, 
+                                  out_col = '#30638e', 
+                                  plot_letter = 'C) Sauðárkrókur')
+
+GTS_CSWY_Fst_manhattan = Fst_manhattan(non_outs = non_outs,
+                                       outs = outs, 
+                                       axisdf = axisdf_GTS, 
+                                       xval = BPcum, 
+                                       yval = FST_zero, 
+                                       chr = non_outs$CHR, 
+                                       out_col = '#edae49', 
+                                       plot_letter = 'D) Grettislaug-Garðsvatn')
+
+
+Fst_man_combo = (ASHN_Fst_manhattan|MYV_Fst_manhattan)/(SKR_Fst_manhattan|GTS_CSWY_Fst_manhattan)|WC_Fst_manhattan
+
+
+## ggsave that plot
+
+ggsave(file = 'stickleback_0.5%_FST_manhattan_plot.tiff', 
+       path = 'C:/Stickleback_Genomic/Figures/', 
+       plot = Fst_man_combo, 
+       dpi = 'retina', 
+       units = 'cm', 
+       width = 40, 
+       height = 20)
+
+
+local_adaptation = (ASHN_Fst_manhattan|MYV_Fst_manhattan)/(SKR_Fst_manhattan|GTS_CSWY_Fst_manhattan)
+
+
+## ggsave that plot
+
+ggsave(file = 'local_adaptation_stickleback_0.5%_FST_manhattan_plot.tiff', 
+       path = '~/Parsons_Postdoc/Stickleback_Genomic/Figures/', 
+       plot = local_adaptation, 
+       dpi = 'retina', 
+       units = 'cm', 
+       width = 40, 
+       height = 20)
+
 
 
 ##
