@@ -170,6 +170,10 @@ outliers = read_outlier(outlier_data, chromosome = 'all') %>%
   select(-chr, 
          -chr_name)
 
+## might have to use a map function to see if these actually line up
+
+
+
 # obtain outlier positions
 pos = outliers$position
 
