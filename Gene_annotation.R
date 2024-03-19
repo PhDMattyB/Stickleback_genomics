@@ -137,25 +137,53 @@ read_outlier = function(filename, chromosome = "all"){
 #I set important filenames etc. to variables, so they can be easily found, changed, and reused.
 gff_filename = "stickleback_v5_ensembl_genes.gff3.gz"
 ncbi_code_AC08 = "chr_I"
-outlier_data = "ASHN_TOP_DAWG_Fst_clean.csv"
+outlier_data = "ASHN_TOP_DAWG_FST_outlier.csv"
 outlier_code_AC08 = "chr_I"
+# read_csv('ASHN_TOP_DAWG_Fst_clean.csv') %>% 
+#   select(-NMISS, 
+#          -FST) %>%
+#   rename(position = POS, 
+#          chromosome = CHR, 
+#          FST = FST_zero) %>% 
+#   filter(value == 'Outlier') %>% 
+#   write_csv('ASHN_TOP_DAWG_FST_outlier.csv')
 
 ########
 # read in the data
 # all the detail above is abstracted away into these two lines
-gff = read_gff(gff_filename, chromosome = 'all')
-outliers = read_outlier(outlier_data, chromosome = 'all')
+gff = read_gff(gff_filename, chromosome = 'all') %>% 
+  filter(chr != 'chrM') %>% 
+  arrange(chr, 
+          mid)
+  group_by(chr)
+outliers = read_outlier(outlier_data, chromosome = 'all') %>% 
+  arrange(chromosome, 
+          position) %>% 
+  group_by(chromosome) %>% 
+  separate(col = chromosome, 
+           into = c('chr', 'chr_name'), 
+           sep = '_') %>% 
+  unite(chromosome, 
+        chr:chr_name,
+        sep = '',
+        remove = F) %>% 
+  select(-chr, 
+         -chr_name)
 
 # obtain outlier positions
-pos = outliers$POS
+pos = outliers$position
+
+
 
 #obtain genes in those positions
 gene_regions = gff %>% 
+  group_by(chr) %>% 
   mutate(hit_dist = abs(mid - pos)) %>% 
   arrange(hit_dist) %>% 
-  filter(hit_dist <100) %>%
-  select(chr, start, end, attribute, hit_dist) %>% 
+  filter(hit_dist < 1000) %>%
   pull(attribute)
+  # select(chr, start, end, attribute, hit_dist) %>% 
+  # pull(attribute)
 
 
 # Methylation outliers ----------------------------------------------------
