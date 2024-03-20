@@ -41,15 +41,20 @@ gene_annotation = read_tsv('stickleback_v5_ensembl_genes.gff3.gz',
          position = mid) %>% 
   na.omit()
 
-genes = gene_annotation %>% 
-  arrange(chromosome) %>% 
-  filter(feature == 'gene') 
+# genes = gene_annotation %>% 
+#   arrange(chromosome) %>% 
+#   filter(feature == 'gene') 
 # %>% 
 #   select(chromosome, 
 #          feature, 
 #          gene_id, 
 #          position)
 
+
+
+
+#### ASHN outliers ----------------------------------------------------
+  
 ASHN_div_snps = read_csv('ASHN_TOP_DAWG_Fst_clean.csv') %>% 
   select(-NMISS, 
          -FST) %>%
@@ -57,30 +62,123 @@ ASHN_div_snps = read_csv('ASHN_TOP_DAWG_Fst_clean.csv') %>%
          chromosome = CHR, 
          FST = FST_zero) %>% 
   filter(value == 'Outlier') %>% 
+  arrange(chromosome, 
+          position) %>% 
   group_by(chromosome)
 
-ASHN_div_snps %>% 
-  summarise(snp_per_chr = n()) %>% 
-  View()
-
-## Cannot figure this out right now
-## Need to find out if the average positions of each gene
-## lies within the window range
-## my brain hurts
-
-inner_join(WC_Fst_regions, 
-           genes, 
-           by = c('chromosome', 
-                  'start', 
-                  'end'))
+# ASHN_div_snps %>% 
+#   summarise(snp_per_chr = n()) %>% 
+#   View()
 
 
-gene_test = genes %>% 
-  filter(chromosome == 'chrI')
+# methy_outliers$position = as.numeric(methy_outliers$position)
+
+## create a 100bp window around the snp identified
+## settting the start and end range for the methylation data
+## this number can be as big or small as you want depending
+## on how liberal you want it
+
+ASHN_div_window = ASHN_div_snps %>%
+  group_by(chromosome)%>%
+  mutate(start = position-100,
+         end = position+100)
+
+library(data.table)
+
+setDT(ASHN_div_window)
+setDT(gene_annotation)
+
+setkey(ASHN_div_window, 
+       chromosome, 
+       start, 
+       end)
+
+ASHN_gene_overlap = foverlaps(gene_annotation, 
+                         ASHN_div_window, 
+                         # by.x = start, 
+                         # by.y = end,
+                         type="any", 
+                         which = T)
 
 
-test_data = WC_Fst_regions %>% 
-  filter(chromosome == 'chr_I')
+ASHN_gene_overlap_tib = as_tibble(ASHN_gene_overlap) 
+sum(is.na(ASHN_gene_overlap$position))
+  
+
+
+gene_name_1 = gene_overlap_tib %>% 
+  # pull(gene_id) %>% 
+  as_tibble() %>% 
+  dplyr::select(chromosome, 
+                position, 
+                start, 
+                end, 
+                gene_id, 
+                F118, 
+                F218, 
+                TETWarm.F118, 
+                TETWarm.F218, 
+                TETWarm.F118.F218) %>% 
+  separate(col = gene_id, 
+           into = c('ensemble_id', 
+                    'gene_name', 
+                    'parent_code', 
+                    'gene_name2'), 
+           sep = ';') %>%
+  separate(col = gene_name, 
+           into = c('Garbage', 
+                    'gene_name'), 
+           sep = '=') %>% 
+  dplyr::select(chromosome, 
+                position, 
+                start, 
+                end, 
+                gene_name) %>% 
+  na.omit()
+
+gene_name_2 = gene_overlap_tib %>% 
+  # pull(gene_id) %>% 
+  as_tibble() %>% 
+  dplyr::select(chromosome, 
+                position, 
+                start, 
+                end, 
+                gene_id,
+                F118, 
+                F218, 
+                TETWarm.F118, 
+                TETWarm.F218, 
+                TETWarm.F118.F218) %>% 
+  separate(col = gene_id, 
+           into = c('ensemble_id', 
+                    'gene_name', 
+                    'parent_code', 
+                    'gene_name2'), 
+           sep = ';') %>%
+  separate(col = parent_code, 
+           into = c('Garbage', 
+                    'gene_name'), 
+           sep = '=') %>% 
+  dplyr::select(chromosome, 
+                position, 
+                start, 
+                end, 
+                gene_name) %>% 
+  na.omit()
+
+
+methy_genes = bind_rows(gene_name_1, 
+                        gene_name_2) %>% 
+  arrange(chromosome, 
+          position) %>% 
+  distinct(gene_name, 
+           .keep_all = T) %>% 
+  filter(!grepl('ENSG', 
+                gene_name))
+
+methy_genes %>% 
+  write_csv('Methylation_outlier_genes.csv')
+
 
 
 # Test old R functions  ---------------------------------------------------
@@ -239,6 +337,7 @@ gene_overlap = foverlaps(gene_annotation,
 gene_overlap_tib = as_tibble(gene_overlap) %>% 
   na.omit() 
 
+View(gene_overlap_tib)
 
 gene_name_1 = gene_overlap_tib %>% 
   # pull(gene_id) %>% 
