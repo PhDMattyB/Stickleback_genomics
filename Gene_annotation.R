@@ -154,12 +154,11 @@ outlier_code_AC08 = "chr_I"
 gff = read_gff(gff_filename, chromosome = 'all') %>% 
   filter(chr != 'chrM') %>% 
   arrange(chr, 
-          mid)
+          mid) %>% 
   group_by(chr)
 outliers = read_outlier(outlier_data, chromosome = 'all') %>% 
   arrange(chromosome, 
           position) %>% 
-  group_by(chromosome) %>% 
   separate(col = chromosome, 
            into = c('chr', 'chr_name'), 
            sep = '_') %>% 
@@ -168,7 +167,8 @@ outliers = read_outlier(outlier_data, chromosome = 'all') %>%
         sep = '',
         remove = F) %>% 
   select(-chr, 
-         -chr_name)
+         -chr_name) %>% 
+  group_by(chromosome)
 
 ## might have to use a map function to see if these actually line up
 
