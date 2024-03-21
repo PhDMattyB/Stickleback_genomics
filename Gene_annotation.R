@@ -125,8 +125,7 @@ gene_name_1 = ASHN_gene_overlap_tib %>%
                 i.end,
                 gene_id,
                 feature,
-                FST, 
-                value) %>% 
+                FST) %>% 
   separate(col = gene_id, 
            into = c('ensemble_id', 
                     'gene_name', 
@@ -144,6 +143,7 @@ gene_name_1 = ASHN_gene_overlap_tib %>%
                 end, 
                 i.end,
                 FST,
+                feature,
                 gene_name) %>% 
   na.omit()
 
@@ -157,6 +157,7 @@ gene_name_2 = ASHN_gene_overlap_tib %>%
                 end, 
                 i.end,
                 gene_id,
+                feature,
                 FST,) %>% 
   separate(col = gene_id, 
            into = c('ensemble_id', 
@@ -175,6 +176,7 @@ gene_name_2 = ASHN_gene_overlap_tib %>%
                 end, 
                 i.end,
                 FST,
+                feature,
                 gene_name) %>% 
   na.omit()
 
@@ -264,8 +266,7 @@ gene_name_1 = MYV_gene_overlap_tib %>%
                 i.end,
                 gene_id,
                 feature,
-                FST, 
-                value) %>% 
+                FST) %>% 
   separate(col = gene_id, 
            into = c('ensemble_id', 
                     'gene_name', 
@@ -283,6 +284,7 @@ gene_name_1 = MYV_gene_overlap_tib %>%
                 end, 
                 i.end,
                 FST,
+                feature,
                 gene_name) %>% 
   na.omit()
 
@@ -296,6 +298,7 @@ gene_name_2 = MYV_gene_overlap_tib %>%
                 end, 
                 i.end,
                 gene_id,
+                feature,
                 FST,) %>% 
   separate(col = gene_id, 
            into = c('ensemble_id', 
@@ -314,6 +317,7 @@ gene_name_2 = MYV_gene_overlap_tib %>%
                 end, 
                 i.end,
                 FST,
+                feature,
                 gene_name) %>% 
   na.omit()
 
@@ -402,8 +406,7 @@ gene_name_1 = SKR_gene_overlap_tib %>%
                 i.end,
                 gene_id,
                 feature,
-                FST, 
-                value) %>% 
+                FST) %>% 
   separate(col = gene_id, 
            into = c('ensemble_id', 
                     'gene_name', 
@@ -421,6 +424,7 @@ gene_name_1 = SKR_gene_overlap_tib %>%
                 end, 
                 i.end,
                 FST,
+                feature,
                 gene_name) %>% 
   na.omit()
 
@@ -434,6 +438,7 @@ gene_name_2 = SKR_gene_overlap_tib %>%
                 end, 
                 i.end,
                 gene_id,
+                feature,
                 FST,) %>% 
   separate(col = gene_id, 
            into = c('ensemble_id', 
@@ -452,6 +457,7 @@ gene_name_2 = SKR_gene_overlap_tib %>%
                 end, 
                 i.end,
                 FST,
+                feature,
                 gene_name) %>% 
   na.omit()
 
@@ -540,8 +546,7 @@ gene_name_1 = GTS_CSWY_gene_overlap_tib %>%
                 i.end,
                 gene_id,
                 feature,
-                FST, 
-                value) %>% 
+                FST) %>% 
   separate(col = gene_id, 
            into = c('ensemble_id', 
                     'gene_name', 
@@ -559,6 +564,7 @@ gene_name_1 = GTS_CSWY_gene_overlap_tib %>%
                 end, 
                 i.end,
                 FST,
+                feature,
                 gene_name) %>% 
   na.omit()
 
@@ -572,6 +578,7 @@ gene_name_2 = GTS_CSWY_gene_overlap_tib %>%
                 end, 
                 i.end,
                 gene_id,
+                feature,
                 FST,) %>% 
   separate(col = gene_id, 
            into = c('ensemble_id', 
@@ -590,6 +597,7 @@ gene_name_2 = GTS_CSWY_gene_overlap_tib %>%
                 end, 
                 i.end,
                 FST,
+                feature,
                 gene_name) %>% 
   na.omit()
 
@@ -659,7 +667,6 @@ ASHN_fst_genes = read_csv('ASHN_FST_0.5%_outlier_genes.csv')
 MYV_fst_genes = read_csv('MYV_FST_0.5%_outlier_genes.csv') 
 SKR_fst_genes = read_csv('SKR_FST_0.5%_outlier_genes.csv') 
 GTS_CSWY_fst_genes = read_csv('GTS_CSWY_FST_0.5%_outlier_genes.csv') 
-
 
 
 
