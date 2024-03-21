@@ -71,7 +71,6 @@ ASHN_div_snps = read_csv('ASHN_TOP_DAWG_Fst_clean.csv') %>%
 #   View()
 
 
-# methy_outliers$position = as.numeric(methy_outliers$position)
 
 ## create a 100bp window around the snp identified
 ## settting the start and end range for the methylation data
@@ -81,7 +80,21 @@ ASHN_div_snps = read_csv('ASHN_TOP_DAWG_Fst_clean.csv') %>%
 ASHN_div_window = ASHN_div_snps %>%
   group_by(chromosome)%>%
   mutate(start = position-100,
-         end = position+100)
+         end = position+100) %>% 
+  separate(col = chromosome, 
+           into = c('chr', 
+                    'chr_name'), 
+           sep = '_') %>% 
+  unite(chromosome, 
+        chr:chr_name,
+        sep = '',
+        remove = F) %>% 
+  select(-chr, 
+         -chr_name, 
+         -SNP) %>% 
+  group_by(chromosome)
+
+
 
 library(data.table)
 
@@ -93,18 +106,18 @@ setkey(ASHN_div_window,
        start, 
        end)
 
-ASHN_gene_overlap = foverlaps(gene_annotation, 
-                         ASHN_div_window, 
-                         # by.x = start, 
+ASHN_gene_overlap = foverlaps(gene_annotation,
+                         ASHN_div_window,
+                         # by.x = start,
                          # by.y = end,
-                         type="any", 
-                         which = T)
+                         type="any")
 
 
-ASHN_gene_overlap_tib = as_tibble(ASHN_gene_overlap) 
-sum(is.na(ASHN_gene_overlap$position))
-  
-
+ASHN_gene_overlap_tib = as_tibble(ASHN_gene_overlap) %>% 
+  na.omit() %>% 
+  filter(chromosome != 'chrUn') %>% 
+  arrange(chromosome, 
+          position)
 
 gene_name_1 = gene_overlap_tib %>% 
   # pull(gene_id) %>% 
