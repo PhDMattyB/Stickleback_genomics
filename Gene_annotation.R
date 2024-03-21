@@ -615,6 +615,44 @@ GTS_CSWY_FST_out_genes %>%
 
 
 
+
+
+# Gene overlap b/w pops ---------------------------------------------------
+
+ASHN_fst_genes = read_csv('ASHN_FST_0.5%_outlier_genes.csv') %>%
+  select(gene_name)
+MYV_fst_genes = read_csv('MYV_FST_0.5%_outlier_genes.csv') %>% 
+  select(gene_name)
+SKR_fst_genes = read_csv('SKR_FST_0.5%_outlier_genes.csv') %>% 
+  select(gene_name)
+GTS_CSWY_fst_genes =  read_csv('GTS_CSWY_FST_0.5%_outlier_genes.csv') %>% 
+  select(gene_name)
+
+
+intersect(ASHN_fst_genes, 
+          MYV_fst_genes)
+
+intersect(ASHN_fst_genes, 
+          SKR_fst_genes)
+## a single overlapping gene
+
+intersect(ASHN_fst_genes, 
+          GTS_CSWY_fst_genes)
+##single gene overlapping
+
+intersect(MYV_fst_genes, 
+          SKR_fst_genes)
+## 4 overlapping genes
+
+intersect(MYV_fst_genes, 
+          GTS_CSWY_fst_genes)
+## 3 genes overlapping
+
+intersect(SKR_fst_genes, 
+          GTS_CSWY_fst_genes)
+## 3 overlapping genes
+
+##
 # Methylation outliers ----------------------------------------------------
 
 
