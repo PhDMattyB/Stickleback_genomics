@@ -65,13 +65,6 @@ ASHN_div_snps = read_csv('ASHN_TOP_DAWG_Fst_clean.csv') %>%
   arrange(chromosome, 
           position) %>% 
   group_by(chromosome)
-
-# ASHN_div_snps %>% 
-#   summarise(snp_per_chr = n()) %>% 
-#   View()
-
-
-
 ## create a 100bp window around the snp identified
 ## settting the start and end range for the methylation data
 ## this number can be as big or small as you want depending
@@ -119,19 +112,19 @@ ASHN_gene_overlap_tib = as_tibble(ASHN_gene_overlap) %>%
   arrange(chromosome, 
           position)
 
-gene_name_1 = gene_overlap_tib %>% 
+gene_name_1 = ASHN_gene_overlap_tib %>% 
   # pull(gene_id) %>% 
   as_tibble() %>% 
   dplyr::select(chromosome, 
                 position, 
-                start, 
+                start,
+                i.start, 
                 end, 
-                gene_id, 
-                F118, 
-                F218, 
-                TETWarm.F118, 
-                TETWarm.F218, 
-                TETWarm.F118.F218) %>% 
+                i.end,
+                gene_id,
+                feature,
+                FST, 
+                value) %>% 
   separate(col = gene_id, 
            into = c('ensemble_id', 
                     'gene_name', 
@@ -145,23 +138,24 @@ gene_name_1 = gene_overlap_tib %>%
   dplyr::select(chromosome, 
                 position, 
                 start, 
+                i.start,
                 end, 
+                i.end,
+                FST,
                 gene_name) %>% 
   na.omit()
 
-gene_name_2 = gene_overlap_tib %>% 
+gene_name_2 = ASHN_gene_overlap_tib %>% 
   # pull(gene_id) %>% 
   as_tibble() %>% 
   dplyr::select(chromosome, 
                 position, 
-                start, 
+                start,
+                i.start,
                 end, 
+                i.end,
                 gene_id,
-                F118, 
-                F218, 
-                TETWarm.F118, 
-                TETWarm.F218, 
-                TETWarm.F118.F218) %>% 
+                FST,) %>% 
   separate(col = gene_id, 
            into = c('ensemble_id', 
                     'gene_name', 
@@ -175,12 +169,15 @@ gene_name_2 = gene_overlap_tib %>%
   dplyr::select(chromosome, 
                 position, 
                 start, 
+                i.start,
                 end, 
+                i.end,
+                FST,
                 gene_name) %>% 
   na.omit()
 
 
-methy_genes = bind_rows(gene_name_1, 
+ASHN_FST_out_genes = bind_rows(gene_name_1, 
                         gene_name_2) %>% 
   arrange(chromosome, 
           position) %>% 
@@ -189,8 +186,8 @@ methy_genes = bind_rows(gene_name_1,
   filter(!grepl('ENSG', 
                 gene_name))
 
-methy_genes %>% 
-  write_csv('Methylation_outlier_genes.csv')
+ASHN_FST_out_genes %>% 
+  write_csv('ASHN_FST_0.5%_outlier_genes.csv')
 
 
 
