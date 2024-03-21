@@ -11,6 +11,8 @@
 setwd('~/Parsons_Postdoc/Stickleback_Genomic/Stickleback_Annotation_features/')
 
 library(tidyverse)
+library(data.table)
+
 
 read_tsv('stickleback_v5_ensembl_genes.gff3.gz', 
          col_names = F, 
@@ -188,6 +190,428 @@ ASHN_FST_out_genes = bind_rows(gene_name_1,
 
 ASHN_FST_out_genes %>% 
   write_csv('ASHN_FST_0.5%_outlier_genes.csv')
+
+ASHN_FST_out_genes %>% 
+  select(gene_name) %>% 
+  write_tsv('ASHN_FST_0.5%_outlier_gene_names_only.tsv', 
+            col_names = F)
+
+
+#### MYV outliers ----------------------------------------------------
+
+MYV_div_snps = read_csv('MYV_TOP_DAWG_Fst_clean.csv') %>% 
+  select(-NMISS, 
+         -FST) %>%
+  rename(position = POS, 
+         chromosome = CHR, 
+         FST = FST_zero) %>% 
+  filter(value == 'Outlier') %>% 
+  arrange(chromosome, 
+          position) %>% 
+  group_by(chromosome)
+## create a 100bp window around the snp identified
+## settting the start and end range for the methylation data
+## this number can be as big or small as you want depending
+## on how liberal you want it
+
+MYV_div_window = MYV_div_snps %>%
+  group_by(chromosome)%>%
+  mutate(start = position-100,
+         end = position+100) %>% 
+  separate(col = chromosome, 
+           into = c('chr', 
+                    'chr_name'), 
+           sep = '_') %>% 
+  unite(chromosome, 
+        chr:chr_name,
+        sep = '',
+        remove = F) %>% 
+  select(-chr, 
+         -chr_name, 
+         -SNP) %>% 
+  group_by(chromosome)
+
+
+setDT(MYV_div_window)
+setDT(gene_annotation)
+
+setkey(MYV_div_window, 
+       chromosome, 
+       start, 
+       end)
+
+MYV_gene_overlap = foverlaps(gene_annotation,
+                              MYV_div_window,
+                              # by.x = start,
+                              # by.y = end,
+                              type="any")
+
+
+MYV_gene_overlap_tib = as_tibble(MYV_gene_overlap) %>% 
+  na.omit() %>% 
+  filter(chromosome != 'chrUn') %>% 
+  arrange(chromosome, 
+          position)
+
+gene_name_1 = MYV_gene_overlap_tib %>% 
+  # pull(gene_id) %>% 
+  as_tibble() %>% 
+  dplyr::select(chromosome, 
+                position, 
+                start,
+                i.start, 
+                end, 
+                i.end,
+                gene_id,
+                feature,
+                FST, 
+                value) %>% 
+  separate(col = gene_id, 
+           into = c('ensemble_id', 
+                    'gene_name', 
+                    'parent_code', 
+                    'gene_name2'), 
+           sep = ';') %>%
+  separate(col = gene_name, 
+           into = c('Garbage', 
+                    'gene_name'), 
+           sep = '=') %>% 
+  dplyr::select(chromosome, 
+                position, 
+                start, 
+                i.start,
+                end, 
+                i.end,
+                FST,
+                gene_name) %>% 
+  na.omit()
+
+gene_name_2 = MYV_gene_overlap_tib %>% 
+  # pull(gene_id) %>% 
+  as_tibble() %>% 
+  dplyr::select(chromosome, 
+                position, 
+                start,
+                i.start,
+                end, 
+                i.end,
+                gene_id,
+                FST,) %>% 
+  separate(col = gene_id, 
+           into = c('ensemble_id', 
+                    'gene_name', 
+                    'parent_code', 
+                    'gene_name2'), 
+           sep = ';') %>%
+  separate(col = parent_code, 
+           into = c('Garbage', 
+                    'gene_name'), 
+           sep = '=') %>% 
+  dplyr::select(chromosome, 
+                position, 
+                start, 
+                i.start,
+                end, 
+                i.end,
+                FST,
+                gene_name) %>% 
+  na.omit()
+
+
+MYV_FST_out_genes = bind_rows(gene_name_1, 
+                               gene_name_2) %>% 
+  arrange(chromosome, 
+          position) %>% 
+  distinct(gene_name, 
+           .keep_all = T) %>% 
+  filter(!grepl('ENSG', 
+                gene_name))
+
+MYV_FST_out_genes %>% 
+  write_csv('MYV_FST_0.5%_outlier_genes.csv')
+
+MYV_FST_out_genes %>% 
+  select(gene_name) %>% 
+  write_tsv('MYV_FST_0.5%_outlier_gene_names_only.tsv', 
+            col_names = F)
+
+
+#### SKR outliers ----------------------------------------------------
+
+SKR_div_snps = read_csv('SKR_TOP_DAWG_Fst_clean.csv') %>% 
+  select(-NMISS, 
+         -FST) %>%
+  rename(position = POS, 
+         chromosome = CHR, 
+         FST = FST_zero) %>% 
+  filter(value == 'Outlier') %>% 
+  arrange(chromosome, 
+          position) %>% 
+  group_by(chromosome)
+## create a 100bp window around the snp identified
+## settting the start and end range for the methylation data
+## this number can be as big or small as you want depending
+## on how liberal you want it
+
+SKR_div_window = SKR_div_snps %>%
+  group_by(chromosome)%>%
+  mutate(start = position-100,
+         end = position+100) %>% 
+  separate(col = chromosome, 
+           into = c('chr', 
+                    'chr_name'), 
+           sep = '_') %>% 
+  unite(chromosome, 
+        chr:chr_name,
+        sep = '',
+        remove = F) %>% 
+  select(-chr, 
+         -chr_name, 
+         -SNP) %>% 
+  group_by(chromosome)
+
+setDT(SKR_div_window)
+setDT(gene_annotation)
+
+setkey(SKR_div_window, 
+       chromosome, 
+       start, 
+       end)
+
+SKR_gene_overlap = foverlaps(gene_annotation,
+                              SKR_div_window,
+                              # by.x = start,
+                              # by.y = end,
+                              type="any")
+
+
+SKR_gene_overlap_tib = as_tibble(SKR_gene_overlap) %>% 
+  na.omit() %>% 
+  filter(chromosome != 'chrUn') %>% 
+  arrange(chromosome, 
+          position)
+
+gene_name_1 = SKR_gene_overlap_tib %>% 
+  # pull(gene_id) %>% 
+  as_tibble() %>% 
+  dplyr::select(chromosome, 
+                position, 
+                start,
+                i.start, 
+                end, 
+                i.end,
+                gene_id,
+                feature,
+                FST, 
+                value) %>% 
+  separate(col = gene_id, 
+           into = c('ensemble_id', 
+                    'gene_name', 
+                    'parent_code', 
+                    'gene_name2'), 
+           sep = ';') %>%
+  separate(col = gene_name, 
+           into = c('Garbage', 
+                    'gene_name'), 
+           sep = '=') %>% 
+  dplyr::select(chromosome, 
+                position, 
+                start, 
+                i.start,
+                end, 
+                i.end,
+                FST,
+                gene_name) %>% 
+  na.omit()
+
+gene_name_2 = SKR_gene_overlap_tib %>% 
+  # pull(gene_id) %>% 
+  as_tibble() %>% 
+  dplyr::select(chromosome, 
+                position, 
+                start,
+                i.start,
+                end, 
+                i.end,
+                gene_id,
+                FST,) %>% 
+  separate(col = gene_id, 
+           into = c('ensemble_id', 
+                    'gene_name', 
+                    'parent_code', 
+                    'gene_name2'), 
+           sep = ';') %>%
+  separate(col = parent_code, 
+           into = c('Garbage', 
+                    'gene_name'), 
+           sep = '=') %>% 
+  dplyr::select(chromosome, 
+                position, 
+                start, 
+                i.start,
+                end, 
+                i.end,
+                FST,
+                gene_name) %>% 
+  na.omit()
+
+
+SKR_FST_out_genes = bind_rows(gene_name_1, 
+                               gene_name_2) %>% 
+  arrange(chromosome, 
+          position) %>% 
+  distinct(gene_name, 
+           .keep_all = T) %>% 
+  filter(!grepl('ENSG', 
+                gene_name))
+
+SKR_FST_out_genes %>% 
+  write_csv('SKR_FST_0.5%_outlier_genes.csv')
+
+SKR_FST_out_genes %>% 
+  select(gene_name) %>% 
+  write_tsv('SKR_FST_0.5%_outlier_gene_names_only.tsv', 
+            col_names = F)
+
+
+#### GTS_CSWY outliers ----------------------------------------------------
+
+GTS_CSWY_div_snps = read_csv('GTS_CSWY_TOP_DAWG_Fst_clean.csv') %>% 
+  select(-NMISS, 
+         -FST) %>%
+  rename(position = POS, 
+         chromosome = CHR, 
+         FST = FST_zero) %>% 
+  filter(value == 'Outlier') %>% 
+  arrange(chromosome, 
+          position) %>% 
+  group_by(chromosome)
+## create a 100bp window around the snp identified
+## settting the start and end range for the methylation data
+## this number can be as big or small as you want depending
+## on how liberal you want it
+
+GTS_CSWY_div_window = GTS_CSWY_div_snps %>%
+  group_by(chromosome)%>%
+  mutate(start = position-100,
+         end = position+100) %>% 
+  separate(col = chromosome, 
+           into = c('chr', 
+                    'chr_name'), 
+           sep = '_') %>% 
+  unite(chromosome, 
+        chr:chr_name,
+        sep = '',
+        remove = F) %>% 
+  select(-chr, 
+         -chr_name, 
+         -SNP) %>% 
+  group_by(chromosome)
+
+setDT(GTS_CSWY_div_window)
+setDT(gene_annotation)
+
+setkey(GTS_CSWY_div_window, 
+       chromosome, 
+       start, 
+       end)
+
+GTS_CSWY_gene_overlap = foverlaps(gene_annotation,
+                              GTS_CSWY_div_window,
+                              # by.x = start,
+                              # by.y = end,
+                              type="any")
+
+
+GTS_CSWY_gene_overlap_tib = as_tibble(GTS_CSWY_gene_overlap) %>% 
+  na.omit() %>% 
+  filter(chromosome != 'chrUn') %>% 
+  arrange(chromosome, 
+          position)
+
+gene_name_1 = GTS_CSWY_gene_overlap_tib %>% 
+  # pull(gene_id) %>% 
+  as_tibble() %>% 
+  dplyr::select(chromosome, 
+                position, 
+                start,
+                i.start, 
+                end, 
+                i.end,
+                gene_id,
+                feature,
+                FST, 
+                value) %>% 
+  separate(col = gene_id, 
+           into = c('ensemble_id', 
+                    'gene_name', 
+                    'parent_code', 
+                    'gene_name2'), 
+           sep = ';') %>%
+  separate(col = gene_name, 
+           into = c('Garbage', 
+                    'gene_name'), 
+           sep = '=') %>% 
+  dplyr::select(chromosome, 
+                position, 
+                start, 
+                i.start,
+                end, 
+                i.end,
+                FST,
+                gene_name) %>% 
+  na.omit()
+
+gene_name_2 = GTS_CSWY_gene_overlap_tib %>% 
+  # pull(gene_id) %>% 
+  as_tibble() %>% 
+  dplyr::select(chromosome, 
+                position, 
+                start,
+                i.start,
+                end, 
+                i.end,
+                gene_id,
+                FST,) %>% 
+  separate(col = gene_id, 
+           into = c('ensemble_id', 
+                    'gene_name', 
+                    'parent_code', 
+                    'gene_name2'), 
+           sep = ';') %>%
+  separate(col = parent_code, 
+           into = c('Garbage', 
+                    'gene_name'), 
+           sep = '=') %>% 
+  dplyr::select(chromosome, 
+                position, 
+                start, 
+                i.start,
+                end, 
+                i.end,
+                FST,
+                gene_name) %>% 
+  na.omit()
+
+
+GTS_CSWY_FST_out_genes = bind_rows(gene_name_1, 
+                               gene_name_2) %>% 
+  arrange(chromosome, 
+          position) %>% 
+  distinct(gene_name, 
+           .keep_all = T) %>% 
+  filter(!grepl('ENSG', 
+                gene_name))
+
+GTS_CSWY_FST_out_genes %>% 
+  write_csv('GTS_CSWY_FST_0.5%_outlier_genes.csv')
+
+
+GTS_CSWY_FST_out_genes %>% 
+  select(gene_name) %>% 
+  write_tsv('GTS_CSWY_FST_0.5%_outlier_gene_names_only.tsv', 
+            col_names = F)
+
 
 
 
