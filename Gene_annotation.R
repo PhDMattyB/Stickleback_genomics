@@ -43,14 +43,11 @@ gene_annotation = read_tsv('stickleback_v5_ensembl_genes.gff3.gz',
          position = mid) %>% 
   na.omit()
 
-# genes = gene_annotation %>% 
-#   arrange(chromosome) %>% 
-#   filter(feature == 'gene') 
-# %>% 
-#   select(chromosome, 
-#          feature, 
-#          gene_id, 
-#          position)
+gene_annotation %>% 
+  arrange(chromosome) %>%
+  # filter(feature == 'gene')
+  group_by(feature) %>% 
+  distinct(feature)
 
 
 
@@ -188,7 +185,8 @@ ASHN_FST_out_genes = bind_rows(gene_name_1,
   distinct(gene_name, 
            .keep_all = T) %>% 
   filter(!grepl('ENSG', 
-                gene_name))
+                gene_name)) %>% 
+  filter(feature == 'gene')
 
 ASHN_FST_out_genes %>% 
   write_csv('ASHN_FST_0.5%_outlier_genes.csv')
@@ -329,7 +327,8 @@ MYV_FST_out_genes = bind_rows(gene_name_1,
   distinct(gene_name, 
            .keep_all = T) %>% 
   filter(!grepl('ENSG', 
-                gene_name))
+                gene_name)) %>% 
+  filter(feature == 'gene')
 
 MYV_FST_out_genes %>% 
   write_csv('MYV_FST_0.5%_outlier_genes.csv')
@@ -469,7 +468,8 @@ SKR_FST_out_genes = bind_rows(gene_name_1,
   distinct(gene_name, 
            .keep_all = T) %>% 
   filter(!grepl('ENSG', 
-                gene_name))
+                gene_name)) %>% 
+  filter(feature == 'gene')
 
 SKR_FST_out_genes %>% 
   write_csv('SKR_FST_0.5%_outlier_genes.csv')
@@ -609,7 +609,8 @@ GTS_CSWY_FST_out_genes = bind_rows(gene_name_1,
   distinct(gene_name, 
            .keep_all = T) %>% 
   filter(!grepl('ENSG', 
-                gene_name))
+                gene_name)) %>% 
+  filter(feature == 'gene')
 
 GTS_CSWY_FST_out_genes %>% 
   write_csv('GTS_CSWY_FST_0.5%_outlier_genes.csv')
@@ -668,6 +669,38 @@ MYV_fst_genes = read_csv('MYV_FST_0.5%_outlier_genes.csv')
 SKR_fst_genes = read_csv('SKR_FST_0.5%_outlier_genes.csv') 
 GTS_CSWY_fst_genes = read_csv('GTS_CSWY_FST_0.5%_outlier_genes.csv') 
 
+
+ASHN_fst_genes %>% 
+  select(chromosome, 
+         position, 
+         feature, 
+         gene_name) %>% 
+  group_by(feature) %>% 
+  summarize(n_feature = n())
+
+MYV_fst_genes %>% 
+  select(chromosome, 
+         position, 
+         feature, 
+         gene_name) %>% 
+  group_by(feature) %>% 
+  summarize(n_feature = n())
+
+SKR_fst_genes %>% 
+  select(chromosome, 
+         position, 
+         feature, 
+         gene_name) %>% 
+  group_by(feature) %>% 
+  summarize(n_feature = n())
+
+GTS_CSWY_fst_genes %>% 
+  select(chromosome, 
+         position, 
+         feature, 
+         gene_name) %>% 
+  group_by(feature) %>% 
+  summarize(n_feature = n())
 
 
 ##
