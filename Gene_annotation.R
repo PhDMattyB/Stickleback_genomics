@@ -13,12 +13,12 @@ setwd('~/Parsons_Postdoc/Stickleback_Genomic/Stickleback_Annotation_features/')
 library(tidyverse)
 library(data.table)
 
-
-read_tsv('stickleback_v5_ensembl_genes.gff3.gz', 
-         col_names = F, 
-         skip = 1) %>% 
-  select(X3) %>% 
-  distinct()
+# 
+# read_tsv('stickleback_v5_ensembl_genes.gff3.gz', 
+#          col_names = F, 
+#          skip = 1) %>% 
+#   select(X3) %>% 
+#   distinct()
 
 
 gene_annotation = read_tsv('stickleback_v5_ensembl_genes.gff3.gz', 
@@ -86,9 +86,6 @@ ASHN_div_window = ASHN_div_snps %>%
          -SNP) %>% 
   group_by(chromosome)
 
-
-
-library(data.table)
 
 setDT(ASHN_div_window)
 setDT(gene_annotation)
@@ -701,6 +698,138 @@ GTS_CSWY_fst_genes %>%
          gene_name) %>% 
   group_by(feature) %>% 
   summarize(n_feature = n())
+
+
+# Coding vs non-coding vs regulatory regions ------------------------------
+
+ASHN_div_window = ASHN_div_snps %>%
+  group_by(chromosome)%>%
+  mutate(start = position-1,
+         end = position+1) %>% 
+  separate(col = chromosome, 
+           into = c('chr', 
+                    'chr_name'), 
+           sep = '_') %>% 
+  unite(chromosome, 
+        chr:chr_name,
+        sep = '',
+        remove = F) %>% 
+  select(-chr, 
+         -chr_name, 
+         -SNP) %>% 
+  group_by(chromosome)
+
+
+setDT(ASHN_div_window)
+setDT(gene_annotation)
+
+setkey(ASHN_div_window, 
+       chromosome, 
+       start, 
+       end)
+
+ASHN_gene_overlap = foverlaps(gene_annotation,
+                              ASHN_div_window,
+                              # by.x = start,
+                              # by.y = end,
+                              type="any")
+
+
+ASHN_gene_overlap_tib = as_tibble(ASHN_gene_overlap) %>% 
+  na.omit() %>% 
+  filter(chromosome != 'chrUn') %>% 
+  arrange(chromosome, 
+          position)
+
+gene_name_1 = ASHN_gene_overlap_tib %>% 
+  # pull(gene_id) %>% 
+  as_tibble() %>% 
+  dplyr::select(chromosome, 
+                position, 
+                start,
+                i.start, 
+                end, 
+                i.end,
+                gene_id,
+                feature,
+                FST) %>% 
+  separate(col = gene_id, 
+           into = c('ensemble_id', 
+                    'gene_name', 
+                    'parent_code', 
+                    'gene_name2'), 
+           sep = ';') %>%
+  separate(col = gene_name, 
+           into = c('Garbage', 
+                    'gene_name'), 
+           sep = '=') %>% 
+  dplyr::select(chromosome, 
+                position, 
+                start, 
+                i.start,
+                end, 
+                i.end,
+                FST,
+                feature,
+                gene_name) %>% 
+  na.omit()
+
+gene_name_2 = ASHN_gene_overlap_tib %>% 
+  # pull(gene_id) %>% 
+  as_tibble() %>% 
+  dplyr::select(chromosome, 
+                position, 
+                start,
+                i.start,
+                end, 
+                i.end,
+                gene_id,
+                feature,
+                FST,) %>% 
+  separate(col = gene_id, 
+           into = c('ensemble_id', 
+                    'gene_name', 
+                    'parent_code', 
+                    'gene_name2'), 
+           sep = ';') %>%
+  separate(col = parent_code, 
+           into = c('Garbage', 
+                    'gene_name'), 
+           sep = '=') %>% 
+  dplyr::select(chromosome, 
+                position, 
+                start, 
+                i.start,
+                end, 
+                i.end,
+                FST,
+                feature,
+                gene_name) %>% 
+  na.omit()
+
+
+ASHN_FST_out_genes = bind_rows(gene_name_1, 
+                               gene_name_2) %>% 
+  arrange(chromosome, 
+          position) %>% 
+  distinct(gene_name, 
+           .keep_all = T) %>% 
+  filter(!grepl('ENSG', 
+                gene_name)) 
+
+ASHN_FST_out_genes %>% 
+  group_by(feature) %>% 
+  summarize(n_features = n())
+
+ASHN_FST_out_genes %>% 
+    filter(feature == 'gene') %>% 
+  write_csv('ASHN_NoWindow_FST_0.5%_outlier_genes.csv')
+
+ASHN_FST_out_genes %>% 
+  select(gene_name) %>% 
+  write_tsv('ASHN_NoWindow_FST_0.5%_outlier_gene_names_only.tsv', 
+            col_names = F)
+
 
 
 ##
