@@ -1241,6 +1241,10 @@ WC_top_dist %>%
             max_fst = max(FST_zero), 
             mean_fst = mean(FST_zero)) 
 
+WC_Top_Dawg_Outs = WC_top_dist %>% 
+  filter(FST_zero >= 0.0982) %>% 
+  arrange(CHR, 
+          POS) 
 
 ## snps that are the top 5% fst distribution
 # ASHN_top_dist = ASHN_Fst[ASHN_Fst$FST_zero > quantile(ASHN_Fst$FST_zero, 
@@ -1335,6 +1339,11 @@ Fst_manhatan_format(GTS_CSWY_Fst,
                     GTS_CSWY_Top_Dawg_Outs) %>% 
   write_csv('GTS_CSWY_TOP_DAWG_Fst_clean.csv')
 
+# WC_Top_Dawg_Outs
+
+Fst_manhatan_format(WC_Fst,
+                    WC_Top_Dawg_Outs) %>% 
+  write_csv('WC_TOP_DAWG_Fst_clean.csv')
 # TOP DAWG OUTS FST outlier manhattan plot ----------------------------------------------
 
 ASHN_Fst_clean = read_csv('ASHN_TOP_DAWG_Fst_clean.csv') %>% 
@@ -1999,9 +2008,9 @@ Three_analysis_outs %>%
 # Fst sliding window ------------------------------------------------------
 
 ## per population FST outliers
-ASHN_Fst_clean = read_csv('ASHN_Fst_clean.csv') %>%
-  stickle_CHR_reorder() %>%
-dist_cal()
+# ASHN_Fst_clean = read_csv('ASHN_Fst_clean.csv') %>%
+#   stickle_CHR_reorder() %>%
+# dist_cal()
 # MYV_Fst_clean = read_csv('MYV_Fst_clean.csv') %>%
 #   stickle_CHR_reorder() %>%
 #   dist_cal()
@@ -2013,12 +2022,12 @@ dist_cal()
 #   dist_cal()
 
 ##Common FST outliers
-# WC_Fst_clean_all = read_csv('WC_Fst_clean.csv') %>%
-#   stickle_CHR_reorder() %>%
-#   dist_cal()
+WC_Fst_clean = read_csv('WC_Fst_clean.csv') %>%
+  stickle_CHR_reorder() %>%
+  dist_cal()
 
 ## 25kb
-fst_25_position = winScan(x = ASHN_Fst_clean, 
+fst_25_position = winScan(x = WC_Fst_clean, 
                        groups = 'CHR', 
                        position = 'POS',
                        values = 'FST', 
@@ -2029,7 +2038,7 @@ fst_25_position = winScan(x = ASHN_Fst_clean,
 fst_25_position = fst_25_position %>%
   as_tibble() %>% 
   filter(FST_n >= 3) %>% 
-  write_tsv('ASHN_Fst_25kb_3obs_window.txt')
+  write_tsv('WC_Fst_25kb_3obs_window.txt')
 ## Write the txt file for each window size. 
 ## Need to compare the different window sizes to see which one
 ## is the most appropriate. 
@@ -2078,10 +2087,10 @@ MYV_25kb = read_tsv('MYV_Fst_25Kb_3obs_window.txt')
 SKR_25kb = read_tsv('SKR_Fst_25Kb_3obs_window.txt')
 GTS_CSWY_25kb = read_tsv('GTS_CSWY_Fst_25Kb_3obs_window.txt')
 
-GTS_CSWY_25kb %>%
+WC_25kb %>%
   SW_top_0.5_outliers() %>%
   # write_csv('SKR_25Kb_0.5%_Fst_outlier.csv')
-  write_tsv('GTS_CSWY_25Kb_0.5%_Fst_outlier.tsv')
+  write_tsv('WC_25Kb_0.5%_Fst_outlier.tsv')
 
 # ASHN_25kb %>%
 #   SW_top_5_outliers() %>%
@@ -2156,7 +2165,7 @@ WC_25_Zoomed_plot = ggplot(neutral,
                      limits = c(0,0.10))+
   labs(x = 'Cumulative base pair', 
        y = 'Fst', 
-       title = 'A) Common geothermal-Ambient comparison')+
+       title = 'B)')+
   theme(legend.position="none",
         # panel.border = element_blank(),
         panel.grid.major.x = element_blank(),
@@ -2182,7 +2191,7 @@ WC_25_region_man = Fst_manhattan(non_outs = neutral,
                               yval = FST_mean, 
                               chr = neutral$CHR,
                               out_col = '#fb6f92', 
-                              plot_letter = 'E) Common geothermal-Ambient comparison')
+                              plot_letter = 'A)')
  
 ASHN_25_top5 = read_csv('ASHN_25Kb_0.5%_Fst_outlier.csv') 
 ASHN_25kb = read_tsv('ASHN_Fst_25Kb_3obs_window.txt') 
@@ -2308,7 +2317,17 @@ ggsave(file = 'local_adapt_stickleback_0.5%_FST_25KB_manhattan_plot.tiff',
        width = 30, 
        height = 20)
 
-common_adapt = WC_25_Zoomed_plot
+common_adapt_zoom = WC_25_Zoomed_plot
+ggsave(file = 'common_adapt_stickleback_0.5%_FST_25KB_manhattan_plot.tiff', 
+       path = '~/Parsons_Postdoc/Stickleback_Genomic/Figures/', 
+       plot = common_adapt_zoom, 
+       dpi = 'retina', 
+       units = 'cm', 
+       width = 30, 
+       height = 15)
+
+
+common_adapt = WC_25_region_man
 ggsave(file = 'common_adapt_stickleback_0.5%_FST_25KB_manhattan_plot.tiff', 
        path = '~/Parsons_Postdoc/Stickleback_Genomic/Figures/', 
        plot = common_adapt, 
