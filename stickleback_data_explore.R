@@ -1830,22 +1830,45 @@ ggsave(file = 'local_adaptation_stickleback_0.5%_FST_manhattan_plot.tiff',
 # Outlier overlap ---------------------------------------------------------
 
 ## per population FST outliers
-# ASHN_Fst_clean = read_csv('ASHN_Fst_clean.csv') %>% 
-#   stickle_CHR_reorder() %>% 
-#   dist_cal() %>% 
-#   filter(value == 'Outlier')
-# MYV_Fst_clean = read_csv('MYV_Fst_clean.csv') %>% 
-#   stickle_CHR_reorder() %>% 
-#   dist_cal()%>% 
-#   filter(value == 'Outlier')
-# SKR_Fst_clean = read_csv('SKR_Fst_clean.csv') %>% 
-#   stickle_CHR_reorder() %>% 
-#   dist_cal()%>% 
-#   filter(value == 'Outlier')
-# GTS_CSWY_Fst_clean = read_csv('GTS_CSWY_Fst_clean.csv') %>% 
-#   stickle_CHR_reorder() %>% 
-#   dist_cal()%>% 
-#   filter(value == 'Outlier')
+ASHN_Fst_clean = read_csv('ASHN_TOP_DAWG_Fst_clean.csv') %>%
+  stickle_CHR_reorder() %>%
+  dist_cal() %>%
+  filter(value == 'Outlier') %>% 
+  select(SNP)
+MYV_Fst_clean = read_csv('MYV_TOP_DAWG_Fst_clean.csv') %>%
+  stickle_CHR_reorder() %>%
+  dist_cal()%>%
+  filter(value == 'Outlier') %>% 
+  select(SNP)
+SKR_Fst_clean = read_csv('SKR_TOP_DAWG_Fst_clean.csv') %>%
+  stickle_CHR_reorder() %>%
+  dist_cal()%>%
+  filter(value == 'Outlier') %>% 
+  select(SNP)
+GTS_CSWY_Fst_clean = read_csv('GTS_CSWY_TOP_DAWG_Fst_clean.csv') %>%
+  stickle_CHR_reorder() %>%
+  dist_cal()%>%
+  filter(value == 'Outlier') %>% 
+  select(SNP)
+
+
+intersect(ASHN_Fst_clean, 
+          MYV_Fst_clean)
+
+intersect(ASHN_Fst_clean, 
+          SKR_Fst_clean)
+
+intersect(ASHN_Fst_clean, 
+          GTS_CSWY_Fst_clean)
+
+intersect(MYV_Fst_clean, 
+          SKR_Fst_clean)
+
+intersect(MYV_Fst_clean, 
+          GTS_CSWY_Fst_clean)
+
+intersect(SKR_Fst_clean, 
+          GTS_CSWY_Fst_clean)
 
 ##Common FST outliers
 WC_Fst_clean_outs = read_csv('WC_Fst_clean.csv') %>% 
