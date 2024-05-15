@@ -13,6 +13,8 @@ setwd('~/Parsons_Postdoc/Stickleback_Genomic/vcf_filter/')
 library(ape)
 library(adegenet)
 library(pegas)
+library(hierfstat)
+library(poppr)
 library(tidyverse)
 
 data(jaguar)
@@ -32,19 +34,18 @@ meta_df = read_csv('Whole_genome_IndividualID.csv') %>%
 stickle_data@pop = as.factor(meta_df$pops)
 # stickle_data@pop
 
+ASHN_sub = popsub(stickle_data, 
+                   sublist = c('ASHNC', 
+                               'ASHNW'))
+
+
+ASHN_fst = genet.dist(ASHN_sub, 
+                      method = 'WC84')
+
+
+## perlocus fst
 pegas_df = alleles2loci(stickle_data)
 
 Fst(pegas_df, 
     pop = meta_df$pops)
 
-
-by(data, INDICES = data$population, FUN = NULL, ..., simplify = TRUE)
-
-test = by(pegas_df, 
-          INDICES = meta_df$pops, 
-          FUN = NULL)
-head(test)
-          
-Fst(jaguar)
-jaguar_corridor <- jaguar[jaguar$population == "Green Corridor", ]
-Fst(jaguar_corridor) 
