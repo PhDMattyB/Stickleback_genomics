@@ -36,3 +36,12 @@ pegas_df = alleles2loci(stickle_data)
 
 Fst(pegas_df, 
     pop = meta_df$pops)
+
+
+by(data, INDICES = data$population, FUN = NULL, ..., simplify = TRUE)
+
+test = by(pegas_df, 
+          INDICES = meta_df$pops, 
+          FUN = NULL)
+head(test)
+          
