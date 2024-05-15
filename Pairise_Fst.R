@@ -42,6 +42,15 @@ ASHN_sub = popsub(stickle_data,
 ASHN_fst = genet.dist(ASHN_sub, 
                       method = 'WC84')
 
+stickle_pops = popsub(stickle_data, 
+                  sublist = c('ASHNC', 
+                              'ASHNW', 
+                              'MYVC', 
+                              'MYVW', 
+                              'SKRC', 
+                              'SKRW', 
+                              'GTS', 
+                              'CSWY'))
 
 ## perlocus fst
 pegas_df = alleles2loci(stickle_data)
