@@ -45,3 +45,6 @@ test = by(pegas_df,
           FUN = NULL)
 head(test)
           
+Fst(jaguar)
+jaguar_corridor <- jaguar[jaguar$population == "Green Corridor", ]
+Fst(jaguar_corridor) 
