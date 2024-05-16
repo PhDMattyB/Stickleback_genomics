@@ -51,6 +51,8 @@ stickle_pops = popsub(stickle_data,
                               'SKRW', 
                               'GTS', 
                               'CSWY'))
+stickle_fst = genet.dist(stickle_pops, 
+                      method = 'WC84')
 
 ## perlocus fst
 pegas_df = alleles2loci(stickle_data)
