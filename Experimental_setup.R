@@ -16,6 +16,11 @@ library(tidyverse)
 
 treatment_data = read_csv('Experiment1_setup_data.csv')
 
+treatment_data %>% 
+  filter(Population == 'ACAC', 
+         Crosses == 126)
+
+
 ##
 # Warm side Initial---------------------------------------------------------------
 
