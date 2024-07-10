@@ -741,6 +741,10 @@ ASHN_gene_overlap_tib = as_tibble(ASHN_gene_overlap) %>%
   arrange(chromosome, 
           position)
 
+ASHN_gene_overlap_tib %>% 
+  group_by(feature) %>% 
+  summarize(n = n())
+
 gene_name_1 = ASHN_gene_overlap_tib %>% 
   # pull(gene_id) %>% 
   as_tibble() %>% 
@@ -774,52 +778,85 @@ gene_name_1 = ASHN_gene_overlap_tib %>%
                 gene_name) %>% 
   na.omit()
 
-gene_name_2 = ASHN_gene_overlap_tib %>% 
-  # pull(gene_id) %>% 
-  as_tibble() %>% 
-  dplyr::select(chromosome, 
-                position, 
-                start,
-                i.start,
-                end, 
-                i.end,
-                gene_id,
-                feature,
-                FST,) %>% 
-  separate(col = gene_id, 
-           into = c('ensemble_id', 
-                    'gene_name', 
-                    'parent_code', 
-                    'gene_name2'), 
-           sep = ';') %>%
-  separate(col = parent_code, 
-           into = c('Garbage', 
-                    'gene_name'), 
-           sep = '=') %>% 
-  dplyr::select(chromosome, 
-                position, 
-                start, 
-                i.start,
-                end, 
-                i.end,
-                FST,
-                feature,
-                gene_name) %>% 
-  na.omit()
+ASHN_gene_table = gene_name_1 %>%
+  arrange(chromosome, 
+          position) %>% 
+  distinct(gene_name, 
+           .keep_all = T) %>%
+  group_by(feature) %>%
+  summarize(n = n())
 
 
-ASHN_FST_out_genes = bind_rows(gene_name_1, 
-                               gene_name_2) %>% 
+ASHN_gene_only = gene_name_1 %>%
   arrange(chromosome, 
           position) %>% 
   distinct(gene_name, 
            .keep_all = T) %>% 
-  filter(!grepl('ENSG', 
-                gene_name)) 
+  filter(feature == 'gene') %>% 
+  select(gene_name)%>% 
+  write_csv('ASHN_NoWindow_FST_0.5%_outlier_genes.csv')
 
-ASHN_FST_out_genes %>% 
-  group_by(feature) %>% 
-  summarize(n_features = n())
+ASHN_regulatory_coding_genes = gene_name_1 %>%
+  arrange(chromosome, 
+          position) %>% 
+  distinct(gene_name, 
+           .keep_all = T) %>% 
+  write_csv('ASHN_NoWindow_FST_0.5%_outlier_regulatory_and_genes.csv')
+
+# 
+#   filter(!grepl('ENSG', 
+#                 gene_name)) 
+
+
+# gene_name_2 = ASHN_gene_overlap_tib %>% 
+#   # pull(gene_id) %>% 
+#   as_tibble() %>% 
+#   dplyr::select(chromosome, 
+#                 position, 
+#                 start,
+#                 i.start,
+#                 end, 
+#                 i.end,
+#                 gene_id,
+#                 feature,
+#                 FST,) %>% 
+#   separate(col = gene_id, 
+#            into = c('ensemble_id', 
+#                     'gene_name', 
+#                     'parent_code', 
+#                     'gene_name2'), 
+#            sep = ';') %>% 
+#   separate(col = parent_code, 
+#            into = c('Garbage', 
+#                     'gene_name'), 
+#            sep = '=') %>% 
+#   dplyr::select(chromosome, 
+#                 position, 
+#                 start, 
+#                 i.start,
+#                 end, 
+#                 i.end,
+#                 FST,
+#                 feature,
+#                 gene_name) %>% 
+#   na.omit()
+# 
+# gene_name_2 %>% 
+#   group_by(feature) %>% 
+#   summarize(n = n())
+
+# ASHN_FST_out_genes = bind_rows(gene_name_1, 
+#                                gene_name_2) %>% 
+#   arrange(chromosome, 
+#           position) %>% 
+#   distinct(gene_name, 
+#            .keep_all = T) %>% 
+#   filter(!grepl('ENSG', 
+#                 gene_name)) 
+# 
+# ASHN_FST_out_genes %>% 
+#   group_by(feature) %>% 
+#   summarize(n_features = n())
 
 ASHN_FST_out_genes %>% 
     filter(feature == 'gene') %>% 

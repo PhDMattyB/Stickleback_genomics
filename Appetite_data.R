@@ -142,3 +142,9 @@ ggsave('~/Parsons_Postdoc/Stickleback_Genomic/Figures/Time_spent_eating.tiff',
        height = 10, 
        width = 15)
 
+
+
+
+# percentage difference between ecotypes ----------------------------------
+
+
