@@ -801,6 +801,7 @@ ASHN_regulatory_coding_genes = gene_name_1 %>%
           position) %>% 
   distinct(gene_name, 
            .keep_all = T) %>% 
+  select(gene_name)%>% 
   write_csv('ASHN_NoWindow_FST_0.5%_outlier_regulatory_and_genes.csv')
 
 # 
