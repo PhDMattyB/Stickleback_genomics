@@ -790,20 +790,20 @@ ASHN_gene_table = gene_name_1 %>%
   group_by(feature) %>%
   summarize(n = n())
 
-gene_name_1 %>%
-  arrange(chromosome, 
-          position) %>% 
-  distinct(gene_name, 
-           .keep_all = T) %>%
-  filter(feature %in% c('gene',
-                        'CDS')) %>%
-  arrange(chromosome,
-          position) %>%
-  # filter(feature == 'gene') %>%
-  # filter(!grepl('ENSG',
-  #               gene_name))
-  select(gene_name)%>% 
-  write_csv('ASHN_NoWindow_FST_0.5%_outlier_genes.csv')
+# gene_name_1 %>%
+#   arrange(chromosome, 
+#           position) %>% 
+#   distinct(gene_name, 
+#            .keep_all = T) %>%
+#   filter(feature %in% c('gene',
+#                         'CDS')) %>%
+#   arrange(chromosome,
+#           position) %>%
+#   # filter(feature == 'gene') %>%
+#   # filter(!grepl('ENSG',
+#   #               gene_name))
+#   select(gene_name)%>% 
+#   write_csv('ASHN_NoWindow_FST_0.5%_outlier_genes.csv')
 
 
 ASHN_gene_only = gene_name_1 %>%
@@ -986,6 +986,21 @@ MYV_gene_table = gene_name_1 %>%
   group_by(feature) %>%
   summarize(n = n())
 
+gene_name_1 %>%
+  arrange(chromosome, 
+          position) %>% 
+  distinct(gene_name, 
+           .keep_all = T) %>%
+  filter(feature %in% c('gene',
+                        'CDS')) %>%
+  arrange(chromosome,
+          position) %>% View()
+  # filter(feature == 'gene') %>%
+  # filter(!grepl('ENSG',
+  #               gene_name))
+  select(gene_name)%>% 
+  write_csv('ASHN_NoWindow_FST_0.5%_outlier_genes.csv')
+
 
 MYV_gene_only = gene_name_1 %>%
   arrange(chromosome, 
@@ -1147,6 +1162,9 @@ gene_name_1 = SKR_gene_overlap_tib %>%
                 gene_name) %>% 
   na.omit()
 
+
+
+
 SKR_gene_table = gene_name_1 %>%
   arrange(chromosome, 
           position) %>% 
@@ -1155,6 +1173,15 @@ SKR_gene_table = gene_name_1 %>%
   group_by(feature) %>%
   summarize(n = n())
 
+gene_name_1 %>%
+  arrange(chromosome, 
+          position) %>% 
+  distinct(gene_name, 
+           .keep_all = T) %>%
+  filter(feature %in% c('gene',
+                        'CDS')) %>%
+  arrange(chromosome,
+          position) %>% View()
 
 SKR_gene_only = gene_name_1 %>%
   arrange(chromosome, 
@@ -1323,6 +1350,15 @@ GTS_GAR_gene_table = gene_name_1 %>%
   group_by(feature) %>%
   summarize(n = n())
 
+gene_name_1 %>%
+  arrange(chromosome, 
+          position) %>% 
+  distinct(gene_name, 
+           .keep_all = T) %>%
+  filter(feature %in% c('gene',
+                        'CDS')) %>%
+  arrange(chromosome,
+          position) %>% View()
 
 GTS_GAR_gene_only = gene_name_1 %>%
   arrange(chromosome, 
