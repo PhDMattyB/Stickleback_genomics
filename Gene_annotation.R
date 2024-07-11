@@ -742,6 +742,10 @@ ASHN_gene_overlap_tib = as_tibble(ASHN_gene_overlap) %>%
           position)
 
 ASHN_gene_overlap_tib %>% 
+  filter(feature == 'CDS') %>% 
+  pull(gene_id)
+
+ASHN_gene_overlap_tib %>% 
   group_by(feature) %>% 
   summarize(n = n())
 
@@ -786,6 +790,21 @@ ASHN_gene_table = gene_name_1 %>%
   group_by(feature) %>%
   summarize(n = n())
 
+gene_name_1 %>%
+  arrange(chromosome, 
+          position) %>% 
+  distinct(gene_name, 
+           .keep_all = T) %>%
+  filter(feature %in% c('gene',
+                        'CDS')) %>%
+  arrange(chromosome,
+          position) %>%
+  # filter(feature == 'gene') %>%
+  # filter(!grepl('ENSG',
+  #               gene_name))
+  select(gene_name)%>% 
+  write_csv('ASHN_NoWindow_FST_0.5%_outlier_genes.csv')
+
 
 ASHN_gene_only = gene_name_1 %>%
   arrange(chromosome, 
@@ -793,6 +812,8 @@ ASHN_gene_only = gene_name_1 %>%
   distinct(gene_name, 
            .keep_all = T) %>% 
   filter(feature == 'gene') %>% 
+    # filter(!grepl('ENSG',
+    #               gene_name))
   select(gene_name)%>% 
   write_csv('ASHN_NoWindow_FST_0.5%_outlier_genes.csv')
 
