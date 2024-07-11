@@ -1367,16 +1367,16 @@ axisdf_GTS = axis_df(GTS_CSWY_Fst_clean)
 
 non_outs = 
   # ASHN_Fst_clean %>%
-  MYV_Fst_clean %>%
-  # SKR_Fst_clean %>%
+  # MYV_Fst_clean %>%
+  SKR_Fst_clean %>%
   # GTS_CSWY_Fst_clean %>%
   filter(value == 'Neutral') 
 
 ## Get the outliers
 outs = 
   # ASHN_Fst_clean %>%
-  MYV_Fst_clean %>%
-  # SKR_Fst_clean %>%
+  # MYV_Fst_clean %>%
+  SKR_Fst_clean %>%
   # GTS_CSWY_Fst_clean %>%
   filter(value == 'Outlier') 
 
