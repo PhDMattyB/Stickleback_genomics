@@ -1456,7 +1456,6 @@ GTS_GAR_regulatory_coding_genes = gene_name_1 %>%
 #             col_names = F)
 
 
-
 # Gene overlap b/w pops ---------------------------------------------------
 
 ASHN_genes = read_csv('ASHN_NoWindow_FST_0.5%_outlier_genes.csv') %>% 
