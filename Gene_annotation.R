@@ -1465,7 +1465,6 @@ intersect(MYV_genes,
 intersect(SKR_genes, 
           GTS_CSWY_genes)
 
-
 ##
 # Methylation outliers ----------------------------------------------------
 
