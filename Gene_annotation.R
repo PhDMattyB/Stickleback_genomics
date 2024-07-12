@@ -701,6 +701,17 @@ GTS_CSWY_fst_genes %>%
 
 
 # ASHN genes no 100bp window ------------------------------
+ASHN_div_snps = read_csv('ASHN_TOP_DAWG_Fst_clean.csv') %>% 
+  select(-NMISS, 
+         -FST) %>%
+  rename(position = POS, 
+         chromosome = CHR, 
+         FST = FST_zero) %>% 
+  filter(value == 'Outlier') %>% 
+  arrange(chromosome, 
+          position) %>% 
+  group_by(chromosome)
+## create a 100bp window ar
 
 ASHN_div_window = ASHN_div_snps %>%
   group_by(chromosome)%>%
@@ -740,10 +751,13 @@ ASHN_gene_overlap_tib = as_tibble(ASHN_gene_overlap) %>%
   filter(chromosome != 'chrUn') %>% 
   arrange(chromosome, 
           position)
-
-ASHN_gene_overlap_tib %>% 
-  filter(feature == 'CDS') %>% 
-  pull(gene_id)
+# 
+# as_tibble(ASHN_gene_overlap) %>% 
+#   na.omit() %>% 
+#   filter(chromosome != 'chrUn') %>% 
+#   arrange(chromosome, 
+#           position) %>% 
+#   filter(feature == 'gene')
 
 ASHN_gene_overlap_tib %>% 
   group_by(feature) %>% 
@@ -945,6 +959,13 @@ MYV_gene_overlap_tib = as_tibble(MYV_gene_overlap) %>%
   arrange(chromosome, 
           position)
 
+as_tibble(MYV_gene_overlap) %>% 
+  na.omit() %>% 
+  filter(chromosome != 'chrUn') %>% 
+  arrange(chromosome, 
+          position) %>% 
+  filter(feature == 'gene')
+
 gene_name_1 = MYV_gene_overlap_tib %>% 
   # pull(gene_id) %>% 
   as_tibble() %>% 
@@ -994,7 +1015,7 @@ gene_name_1 %>%
   filter(feature %in% c('gene',
                         'CDS')) %>%
   arrange(chromosome,
-          position) %>% View()
+          position) 
   # filter(feature == 'gene') %>%
   # filter(!grepl('ENSG',
   #               gene_name))
