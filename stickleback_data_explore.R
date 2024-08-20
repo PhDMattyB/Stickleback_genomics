@@ -1430,7 +1430,7 @@ TOP_DAWG_PLOT = (ASHN_Fst_manhattan|MYV_Fst_manhattan)/(SKR_Fst_manhattan|GTS_CS
 ## ggsave that plot
 
 ggsave(file = 'stickleback_TOP_DAWG_0.5%_FST_manhattan_plot.tiff', 
-       path = 'C:/Stickleback_Genomic/Figures/', 
+       path = '~/Parsons_Postdoc/Stickleback_Genomic/Figures/', 
        plot = TOP_DAWG_PLOT, 
        dpi = 'retina', 
        units = 'cm', 
