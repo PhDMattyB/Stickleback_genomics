@@ -20,7 +20,13 @@ treatment_data %>%
   filter(Population == 'ACAC', 
          Crosses == 126)
 
-
+treatment_data %>% 
+  group_by(Treatment,
+          Temperature,
+          Rep) %>% 
+  summarize(n = n(), 
+            avg_length = mean(Length)) %>% 
+  View()
 ##
 # Warm side Initial---------------------------------------------------------------
 
