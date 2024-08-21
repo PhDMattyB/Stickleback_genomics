@@ -826,8 +826,8 @@ ASHN_gene_only = gene_name_1 %>%
   distinct(gene_name, 
            .keep_all = T) %>% 
   filter(feature == 'gene') %>% 
-    # filter(!grepl('ENSG',
-    #               gene_name))
+    filter(!grepl('ENSG',
+                  gene_name)) %>% 
   select(gene_name)%>% 
   write_csv('ASHN_NoWindow_FST_0.5%_outlier_genes.csv')
 
