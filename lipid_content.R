@@ -47,7 +47,8 @@ lipid_sum = lipid_clean %>%
   group_by(Lake_morph, 
            Temperature, 
            Season) %>% 
-  summarise(mean_fat = mean(Fat_content_g)) 
+  summarise(mean_fat = mean(Fat_content_g),
+            sd_fat = sd(Fat_content_g)) 
 
 mean_season = lipid_clean %>% 
   group_by(Season) %>% 
@@ -65,13 +66,30 @@ ggplot(lipid_clean)+
              col = 'black', 
              size = 4)
 
+season_temp_col = c('#0077b6',
+                   '#e76f51')
 ggplot(data = lipid_sum, 
        aes(x = Season, 
            y = mean_fat, 
            group = Lake_morph))+
   ylim(min = 0, 
        max = 0.08)+
+  labs(x = 'Season', 
+       y = 'Mean fat content')+
   geom_line(col = 'black', 
             size = 1)+
+  # geom_pointrange(aes(ymin = mean_fat-sd_fat,
+  #                     ymax = mean_fat+sd_fat))+
+  # geom_errorbarh(height=.2, 
+  #                aes(ymin = mean_fat-sd_fat, 
+  #                    ymax = mean_fat-sd_fat))+
   geom_point(aes(col = Temperature), 
-             size = 4)``
+             size = 4)+
+  scale_color_manual(values = season_temp_col)+
+  theme(panel.grid = element_blank(), 
+        axis.title = element_text(size = 14), 
+        axis.text = element_text(size = 12), 
+        legend.position = 'none')+
+  scale_x_discrete(limits = rev)
+
+                   
