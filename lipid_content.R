@@ -56,14 +56,14 @@ mean_season = lipid_clean %>%
 
 # Plot it -----------------------------------------------------------------
 
-season_temp_col = c('#0077b6',
-                   '#e76f51')
+season_temp_col = c('#003049', 
+                    '#c1121f')
 ggplot(data = lipid_sum, 
        aes(x = Season, 
            y = mean_fat, 
            group = Lake_morph))+
   ylim(min = 0, 
-       max = 0.08)+
+       max = 0.1)+
   labs(x = 'Season', 
        y = 'Mean fat content')+
   geom_violin(data = lipid_clean,
@@ -90,4 +90,9 @@ ggplot(data = lipid_sum,
         legend.position = 'none')+
   scale_x_discrete(limits = rev)
 
-                   
+ggsave('~/Parsons_Postdoc/Written_things/Stickle_genomic_paper/Fat_Phenotype.tiff', 
+       plot = last_plot(), 
+       dpi = 'retina', 
+       units = 'cm', 
+       width = 15, 
+       height = 10)
