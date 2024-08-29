@@ -56,16 +56,6 @@ mean_season = lipid_clean %>%
 
 # Plot it -----------------------------------------------------------------
 
-ggplot(lipid_clean)+
-  geom_violin(aes(x = Season, 
-                  y = Fat_content_g, 
-                  fill = Season)) +
-  geom_point(data = mean_season, 
-             aes(x = Season, 
-                 y = mean_fat_season), 
-             col = 'black', 
-             size = 4)
-
 season_temp_col = c('#0077b6',
                    '#e76f51')
 ggplot(data = lipid_sum, 
@@ -76,15 +66,23 @@ ggplot(data = lipid_sum,
        max = 0.08)+
   labs(x = 'Season', 
        y = 'Mean fat content')+
-  geom_line(col = 'black', 
-            size = 1)+
-  # geom_pointrange(aes(ymin = mean_fat-sd_fat,
-  #                     ymax = mean_fat+sd_fat))+
-  # geom_errorbarh(height=.2, 
-  #                aes(ymin = mean_fat-sd_fat, 
-  #                    ymax = mean_fat-sd_fat))+
-  geom_point(aes(col = Temperature), 
-             size = 4)+
+  geom_violin(data = lipid_clean,
+              aes(x = Season,
+                  y = Fat_content_g,
+                  group = Season), 
+              fill = 'white', 
+              col = 'grey', 
+              size = 2) +
+  geom_line(col = 'black',
+            size = 1,
+            position = position_dodge(0.3))+
+  geom_point(aes(col = Temperature),
+             size = 4,
+             position = position_dodge(0.3))+
+  # geom_line(col = 'black', 
+  #           size = 1)+
+  # geom_point(aes(col = Temperature), 
+  #            size = 4)+
   scale_color_manual(values = season_temp_col)+
   theme(panel.grid = element_blank(), 
         axis.title = element_text(size = 14), 
