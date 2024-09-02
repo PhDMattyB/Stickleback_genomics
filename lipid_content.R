@@ -31,6 +31,11 @@ lipid_clean = lipid_data %>%
   # filter(Population != 'STEIN') %>% 
   filter(Population != 'MYV')
 
+lipid_clean %>% 
+  filter(Season == 'Winter') %>% 
+  group_by(Population, 
+           Temperature) %>% 
+  summarize(n = n())
 
 
 # Analyse it --------------------------------------------------------------
