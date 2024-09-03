@@ -11,6 +11,7 @@ setwd('~/Parsons_Postdoc/Lipid_starvation_data/')
 
 library(tidyverse)
 
+theme_set(theme_bw())
 
 # Clean it ----------------------------------------------------------------
 
