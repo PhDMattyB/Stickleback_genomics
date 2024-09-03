@@ -60,6 +60,11 @@ mean_season = lipid_clean %>%
   group_by(Season) %>% 
   summarize(mean_fat_season = mean(Fat_content_g))
 
+mean_season = lipid_clean %>% 
+  group_by(Season, 
+           Lake_morph) %>% 
+  summarize(mean_fat_season = mean(Fat_content_g))
+
 # Plot it -----------------------------------------------------------------
 
 season_temp_col = c('#003049', 
