@@ -625,6 +625,22 @@ low_food_warm = treatment_data %>%
 #            Rep) %>% 
 #   summarize(Number = n())
 
+treatment_data %>% 
+  # filter(Treatment == 'Low Food', 
+  #        Population == 'ACAC') %>% 
+  filter(Treatment == 'HF', 
+         Temperature == '18') %>% 
+  group_by(Rep, 
+           Temperature, 
+           Population, 
+           Crosses) %>%
+  summarize(avg_weight = mean(Weight), 
+            avg_length = mean(Length), 
+            density = n()) %>% 
+  mutate(low_food_amount = avg_weight*0.02,
+         low_food_amount_density = avg_weight*0.02/density,
+         low_cond_fac = avg_weight/avg_length^(1/3)*100)
+
 
 high_food_warm = treatment_data %>% 
   # filter(Treatment == 'High Food', 
