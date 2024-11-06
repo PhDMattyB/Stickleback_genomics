@@ -8,9 +8,9 @@
 ##############################
 
 
-setwd('')
+# setwd('')
 
-# setwd('~/Parsons_Postdoc/Experiment1/')
+setwd('~/Parsons_Postdoc/Experiment1/')
 
 library(tidyverse)
 
@@ -36,10 +36,11 @@ low_food_warm = treatment_data %>%
   #        Population == 'ACAC') %>% 
   filter(Treatment == 'Low Food', 
          Temperature == '18') %>% 
-  group_by(Rep, 
-           Temperature)%>% 
   rename(Pop = Population, 
-         Temp = Temperature) %>% 
+         Temp = Temperature) %>%
+  group_by(Rep,
+           Pop,
+           Temp) %>%  
   summarize(avg_weight = mean(Weight), 
             avg_length = mean(Length), 
             density = n()) %>% 
@@ -61,11 +62,12 @@ high_food_warm = treatment_data %>%
   # filter(Treatment == 'High Food', 
   #        Population == 'ACAC') %>% 
   filter(Treatment == 'High Food', 
-         Temperature == '18') %>% 
-  group_by(Rep, 
-           Temperature)%>% 
+         Temperature == '18') %>%
   rename(Pop = Population, 
-         Temp = Temperature) %>% 
+         Temp = Temperature) %>%
+  group_by(Rep,
+           Pop,
+           Temp)%>% 
   summarize(avg_weight = mean(Weight), 
             avg_length = mean(Length), 
             density = n()) %>% 
@@ -599,7 +601,7 @@ treatment_data %>%
 
 
 
-low_food_warm = treatment_data %>% 
+low_food_warm_init = treatment_data %>% 
   # filter(Treatment == 'Low Food', 
   #        Population == 'ACAC') %>% 
   filter(Treatment == 'LF', 
@@ -625,24 +627,24 @@ low_food_warm = treatment_data %>%
 #            Rep) %>% 
 #   summarize(Number = n())
 
-treatment_data %>% 
-  # filter(Treatment == 'Low Food', 
-  #        Population == 'ACAC') %>% 
-  filter(Treatment == 'HF', 
-         Temperature == '18') %>% 
-  group_by(Rep, 
-           Temperature, 
-           Population, 
-           Crosses) %>%
-  summarize(avg_weight = mean(Weight), 
-            avg_length = mean(Length), 
-            density = n()) %>% 
-  mutate(low_food_amount = avg_weight*0.02,
-         low_food_amount_density = avg_weight*0.02/density,
-         low_cond_fac = avg_weight/avg_length^(1/3)*100)
+# treatment_data %>% 
+#   # filter(Treatment == 'Low Food', 
+#   #        Population == 'ACAC') %>% 
+#   filter(Treatment == 'HF', 
+#          Temperature == '18') %>% 
+#   group_by(Rep, 
+#            Temperature, 
+#            Population, 
+#            Crosses) %>%
+#   summarize(avg_weight = mean(Weight), 
+#             avg_length = mean(Length), 
+#             density = n()) %>% 
+#   mutate(low_food_amount = avg_weight*0.02,
+#          low_food_amount_density = avg_weight*0.02/density,
+#          low_cond_fac = avg_weight/avg_length^(1/3)*100)
 
 
-high_food_warm = treatment_data %>% 
+high_food_warm_init = treatment_data %>% 
   # filter(Treatment == 'High Food', 
   #        Population == 'ACAC') %>% 
   filter(Treatment == 'HF', 
@@ -665,3 +667,72 @@ high_food_warm = treatment_data %>%
 #   group_by(Population, 
 #            Rep) %>% 
 #   summarize(Number = n())
+
+
+treatment_data_post = read_csv('F2_Warm_AW_MC_Final.csv')
+
+low_food_warm_post = treatment_data_post %>% 
+  filter(Treatment == 'LF', 
+         Temperature == '18') %>% 
+  group_by(Rep, 
+           Temperature, 
+           Population)%>% 
+  rename(Pop = Population, 
+         Temp = Temperature) %>% 
+  summarize(avg_weight = mean(Weight), 
+            avg_length = mean(Length), 
+            density = n()) %>% 
+  mutate(low_food_amount = avg_weight*0.3,
+         low_food_amount_density = (avg_weight*0.3)/density,
+         low_cond_fac = avg_weight/avg_length^(1/3)*100)
+
+high_food_warm_post = treatment_data_post %>% 
+  filter(Treatment == 'HF', 
+         Temperature == '18') %>% 
+  group_by(Rep, 
+           Temperature, 
+           Population)%>% 
+  rename(Pop = Population, 
+         Temp = Temperature) %>% 
+  summarize(avg_weight = mean(Weight), 
+            avg_length = mean(Length), 
+            density = n()) %>% 
+  mutate(high_food_amount = avg_weight*0.3,
+         high_food_amount_density = (avg_weight*0.3)/density,
+         high_cond_fac = avg_weight/avg_length^(1/3)*100)
+
+
+
+LF_warm_results = inner_join(low_food_warm_init, 
+                             low_food_warm_post, 
+                             by = c('Pop', 
+                                    'Rep', 
+                                    'Temp')) %>%  
+  select(-'low_food_amount.x', 
+         -'low_food_amount.y') %>% 
+  mutate(Weight_dif = avg_weight.y - avg_weight.x, 
+         Length_growth = avg_length.y - avg_length.x, 
+         cond_fac_diff = low_cond_fac.y - low_cond_fac.x) %>% 
+  select(Pop, 
+         Rep,
+         Temp,
+         Weight_dif, 
+         Length_growth, 
+         cond_fac_diff)
+
+HF_warm_results = inner_join(high_food_warm_init, 
+                             high_food_warm_post, 
+                             by = c('Pop', 
+                                    'Rep', 
+                                    'Temp')) %>% 
+  select(-'high_food_amount.x', 
+         -'high_food_amount.y') %>% 
+  mutate(Weight_dif = avg_weight.y - avg_weight.x, 
+         Length_growth = avg_length.y - avg_length.x, 
+         cond_fac_diff = high_cond_fac.y - high_cond_fac.x) %>% 
+  select(Pop, 
+         Rep,
+         Temp,
+         Weight_dif, 
+         Length_growth, 
+         cond_fac_diff)
