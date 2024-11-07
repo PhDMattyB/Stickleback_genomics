@@ -576,7 +576,72 @@ high_food_warm_2nd = treatment_data_2nd %>%
 
 
 # Warm side data analysis -------------------------------------------------
-initial_data = read_csv('Experiment1_setup_data.csv') 
+
+create_aov <- function(y_var, x_var, z_var) {
+  aov(formula = as.formula(glue("{y_var} ~ {x_var}*{z_var}")),
+      data = df)
+}
+
+initial_data = read_csv('Experiment1_setup_data.csv') %>% 
+  na.omit()
 final_data = read_csv('Experiment1_Sampling_Good.csv')
 
+initial_data$Temperature = as.factor(initial_data$Temperature)
+initial_data$Rep = as.factor(initial_data$Rep)
 
+initial_data %>% 
+  filter(Temperature == '18') %>% 
+ggplot(aes(x = Rep, 
+           y = Weight))+
+  geom_violin(aes(fill = Population))+
+  geom_boxplot(aes(fill = Population))+
+  # facet_grid(~Population)+
+  facet_grid(~Treatment)
+
+warm_initial = initial_data %>% 
+  filter(Temperature == '18')
+
+nest_df = warm_initial %>% 
+  group_by(Population) %>% 
+  nest()
+
+rd_model = function(df) {
+  lm(Weight ~ Rep, 
+     data = df)
+}
+
+weight_aov_df = nest_df %>% 
+  mutate(mod = map(data, rd_model))
+
+weight_aov_df = weight_aov_df %>% mutate(tidy = map(mod, broom::tidy),
+       glance = map(mod, broom::glance), 
+       augment = map(mod, broom::augment), 
+       rsq = glance %>% map_dbl("adj.r.squared"), 
+       pval = glance %>% map_dbl("p.value"))
+
+posthoc_model = function(df) {
+  TukeyHSD(mod, 
+     conf.level = 0.95)
+}
+
+TukeyHSD(weight_aov_df$mod[[1]], 
+         conf.level = 0.95)
+
+weight_aov_df$mod[[1]] %>% 
+  mutate(posthoc = map(data, 
+                       posthoc_model))
+
+weight_aov_df$mod %>% 
+  mutate(mod = map(data, posthoc_model))
+
+
+posthoc = TukeyHSD(test_aov, 
+         conf.level = 0.95)
+
+nest_df$glance
+# warm_weight_rep = aov(Weight ~ Rep*Population, 
+#     data = warm_initial, 
+#     type = '2')
+# 
+# summary(warm_weight_rep)
+# 
