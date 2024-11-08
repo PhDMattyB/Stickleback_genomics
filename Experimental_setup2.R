@@ -699,7 +699,7 @@ save_fish %>%
   scale_fill_manual(values = save_fish_pal)+
   labs(y = 'Condition factor')
 
-save_fish %>% 
+cond_factor_plot = save_fish %>% 
   mutate(.data = save_fish,
          status2 = as.factor(case_when(
            status == 'post' ~ 'background',
@@ -710,8 +710,9 @@ save_fish %>%
   #                    fill = status), 
   #                col = 'black')+
   geom_dotplot(aes(x = condition_factor,
-                   fill = status2),
-               col = 'black', 
+                   fill = status2, 
+                   col = status2),
+               # col = 'black', 
                binwidth = 1)+
   geom_segment(aes(x = 179.84, 
                    y = 0.50,
@@ -723,13 +724,14 @@ save_fish %>%
   #                  fill = status), 
   #              col = 'black')+
   scale_fill_manual(values = save_fish_pal)+
+  scale_color_manual(values = save_fish_pal)+
   labs(x = 'Condition factor', 
        y = 'Number of fish')+
   theme(panel.grid = element_blank(), 
         axis.title = element_text(size = 14), 
         axis.text = element_text(size = 12), 
         legend.position = 'none')
-
-
-geom_segment(aes(x = 5, y = 30, xend = 3.5, yend = 25),
-             arrow = arrow(length = unit(0.5, "cm")))
+ggsave('save_fish_dotplot.tiff', 
+       plot = cond_factor_plot, 
+       dpi = 'retina', 
+       units = 'cm')
