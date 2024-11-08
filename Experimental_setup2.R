@@ -578,7 +578,19 @@ high_food_warm_2nd = treatment_data_2nd %>%
 # Warm side data analysis -------------------------------------------------
 
 initial_data = read_csv('Experiment1_setup_data.csv') %>% 
-  na.omit()
+  na.omit() %>% 
+  rename(Temp = Temperature, 
+         Pop = Population, 
+         Cross = Crosses) %>% 
+  select(Treatment, 
+         Generation, 
+         Temp, 
+         Pop, 
+         Cross, 
+         Rep,
+         Length, 
+         Weight) %>% 
+  mutate(status = 'initial')
 initial_data$Temperature = as.factor(initial_data$Temperature)
 initial_data$Rep = as.factor(initial_data$Rep)
 
@@ -618,8 +630,49 @@ initial_data %>%
 
 
 final_data = read_csv('Experiment1_Sampling_Good.csv') %>% 
-  na.omit()
+  na.omit() %>% 
+  select(Treatment, 
+         Generation, 
+         Temp, 
+         Pop, 
+         Cross, 
+         Rep,
+         Length, 
+         Weight) %>% 
+  mutate(status = 'final') 
 final_data$Temp = as.factor(final_data$Temp)
 final_data$Rep = as.factor(final_data$Rep)
 
 
+full_data = bind_rows(initial_data, 
+                      final_data)
+
+
+
+save_fish = read_csv('save_the_fish_data.csv')
+
+save_fish_pal = c("#778da9", 
+                  '#adb5bd', 
+                  '#f72585')
+
+save_da_fish = save_fish %>% 
+  ggplot()+
+  geom_point(aes(x = Weight, 
+                 y = Length, 
+                 fill = status),
+             size = 3, 
+             col = 'black', 
+             pch = 21)+
+  geom_smooth(aes(x = Weight, 
+                  y = Length), 
+              col = 'Black')+
+  scale_fill_manual(values = save_fish_pal)+
+  theme(axis.title = element_text(size = 14), 
+        axis.text = element_text(size = 12), 
+        legend.position = 'none')
+  
+
+ggsave('Save_The_Fish.tiff', 
+       plot = save_da_fish, 
+       dpi = 'retina', 
+       units = 'cm')
