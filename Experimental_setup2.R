@@ -639,7 +639,7 @@ final_data = read_csv('Experiment1_Sampling_Good.csv') %>%
          Rep,
          Length, 
          Weight) %>% 
-  mutate(status = 'final') 
+  mutate(status = 'post') 
 final_data$Temp = as.factor(final_data$Temp)
 final_data$Rep = as.factor(final_data$Rep)
 
@@ -647,12 +647,15 @@ final_data$Rep = as.factor(final_data$Rep)
 full_data = bind_rows(initial_data, 
                       final_data)
 
-
+full_data %>% 
+  write_csv('save_the_fish_data.csv')
 
 save_fish = read_csv('save_the_fish_data.csv')
 
-save_fish_pal = c("#778da9", 
-                  '#adb5bd', 
+save_fish = save_fish %>% 
+  mutate(condition_factor = Weight/Length^(1/3)*100)
+
+save_fish_pal = c("#778da9",
                   '#f72585')
 
 save_da_fish = save_fish %>% 
@@ -676,3 +679,57 @@ ggsave('Save_The_Fish.tiff',
        plot = save_da_fish, 
        dpi = 'retina', 
        units = 'cm')
+
+
+save_fish %>% 
+  mutate(.data = save_fish,
+         status2 = as.factor(case_when(
+           status == 'post' ~ 'background',
+           status == 'initial' ~ 'background',
+           status == 'Save' ~ 'Save'))) %>% 
+  ggplot()+
+  geom_violin(aes(x = status2, 
+                  y = condition_factor, 
+                  fill = status2), 
+              col = 'black')+
+  geom_boxplot(aes(x = status2, 
+                   y = condition_factor, 
+                   fill = status2), 
+               col = 'black')+
+  scale_fill_manual(values = save_fish_pal)+
+  labs(y = 'Condition factor')
+
+save_fish %>% 
+  mutate(.data = save_fish,
+         status2 = as.factor(case_when(
+           status == 'post' ~ 'background',
+           status == 'initial' ~ 'background',
+           status == 'Save' ~ 'Save'))) %>% 
+  ggplot()+
+  # geom_histogram(aes(x = condition_factor, 
+  #                    fill = status), 
+  #                col = 'black')+
+  geom_dotplot(aes(x = condition_factor,
+                   fill = status2),
+               col = 'black', 
+               binwidth = 1)+
+  geom_segment(aes(x = 179.84, 
+                   y = 0.50,
+                   xend = 179.84, 
+                   yend = 0.1), 
+               arrow = arrow(length = unit(0.5, 
+                                           'cm')))+
+  # geom_freqpoly(aes(x = condition_factor, 
+  #                  fill = status), 
+  #              col = 'black')+
+  scale_fill_manual(values = save_fish_pal)+
+  labs(x = 'Condition factor', 
+       y = 'Number of fish')+
+  theme(panel.grid = element_blank(), 
+        axis.title = element_text(size = 14), 
+        axis.text = element_text(size = 12), 
+        legend.position = 'none')
+
+
+geom_segment(aes(x = 5, y = 30, xend = 3.5, yend = 25),
+             arrow = arrow(length = unit(0.5, "cm")))
