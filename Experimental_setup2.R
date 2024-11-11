@@ -16,17 +16,17 @@ library(tidyverse)
 
 treatment_data = read_csv('Experiment1_setup_data.csv') 
 
-treatment_data %>% 
-  filter(Population == 'ACAC', 
-         Crosses == 126)
+# treatment_data %>% 
+#   filter(Population == 'ACAC', 
+#          Crosses == 126)
 
-treatment_data %>% 
-  group_by(Treatment,
-          Temperature,
-          Rep) %>% 
-  summarize(n = n(), 
-            avg_length = mean(Length)) %>% 
-  View()
+# treatment_data %>% 
+#   group_by(Treatment,
+#           Temperature,
+#           Rep) %>% 
+#   summarize(n = n(), 
+#             avg_length = mean(Length)) %>% 
+#   View()
 ##
 # Warm side Initial---------------------------------------------------------------
 
@@ -252,22 +252,23 @@ low_food_cold = treatment_data %>%
   filter(Treatment == 'Low Food', 
          Temperature == '12') %>% 
   group_by(Rep, 
+           Population,
            Temperature)%>% 
-  rename(Pop = Population, 
+  rename(Pop = Population,
          Temp = Temperature) %>% 
   summarize(avg_weight = mean(Weight), 
             avg_length = mean(Length)) %>% 
   mutate(low_food_amount = avg_weight*0.02, 
          low_cond_fac = avg_weight/avg_length^(1/3)*100)
 
-treatment_data %>% 
-  filter(Temperature == '12') %>% 
-  # group_by(Crosses) %>% 
-  distinct(Crosses, 
-           .keep_all = T) %>% 
-  select(Population, 
-         Crosses) %>% 
-  write_csv('Cold_side_Experimental_Crosses.csv')
+# treatment_data %>% 
+#   filter(Temperature == '12') %>% 
+#   # group_by(Crosses) %>% 
+#   distinct(Crosses, 
+#            .keep_all = T) %>% 
+#   select(Population, 
+#          Crosses) %>% 
+#   write_csv('Cold_side_Experimental_Crosses.csv')
 # treatment_data %>% 
 #   filter(Treatment == 'Low Food', 
 #          Temperature == '12') %>% 
@@ -282,6 +283,7 @@ high_food_cold = treatment_data %>%
   filter(Treatment == 'High Food', 
          Temperature == '12') %>% 
   group_by(Rep, 
+           Population,
            Temperature)%>% 
   rename(Pop = Population, 
          Temp = Temperature) %>% 
