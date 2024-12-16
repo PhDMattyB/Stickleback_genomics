@@ -69,7 +69,7 @@ mean_season = lipid_clean %>%
 
 season_temp_col = c('#003049', 
                     '#c1121f')
-ggplot(data = lipid_sum, 
+lipid_plot = ggplot(data = lipid_sum, 
        aes(x = Season, 
            y = mean_fat, 
            group = Lake_morph))+
@@ -97,12 +97,13 @@ ggplot(data = lipid_sum,
   scale_color_manual(values = season_temp_col)+
   theme(panel.grid = element_blank(), 
         axis.title = element_text(size = 14), 
-        axis.text = element_text(size = 12), 
+        axis.text = element_text(size = 12),
+        axis.title.x = element_blank(),
         legend.position = 'none')+
   scale_x_discrete(limits = rev)
 
 ggsave('~/Parsons_Postdoc/Written_things/Stickle_genomic_paper/Fat_Phenotype.tiff', 
-       plot = last_plot(), 
+       plot = lipid_plot, 
        dpi = 'retina', 
        units = 'cm', 
        width = 15, 
