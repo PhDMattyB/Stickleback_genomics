@@ -34,6 +34,14 @@ genlight@pop = as.factor(meta_df$pops)
 # stickle_data@pop = as.factor(meta_df$pops)
 # stickle_data@pop
 
+# ASHN = popsub(genlight, 
+#               sublist = c('ASHNC', 
+#                           'ASHNW'))
+# ASHN_fst_cal = stamppFst(geno = ASHN, 
+#                     nboots = 100, 
+#                     percent = 95, 
+#                     nclusters = 1)
+
 stickle_pops = popsub(genlight, 
                   sublist = c('ASHNC', 
                               'ASHNW', 
