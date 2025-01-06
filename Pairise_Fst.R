@@ -16,33 +16,25 @@ library(pegas)
 library(hierfstat)
 library(poppr)
 library(tidyverse)
+library(vcfR)
+library(StAMPP)
+# 
+# data(jaguar)
+# Fst(jaguar)
 
-data(jaguar)
-Fst(jaguar)
+vcf = read.vcfR('stickleback_filtered_vcf.vcf', 
+                verbose = FALSE)
+genlight = vcfR2genlight(vcf)
 
-
-# read.vcf('stickleback_filtered_vcf.vcf', 
-#          which.loci = 1:173000)
-
-# read.genepop('stickleback_filtered_genepop.gen')
-
-stickle_data = read.structure('stickleback_filtered_structure.stru')
 meta_df = read_csv('Whole_genome_IndividualID.csv') %>% 
   rename(none = 2, 
          pops = 3)
 
-stickle_data@pop = as.factor(meta_df$pops)
+genlight@pop = as.factor(meta_df$pops)
+# stickle_data@pop = as.factor(meta_df$pops)
 # stickle_data@pop
 
-ASHN_sub = popsub(stickle_data, 
-                   sublist = c('ASHNC', 
-                               'ASHNW'))
-
-
-ASHN_fst = genet.dist(ASHN_sub, 
-                      method = 'WC84')
-
-stickle_pops = popsub(stickle_data, 
+stickle_pops = popsub(genlight, 
                   sublist = c('ASHNC', 
                               'ASHNW', 
                               'MYVC', 
@@ -51,12 +43,10 @@ stickle_pops = popsub(stickle_data,
                               'SKRW', 
                               'GTS', 
                               'CSWY'))
-stickle_fst = genet.dist(stickle_pops, 
-                      method = 'WC84')
 
-## perlocus fst
-pegas_df = alleles2loci(stickle_data)
+fst_cal = stamppFst(geno = stickle_pops, 
+          nboots = 100, 
+          percent = 95, 
+          nclusters = 1)
 
-Fst(pegas_df, 
-    pop = meta_df$pops)
 
