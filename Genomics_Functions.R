@@ -67,6 +67,36 @@ Chr_convert = function(data){
   return(data)  
 }
 
+Chr_convert2 = function(data){
+  data = mutate(.data = data,
+                chr_num = as.factor(case_when(
+                  CHR == 'chr_I' ~ '1',
+                  CHR == 'chr_II' ~ '2',
+                  CHR == 'chr_III' ~ '3',
+                  CHR == 'chr_IV' ~ '4',
+                  CHR == 'chr_IX' ~ '5',
+                  CHR == 'chr_M' ~ '6',
+                  CHR == 'chr_Un' ~ '7',
+                  CHR == 'chr_V' ~ '8',
+                  CHR == 'chr_VI' ~ '9',
+                  CHR == 'chr_VII' ~ '10',
+                  CHR == 'chr_VIII' ~ '11',
+                  CHR == 'chr_X' ~ '12',
+                  CHR == 'chr_XI' ~ '13',
+                  CHR == 'chr_XII' ~ '14',
+                  CHR == 'chr_XIII' ~ '15',
+                  CHR == 'chr_XIV' ~ '16',
+                  CHR == 'chr_XIX' ~ '17',
+                  CHR == 'chr_XV' ~ '18',
+                  CHR == 'chr_XVI' ~ '19',
+                  CHR == 'chr_XVII' ~ '20',
+                  CHR == 'chr_XVIII' ~ '21',
+                  CHR == 'chr_XX' ~ '22',
+                  CHR == 'chr_XXI' ~ '23',
+                  CHR == 'chr_Y' ~ '24')))
+  return(data)  
+}
+
 
 stickle_CHR_reorder = function(data){
   data$CHR <- factor(data$CHR, 

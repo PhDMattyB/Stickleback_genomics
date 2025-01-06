@@ -1366,18 +1366,18 @@ axisdf_SKR = axis_df(SKR_Fst_clean)
 axisdf_GTS = axis_df(GTS_CSWY_Fst_clean)
 
 non_outs = 
-  # ASHN_Fst_clean %>%
+  ASHN_Fst_clean %>%
   # MYV_Fst_clean %>%
   # SKR_Fst_clean %>%
-  GTS_CSWY_Fst_clean %>%
+  # GTS_CSWY_Fst_clean %>%
   filter(value == 'Neutral') 
 
 ## Get the outliers
 outs = 
-  # ASHN_Fst_clean %>%
+  ASHN_Fst_clean %>%
   # MYV_Fst_clean %>%
   # SKR_Fst_clean %>%
-  GTS_CSWY_Fst_clean %>%
+  # GTS_CSWY_Fst_clean %>%
   filter(value == 'Outlier') 
 
 ## ASHN colour = #00798c
@@ -1436,6 +1436,75 @@ ggsave(file = 'stickleback_TOP_DAWG_0.5%_FST_manhattan_plot.tiff',
        units = 'cm', 
        width = 40, 
        height = 20)
+
+
+# Fst violin plots --------------------------------------------------------
+
+library(qqman)
+
+manhattan(gwasResults, chr="CHR", bp="BP", snp="SNP", p="P" )
+
+ASHN_Fst_clean
+
+test = Chr_convert2(ASHN_Fst_clean)
+
+test$chr_num = as.numeric(test$chr_num)
+
+manhattan(test, 
+          chr = 'chr_num', 
+          bp = 'POS', 
+          snp = 'SNP', 
+          p = 'FST_zero')
+
+MYV_Fst_clean %>% 
+  mutate(test_name = 'Group') %>% 
+  ggplot()+
+  geom_dotplot(aes(x = test_name, 
+                   y = FST_zero))
+  geom_violin(aes(x = test_name, 
+                  y = FST_zero))
+
+MYV_Fst_clean %>% 
+  filter(FST_zero < 0.002)
+
+MYV_Fst_clean %>% 
+  filter(FST_zero > 0.4, 
+         FST_zero < 0.5)
+
+ASHN_Fst_clean %>% 
+  filter(FST_zero > 0.0022, 
+         FST_zero < 0.1)
+ASHN_Fst_clean %>% 
+  filter(FST_zero > 0.1, 
+         FST_zero < 0.2)
+ASHN_Fst_clean %>% 
+  filter(FST_zero > 0.2, 
+         FST_zero < 0.3)
+
+ASHN_Fst_clean %>% 
+  filter(FST_zero > 0.3, 
+         FST_zero < 0.4)
+ASHN_Fst_clean %>% 
+  filter(FST_zero > 0.4, 
+         FST_zero < 0.5)
+ASHN_Fst_clean %>% 
+  filter(FST_zero > 0.5)
+
+  
+non_outs = 
+  # ASHN_Fst_clean %>%
+  # MYV_Fst_clean %>%
+  # SKR_Fst_clean %>%
+  GTS_CSWY_Fst_clean %>%
+  filter(value == 'Neutral') 
+
+## Get the outliers
+outs = 
+  # ASHN_Fst_clean %>%
+  # MYV_Fst_clean %>%
+  # SKR_Fst_clean %>%
+  GTS_CSWY_Fst_clean %>%
+  filter(value == 'Outlier') 
 
 
 ##
