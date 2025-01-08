@@ -29,8 +29,8 @@ lipid_clean = lipid_data %>%
          Percent_fat_content) %>% 
   rename(Population = Population...1, 
          Lake_morph = Population...2) %>% 
-  # filter(Population != 'STEIN') %>% 
-  filter(Population != 'MYV')
+  # filter(Population != 'STEIN') %>%
+filter(Population != 'MYV')
 
 lipid_clean %>% 
   filter(Season == 'Winter') %>% 
