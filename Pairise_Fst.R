@@ -57,4 +57,4 @@ fst_cal = stamppFst(geno = stickle_pops,
           percent = 95, 
           nclusters = 1)
 
-
+fst_cal$Fsts
