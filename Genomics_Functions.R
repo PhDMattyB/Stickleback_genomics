@@ -129,6 +129,37 @@ stickle_CHR_reorder = function(data){
   
 }
 
+stickle_CHR_reorder2 = function(data){
+  data$CHR <- factor(data$CHR, 
+                     levels=c("chrI",
+                              "chrII", 
+                              "chrIII", 
+                              'chrIV', 
+                              'chrV', 
+                              'chrVI', 
+                              'chrVII', 
+                              'chrVIII', 
+                              'chrIX', 
+                              'chrX', 
+                              'chrXI', 
+                              'chrXII', 
+                              'chrXIII', 
+                              'chrXIV', 
+                              'chrXV', 
+                              'chrXVI', 
+                              'chrXVII', 
+                              'chrXVIII', 
+                              'chrXIX', 
+                              'chrXX', 
+                              'chrXXI', 
+                              'chrY', 
+                              'chrM', 
+                              'chrUn'))
+  # data$CHR = as.character(data$CHR)
+  return(data)
+  
+}
+
 dist_cal = function(data){
   data %>% 
     group_by(CHR) %>% 
