@@ -102,24 +102,27 @@ Final_data = read_csv('Experiment1_Sampling_Good.csv') %>%
         remove = F)
 
 warm = Final_data %>% 
-  filter(Pop == 'ACAC', 
+  filter(Pop == 'MWMW', 
          Temp == '18', 
-         Rep == '1') %>% 
+         Rep == '2') %>% 
   select(Sample_ID) %>% 
   arrange(Sample_ID)
 cold = Final_data %>% 
-  filter(Pop == 'ACAC', 
+  filter(Pop == 'MWMW', 
          Temp == '12', 
-         Rep == '1') %>% 
+         Rep == '2') %>% 
   select(Sample_ID) %>% 
   arrange(Sample_ID)
 
-inner_join(warm, 
-           cold)
+# inner_join(warm, 
+#            cold)
+# 
+# bind_cols(warm, 
+#           cold) %>% 
+#   View()
 
-bind_cols(warm, 
-          cold) %>% 
-  View()
+View(warm)
+View(cold)
 
 high_food_warm_final = Final_data %>% 
   # filter(Treatment == 'High Food', 
