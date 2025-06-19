@@ -87,7 +87,7 @@ high_food_warm = treatment_data %>%
 
 
 Final_data = read_csv('Experiment1_Sampling_Good.csv') %>% 
-  mutate(.data = Final_data,
+  mutate(.data = .,
          Treatment2 = as.factor(case_when(
            Treatment == 'High Food' ~ 'HF',
            Treatment == 'Low Food' ~ 'LF'))) %>% 
@@ -102,15 +102,15 @@ Final_data = read_csv('Experiment1_Sampling_Good.csv') %>%
         remove = F)
 
 warm = Final_data %>% 
-  filter(Pop == 'MWMW', 
+  filter(Pop == 'ACAC', 
          Temp == '18', 
-         Rep == '2') %>% 
+         Rep == '1') %>% 
   select(Sample_ID) %>% 
   arrange(Sample_ID)
 cold = Final_data %>% 
-  filter(Pop == 'MWMW', 
+  filter(Pop == 'ACAC', 
          Temp == '12', 
-         Rep == '2') %>% 
+         Rep == '1') %>% 
   select(Sample_ID) %>% 
   arrange(Sample_ID)
 
