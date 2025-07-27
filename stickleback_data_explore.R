@@ -2960,7 +2960,7 @@ ggsave('~/Parsons_Postdoc/Stickleback_Genomic/Figures/LFMM_temp_FST.tiff',
        height = 5)
 
 ##
-# af-vapeR ----------------------------------------------------------------
+O# af-vapeR ----------------------------------------------------------------
 
 setwd('~/Parsons_Postdoc/Stickleback_Genomic/afvaper/')
 
@@ -3398,7 +3398,7 @@ WC_Fst_outs = read_csv('WC_Fst_clean.csv') %>%
 LFMM_FST_data %>% 
   filter(CHR == 'chr_XXI', 
          POS >= 11044262, 
-         POS <= 11574042) %>% View() 
+         POS <= 11574042) %>%  
   filter(qvalue <= 0.01)
 
 LFMM_FST_data %>% 
