@@ -45,3 +45,25 @@ chr_XXI_SNPs = bind_cols(chr_xxi_meta_data,
 
 
 View(chr_XXI_SNPs)
+
+
+dna <- ape::read.dna('GCF_016920845.1_GAculeatus_UGA_version5_genomic.fna', 
+                     format = "fasta")
+
+gff <- read.table('genomic.gff', sep="\t", quote="")
+
+chromR_xxi = create.chromR(name = 'chrxxi', 
+                           vcf = chrxxi_data, 
+                           seq = dna, 
+                           ann = gff, 
+                           verbose = T)
+
+plot(chromR_xxi)
+
+chromoqc(chromR_xxi, 
+         dp.alpha = 66)
+
+proc_chromR_xxi = proc.chromR(chromR_xxi, verbose = TRUE)
+
+plot(proc_chromR_xxi)
+chromoqc(proc_chromR_xxi)
