@@ -1246,6 +1246,14 @@ WC_Top_Dawg_Outs = WC_top_dist %>%
   arrange(CHR, 
           POS) 
 
+# WC_Top_Dawg_Outs %>% 
+#   dplyr::select(CHR, 
+#          SNP, 
+#          POS, 
+#          FST_zero) %>% 
+#   dplyr::rename(FST = FST_zero) %>% 
+#   write_csv('FST_Outliers_WARM_COLD_COMBO.csv')
+
 ## snps that are the top 5% fst distribution
 # ASHN_top_dist = ASHN_Fst[ASHN_Fst$FST_zero > quantile(ASHN_Fst$FST_zero, 
 #                                     prob = 1-5/100),]
@@ -1264,7 +1272,13 @@ ASHN_Top_Dawg_Outs = ASHN_top_dist %>%
   filter(FST_zero >= 0.235) %>% 
   arrange(CHR, 
           POS) 
-
+ASHN_Top_Dawg_Outs %>%
+  dplyr::select(CHR,
+                SNP,
+                POS,
+                FST_zero) %>%
+  dplyr::rename(FST = FST_zero) %>%
+  write_csv('FST_Outliers_ASHN.csv')
 
 # MYV_top_dist = MYV_Fst[MYV_Fst$FST_zero > quantile(MYV_Fst$FST_zero, 
 #                                                       prob = 1-5/100),]
@@ -1284,6 +1298,13 @@ MYV_Top_Dawg_Outs = MYV_top_dist %>%
   arrange(CHR, 
           POS)
 
+# MYV_Top_Dawg_Outs %>% 
+#   dplyr::select(CHR, 
+#                 SNP, 
+#                 POS, 
+#                 FST_zero) %>% 
+#   dplyr::rename(FST = FST_zero) %>% 
+#   write_csv('FST_Outliers_MYV.csv')
 # SKR_top_dist = SKR_Fst[SKR_Fst$FST_zero > quantile(SKR_Fst$FST_zero, 
 #                                                    prob = 1-5/100),]
 SKR_top_dist = SKR_Fst[SKR_Fst$FST_zero > quantile(SKR_Fst$FST_zero, 
@@ -1300,7 +1321,13 @@ SKR_Top_Dawg_Outs = SKR_top_dist %>%
   filter(FST_zero >= 0.306) %>% 
   arrange(CHR, 
           POS)
-
+# SKR_Top_Dawg_Outs %>% 
+#   dplyr::select(CHR, 
+#                 SNP, 
+#                 POS, 
+#                 FST_zero) %>% 
+#   dplyr::rename(FST = FST_zero) %>% 
+#   write_csv('FST_Outliers_SKR.csv')
 
 # GTS_CSWY_top_dist = GTS_CSWY_Fst[GTS_CSWY_Fst$FST_zero > quantile(GTS_CSWY_Fst$FST_zero, 
 #                                                    prob = 1-5/100),]
@@ -1320,7 +1347,13 @@ GTS_CSWY_Top_Dawg_Outs = GTS_CSWY_top_dist %>%
   filter(FST_zero >= 0.706) %>% 
   arrange(CHR, 
           POS)
-
+# GTS_CSWY_Top_Dawg_Outs %>% 
+#   dplyr::select(CHR, 
+#                 SNP, 
+#                 POS, 
+#                 FST_zero) %>% 
+#   dplyr::rename(FST = FST_zero) %>% 
+#   write_csv('FST_Outliers_GTS_CSWY.csv')
 ##### TOP DAWG OUTS Fst manhattan set up ----------------------------------------------------
 
 Fst_manhatan_format(ASHN_Fst,
