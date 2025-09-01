@@ -2018,7 +2018,7 @@ FST_out_pcadapt = inner_join(WC_Fst_clean_outs,
 # lfmm_outliers = read.vcfR("C:/Stickleback_Genomic/vcf_filter/lfmm.SNPs.vcf")
 
 LFMM_Outliers = read_csv('LFMM_Mapped_Full_Data.csv') %>% 
-  filter(qvalue <= 0.01) %>% 
+  filter(qvalue <= 0.05) %>% 
   mutate(qvalue_trans = -log10(qvalue))
 
 
