@@ -2993,7 +2993,7 @@ ggsave('~/Parsons_Postdoc/Stickleback_Genomic/Figures/LFMM_temp_FST.tiff',
        height = 5)
 
 ##
-O# af-vapeR ----------------------------------------------------------------
+# af-vapeR ----------------------------------------------------------------
 
 setwd('~/Parsons_Postdoc/Stickleback_Genomic/afvaper/')
 

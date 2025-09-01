@@ -321,7 +321,7 @@ chr21_ped_data = ped_data %>%
                 PaternalID,
                 Sex,
                 Phenotype,
-                'chr_XXI_9963830':'chr_XXI_11370710')
+                'chr_XXI_9963830':'chr_XXI_11574024')
 
 chr21_map_data = read_tsv('stickleback_maf0.05_ldpruned_filtered.map',
                     col_names = c('CHR',
@@ -330,13 +330,13 @@ chr21_map_data = read_tsv('stickleback_maf0.05_ldpruned_filtered.map',
                                   'POS')) %>%
   filter(CHR == 'chr_XXI') %>%
   filter(POS >= 9963830,
-         POS <= 11370710)
+         POS <= 11574024)
 
 chr21_ped_data %>%
-  write_tsv('chr21_inversion_region.ped',
+  write_tsv('chr21_inversion_region_fixed.ped',
             col_names = F)
 chr21_map_data %>%
-  write_tsv('chr21_inversion_region.map',
+  write_tsv('chr21_inversion_region_fixed.map',
             col_names = F)
 
 
@@ -344,6 +344,8 @@ chr21_map_data %>%
 # PCA on the putative inversion -------------------------------------------
 
 library(pcadapt)
+
+ped2pcadapt()
 
 
 chr21_inversion = read.pcadapt('chr21_inversion_region.bed', 
