@@ -63,7 +63,16 @@ plot(chromR_xxi)
 chromoqc(chromR_xxi, 
          dp.alpha = 66)
 
-proc_chromR_xxi = proc.chromR(chromR_xxi, verbose = TRUE)
+proc_chromR_xxi = proc.chromR(chromR_xxi, 
+                              win.size = 50,
+                              verbose = TRUE)
 
 plot(proc_chromR_xxi)
 chromoqc(proc_chromR_xxi)
+
+head(proc_chromR_xxi@var.info)
+head(proc_chromR_xxi@win.info)
+
+
+chromoqc(proc_chromR_xxi, 
+         xlim=c(9e+06, 12e+06))
