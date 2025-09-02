@@ -51,67 +51,11 @@ chr_XXI_SNPs = bind_cols(chr_xxi_meta_data,
 View(chr_XXI_SNPs)
 
 
-
-# dna <- ape::read.dna('GCF_016920845.1_GAculeatus_UGA_version5_genomic.fna', 
-#                      format = "fasta")
-# 
-# gff <- read.table('genomic.gff', sep="\t", quote="")
-# 
-# chromR_xxi = create.chromR(name = 'chrxxi', 
-#                            vcf = chrxxi_data, 
-#                            seq = dna, 
-#                            ann = gff, 
-#                            verbose = T)
-# 
-# plot(chromR_xxi)
-# 
-# chromoqc(chromR_xxi, 
-#          dp.alpha = 66)
-# 
-# proc_chromR_xxi = proc.chromR(chromR_xxi, 
-#                               win.size = 50,
-#                               verbose = TRUE)
-# 
-# plot(proc_chromR_xxi)
-# chromoqc(proc_chromR_xxi)
-# 
-# head(proc_chromR_xxi@var.info)
-# head(proc_chromR_xxi@win.info)
-# 
-# 
-# chromoqc(proc_chromR_xxi, 
-#          xlim=c(9e+06, 12e+06))
-# 
-
-
 # pca on the chr xxi ------------------------------------------------------
 library(vegan)
 library(dartRverse)
 
 chrxxi_dart = dartR.base::gl.read.vcf('chrxxi_vcf.vcf')
-
-# chr_XXI_SNPs$POS = as.numeric(chr_XXI_SNPs$POS)
-# 
-# chr_xxi_invert = chr_XXI_SNPs %>% 
-#   dplyr::filter(POS >= 9963830,
-#                 POS <= 11574024)
-# 
-# chrxxi_loci = vcfR2loci(chrxxi_data)
-# 
-# chrxxi_genind = vcfR2genind(chrxxi_data)
-# chrxxi_genlight = vcfR2genlight(chrxxi_data)
-# 
-# glPca(chrxxi_genlight)
-# 
-# chrxxi_genlight@position
-# 
-# gl <- dartR.base::gl.compliance.check(chrxxi_genlight)
-# gl <- dartR.base::gl.recalc.metrics(chrxxi_genlight)
-
-# chrxxi_genlight@other$loc.metrics = chrxxi_genlight$n.loc
-# 
-# num_loci_genlight <- ncol(chrxxi_genlight)
-# num_loci_metrics <- nrow(chrxxi_genlight$other$loc.metrics)
 
 chrxxi_dart@other$loc.metrics$position = chrxxi_dart@position
 
@@ -126,7 +70,7 @@ filtered_gl_data = dartR.base::gl.filter.locmetric(
 )
 
 pca_inversion = adegenet::glPca(filtered_gl_data, 
-                      nf = 2)
+                      nf = 10)
 
 pca_inversion$loadings
 pca_inversion$scores
@@ -142,10 +86,280 @@ inversion_pca_score = pca_inversion$scores %>%
   as.data.frame() %>% 
   rownames_to_column() %>% 
   as.tibble() %>% 
-  rename(Individual = rowname)
+  rename(Individual = rowname) 
 
-ggplot(data = inversion_pca_score, 
+
+metadata = read_csv('stickleback_identifiers.csv')
+pca_data = bind_cols(metadata, 
+                     inversion_pca_score) %>% 
+  mutate(.data = .,
+                  Ecotype = as.factor(case_when(
+                    population == 'ASHNC' ~ 'Cold',
+                    population == 'ASHNW' ~ 'Warm',
+                    population == 'CSWY' ~ 'Cold',
+                    population == 'GTS' ~ 'Warm',
+                    population == 'MYVC' ~ 'Cold',
+                    population == 'MYVW' ~ 'Warm',
+                    population == 'SKRC' ~ 'Cold',
+                    population == 'SKRW' ~ 'Warm')))%>% 
+  mutate(.data = .,
+         POP_PAIR = as.factor(case_when(
+           population == 'ASHNC' ~ 'ASHN',
+           population == 'ASHNW' ~ 'ASHN',
+           population == 'CSWY' ~ 'GTS-GAR',
+           population == 'GTS' ~ 'GTS-GAR',
+           population == 'MYVC' ~ 'MYV',
+           population == 'MYVW' ~ 'MYV',
+           population == 'SKRC' ~ 'SKR',
+           population == 'SKRW' ~ 'SKR')))
+
+plot_pal = c('#003049', 
+             '#c1121f')
+
+ggplot(data = pca_data, 
        aes(x = PC1, 
            y = PC2))+
-  geom_point()
+  geom_point(aes(col = Ecotype, 
+                 shape = POP_PAIR), 
+             size = 2)+
+  scale_color_manual(values = plot_pal)
+
+
+pca_data %>% 
+  group_by(POP_PAIR, 
+           Ecotype) %>% 
+  summarize(n = n())
+
+pca_data %>% 
+  filter(POP_PAIR == 'ASHN') %>% 
+ggplot(aes(x = PC1, 
+           y = PC2))+
+  geom_point(aes(col = Ecotype, 
+                 shape = POP_PAIR), 
+             size = 2)+
+  scale_color_manual(values = plot_pal)
+
+pca_data %>% 
+  filter(POP_PAIR == 'MYV') %>% 
+  ggplot(aes(x = PC1, 
+             y = PC2))+
+  geom_point(aes(col = Ecotype, 
+                 shape = POP_PAIR), 
+             size = 2)+
+  scale_color_manual(values = plot_pal)
+
+pca_data %>% 
+  filter(POP_PAIR == 'SKR') %>% 
+  ggplot(aes(x = PC1, 
+             y = PC2))+
+  geom_point(aes(col = Ecotype, 
+                 shape = POP_PAIR), 
+             size = 2)+
+  scale_color_manual(values = plot_pal)
+
+pca_data %>% 
+  filter(POP_PAIR == 'GTS-GAR') %>% 
+  ggplot(aes(x = PC1, 
+             y = PC2))+
+  geom_point(aes(col = Ecotype, 
+                 shape = POP_PAIR), 
+             size = 2)+
+  scale_color_manual(values = plot_pal)
+
+# PCA per AFVAPER window --------------------------------------------------
+
+
+# window 1 ----------------------------------------------------------------
+
+win1 = dartR.base::gl.filter.locmetric(
+  x = chrxxi_dart,
+  metric = "position", # The name of the metric you added
+  lower = 9963830,
+  upper = 10100975,
+  keep = "within",
+  verbose = 3 # For detailed output
+)
+
+pca_win1 = adegenet::glPca(win1, 
+                                nf = 10)
+
+win1_pca_load = pca_win1$loadings %>% 
+  as.data.frame() %>% 
+  rownames_to_column() %>% 
+  as.tibble() %>% 
+  rename(SNP = rowname)
+
+win1_pca_score = pca_win1$scores %>% 
+  as.data.frame() %>% 
+  rownames_to_column() %>% 
+  as.tibble() %>% 
+  rename(Individual = rowname) 
+
+
+metadata = read_csv('stickleback_identifiers.csv')
+win1_pca_data = bind_cols(metadata, 
+                     win1_pca_score) %>% 
+  mutate(.data = .,
+         Ecotype = as.factor(case_when(
+           population == 'ASHNC' ~ 'Cold',
+           population == 'ASHNW' ~ 'Warm',
+           population == 'CSWY' ~ 'Cold',
+           population == 'GTS' ~ 'Warm',
+           population == 'MYVC' ~ 'Cold',
+           population == 'MYVW' ~ 'Warm',
+           population == 'SKRC' ~ 'Cold',
+           population == 'SKRW' ~ 'Warm')))%>% 
+  mutate(.data = .,
+         POP_PAIR = as.factor(case_when(
+           population == 'ASHNC' ~ 'ASHN',
+           population == 'ASHNW' ~ 'ASHN',
+           population == 'CSWY' ~ 'GTS-GAR',
+           population == 'GTS' ~ 'GTS-GAR',
+           population == 'MYVC' ~ 'MYV',
+           population == 'MYVW' ~ 'MYV',
+           population == 'SKRC' ~ 'SKR',
+           population == 'SKRW' ~ 'SKR')))
+
+plot_pal = c('#003049', 
+             '#c1121f')
+
+ggplot(data = win1_pca_data, 
+       aes(x = PC1, 
+           y = PC2))+
+  geom_point(aes(col = Ecotype, 
+                 shape = POP_PAIR), 
+             size = 2)+
+  scale_color_manual(values = plot_pal)+
+  labs(title = 'Window 1: 9963830-10100975')
+
+
+
+# window 2 ----------------------------------------------------------------
+
+win2 = dartR.base::gl.filter.locmetric(
+  x = chrxxi_dart,
+  metric = "position", # The name of the metric you added
+  lower = 10100983,
+  upper = 10264227,
+  keep = "within",
+  verbose = 3 # For detailed output
+)
+
+pca_win2 = adegenet::glPca(win2, 
+                           nf = 10)
+
+win2_pca_load = pca_win2$loadings %>% 
+  as.data.frame() %>% 
+  rownames_to_column() %>% 
+  as.tibble() %>% 
+  rename(SNP = rowname)
+
+win2_pca_score = pca_win2$scores %>% 
+  as.data.frame() %>% 
+  rownames_to_column() %>% 
+  as.tibble() %>% 
+  rename(Individual = rowname) 
+
+
+metadata = read_csv('stickleback_identifiers.csv')
+win2_pca_data = bind_cols(metadata, 
+                          win2_pca_score) %>% 
+  mutate(.data = .,
+         Ecotype = as.factor(case_when(
+           population == 'ASHNC' ~ 'Cold',
+           population == 'ASHNW' ~ 'Warm',
+           population == 'CSWY' ~ 'Cold',
+           population == 'GTS' ~ 'Warm',
+           population == 'MYVC' ~ 'Cold',
+           population == 'MYVW' ~ 'Warm',
+           population == 'SKRC' ~ 'Cold',
+           population == 'SKRW' ~ 'Warm')))%>% 
+  mutate(.data = .,
+         POP_PAIR = as.factor(case_when(
+           population == 'ASHNC' ~ 'ASHN',
+           population == 'ASHNW' ~ 'ASHN',
+           population == 'CSWY' ~ 'GTS-GAR',
+           population == 'GTS' ~ 'GTS-GAR',
+           population == 'MYVC' ~ 'MYV',
+           population == 'MYVW' ~ 'MYV',
+           population == 'SKRC' ~ 'SKR',
+           population == 'SKRW' ~ 'SKR')))
+
+plot_pal = c('#003049', 
+             '#c1121f')
+
+ggplot(data = win2_pca_data, 
+       aes(x = PC1, 
+           y = PC2))+
+  geom_point(aes(col = Ecotype, 
+                 shape = POP_PAIR), 
+             size = 2)+
+  scale_color_manual(values = plot_pal)+
+  labs(title = 'Window 2: 10100983-10264227')
+
+
+
+# window 3 ----------------------------------------------------------------
+
+win3 = dartR.base::gl.filter.locmetric(
+  x = chrxxi_dart,
+  metric = "position", # The name of the metric you added
+  lower = 10266044,
+  upper = 10403157,
+  keep = "within",
+  verbose = 3 # For detailed output
+)
+
+pca_win3 = adegenet::glPca(win3, 
+                           nf = 10)
+
+win3_pca_load = pca_win3$loadings %>% 
+  as.data.frame() %>% 
+  rownames_to_column() %>% 
+  as.tibble() %>% 
+  rename(SNP = rowname)
+
+win3_pca_score = pca_win3$scores %>% 
+  as.data.frame() %>% 
+  rownames_to_column() %>% 
+  as.tibble() %>% 
+  rename(Individual = rowname) 
+
+
+metadata = read_csv('stickleback_identifiers.csv')
+win3_pca_data = bind_cols(metadata, 
+                          win3_pca_score) %>% 
+  mutate(.data = .,
+         Ecotype = as.factor(case_when(
+           population == 'ASHNC' ~ 'Cold',
+           population == 'ASHNW' ~ 'Warm',
+           population == 'CSWY' ~ 'Cold',
+           population == 'GTS' ~ 'Warm',
+           population == 'MYVC' ~ 'Cold',
+           population == 'MYVW' ~ 'Warm',
+           population == 'SKRC' ~ 'Cold',
+           population == 'SKRW' ~ 'Warm')))%>% 
+  mutate(.data = .,
+         POP_PAIR = as.factor(case_when(
+           population == 'ASHNC' ~ 'ASHN',
+           population == 'ASHNW' ~ 'ASHN',
+           population == 'CSWY' ~ 'GTS-GAR',
+           population == 'GTS' ~ 'GTS-GAR',
+           population == 'MYVC' ~ 'MYV',
+           population == 'MYVW' ~ 'MYV',
+           population == 'SKRC' ~ 'SKR',
+           population == 'SKRW' ~ 'SKR')))
+
+plot_pal = c('#003049', 
+             '#c1121f')
+
+ggplot(data = win3_pca_data, 
+       aes(x = PC1, 
+           y = PC2))+
+  geom_point(aes(col = Ecotype, 
+                 shape = POP_PAIR), 
+             size = 2)+
+  scale_color_manual(values = plot_pal)+
+  labs(title = 'window 3: 10266044-10403157')
+
 
