@@ -1246,13 +1246,13 @@ WC_Top_Dawg_Outs = WC_top_dist %>%
   arrange(CHR, 
           POS) 
 
-# WC_Top_Dawg_Outs %>% 
-#   dplyr::select(CHR, 
-#          SNP, 
-#          POS, 
-#          FST_zero) %>% 
-#   dplyr::rename(FST = FST_zero) %>% 
-#   write_csv('FST_Outliers_WARM_COLD_COMBO.csv')
+# WC_Top_Dawg_Outs %>%
+#   dplyr::select(CHR,
+#          SNP,
+#          POS,
+#          FST_zero) %>%
+#   dplyr::rename(FST = FST_zero) %>%
+#   write_csv('WC_FST_Outliers_WARM_COLD_COMBO.csv')
 
 ## snps that are the top 5% fst distribution
 # ASHN_top_dist = ASHN_Fst[ASHN_Fst$FST_zero > quantile(ASHN_Fst$FST_zero, 
@@ -1953,6 +1953,11 @@ GTS_CSWY_Fst_clean = read_csv('GTS_CSWY_TOP_DAWG_Fst_clean.csv') %>%
   filter(value == 'Outlier') %>% 
   select(SNP)
 
+WC_FST_clean = read_csv("WC_FST_Outliers_WARM_COLD_COMBO.csv") %>%
+  stickle_CHR_reorder() %>%
+  dist_cal()%>%
+  filter(value == 'Outlier') %>% 
+  select(SNP)
 
 intersect(ASHN_Fst_clean, 
           MYV_Fst_clean)
