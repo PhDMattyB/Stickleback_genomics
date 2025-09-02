@@ -20,6 +20,9 @@ head(vcf)
 
 chrxxi_data = vcf[getCHROM(vcf) == 'chr_XXI']
 
+write.vcf(x = chrxxi_data, 
+          'chrxxi_vcf.vcf')
+
 head(chrxxi_data)
 
 chrxxi_data@gt
@@ -85,74 +88,64 @@ View(chr_XXI_SNPs)
 library(vegan)
 library(dartRverse)
 
-chr_XXI_SNPs$POS = as.numeric(chr_XXI_SNPs$POS)
+chrxxi_dart = dartR.base::gl.read.vcf('chrxxi_vcf.vcf')
 
-chr_xxi_invert = chr_XXI_SNPs %>% 
-  dplyr::filter(POS >= 9963830,
-                POS <= 11574024)
+# chr_XXI_SNPs$POS = as.numeric(chr_XXI_SNPs$POS)
+# 
+# chr_xxi_invert = chr_XXI_SNPs %>% 
+#   dplyr::filter(POS >= 9963830,
+#                 POS <= 11574024)
+# 
+# chrxxi_loci = vcfR2loci(chrxxi_data)
+# 
+# chrxxi_genind = vcfR2genind(chrxxi_data)
+# chrxxi_genlight = vcfR2genlight(chrxxi_data)
+# 
+# glPca(chrxxi_genlight)
+# 
+# chrxxi_genlight@position
+# 
+# gl <- dartR.base::gl.compliance.check(chrxxi_genlight)
+# gl <- dartR.base::gl.recalc.metrics(chrxxi_genlight)
 
-chrxxi_loci = vcfR2loci(chrxxi_data)
+# chrxxi_genlight@other$loc.metrics = chrxxi_genlight$n.loc
+# 
+# num_loci_genlight <- ncol(chrxxi_genlight)
+# num_loci_metrics <- nrow(chrxxi_genlight$other$loc.metrics)
 
-chrxxi_genind = vcfR2genind(chrxxi_data)
-chrxxi_genlight = vcfR2genlight(chrxxi_data)
+chrxxi_dart@other$loc.metrics$position = chrxxi_dart@position
 
-glPca(chrxxi_genlight)
 
-chrxxi_genlight@position
-
-gl <- dartR.base::gl.compliance.check(chrxxi_genlight)
-gl <- dartR.base::gl.recalc.metrics(chrxxi_genlight)
-
-chrxxi_genlight@other$loc.metrics = chrxxi_genlight$n.loc
-
-num_loci_genlight <- ncol(chrxxi_genlight)
-num_loci_metrics <- nrow(chrxxi_genlight$other$loc.metrics)
-
-filtered_gl_data <- dartR.base::gl.filter.locmetric(
-  x = chrxxi_genlight,
+filtered_gl_data = dartR.base::gl.filter.locmetric(
+  x = chrxxi_dart,
   metric = "position", # The name of the metric you added
-  lower = 4101,
-  upper = 4600,
+  lower = 9963830,
+  upper = 11574024,
   keep = "within",
   verbose = 3 # For detailed output
 )
 
-# chrxxi_pcadapt = read.pcadapt('chrxxi_vcf.vcf', type = "vcf")
-# 
-# 
-# chr_xxi_invert_snps = chr_xxi_invert %>% 
-#   dplyr::select(-CHROM, 
-#                 -POS,
-#                 -ID, 
-#                 -REF, 
-#                 -ALT)
-# 
-# SNPs_scaled_invert = scale(chr_xxi_invert_snps)
-# 
-# 
-# map_data_invert = read_tsv('chr21_inversion_region_fixed.map', 
-#                            col_names = c('CHR',
-#                                          'SNP',
-#                                          'GPOS',
-#                                          'POS'))
-# 
-# 
-# ped_data_invert = read_table('chr21_inversion_region_fixed.ped', 
-#                              col_names = c('PopulationID',
-#                                            'IndividualID',
-#                                            'MaternalID',
-#                                            'PaternalID',
-#                                            'Sex',
-#                                            'Phenotype',
-#                                            map_data_invert$SNP))
-# 
-# 
-# test = ped_data_invert %>% 
-#   dplyr::select(-PopulationID, 
-#                 -IndividualID, 
-#                 -MaternalID, 
-#                 -PaternalID, 
-#                 -Sex, 
-#                 -Phenotype)
+pca_inversion = adegenet::glPca(filtered_gl_data, 
+                      nf = 2)
 
+pca_inversion$loadings
+pca_inversion$scores
+pca_inversion$eig
+
+inversion_pca_load = pca_inversion$loadings %>% 
+  as.data.frame() %>% 
+  rownames_to_column() %>% 
+  as.tibble() %>% 
+  rename(SNP = rowname)
+
+inversion_pca_score = pca_inversion$scores %>% 
+  as.data.frame() %>% 
+  rownames_to_column() %>% 
+  as.tibble() %>% 
+  rename(Individual = rowname)
+
+ggplot(data = inversion_pca_score, 
+       aes(x = PC1, 
+           y = PC2))+
+  geom_point()
 
