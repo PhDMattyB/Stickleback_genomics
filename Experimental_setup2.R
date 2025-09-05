@@ -102,15 +102,15 @@ Final_data = read_csv('Experiment1_Sampling_Good.csv') %>%
         remove = F)
 
 warm = Final_data %>% 
-  filter(Pop == 'ACAC', 
+  filter(Pop == 'AWAW', 
          Temp == '18', 
-         Rep == '1') %>% 
+         Rep == '3') %>% 
   select(Sample_ID) %>% 
   arrange(Sample_ID)
 cold = Final_data %>% 
-  filter(Pop == 'ACAC', 
+  filter(Pop == 'AWAW', 
          Temp == '12', 
-         Rep == '1') %>% 
+         Rep == '3') %>% 
   select(Sample_ID) %>% 
   arrange(Sample_ID)
 

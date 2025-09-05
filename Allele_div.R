@@ -51,6 +51,34 @@ chr_XXI_SNPs = bind_cols(chr_xxi_meta_data,
 View(chr_XXI_SNPs)
 
 
+
+
+# braf gene snp changes ---------------------------------------------------
+vcf = read.vcfR('stickleback_filtered_vcf.vcf')
+
+
+genome_meta_data = vcf@fix %>% 
+  as.data.frame() %>% 
+  as_tibble() %>% 
+  dplyr::select(CHROM,
+                POS, 
+                ID, 
+                REF, 
+                ALT)
+
+
+genome_meta_data %>% 
+  filter(ID == 'chr_IV_22813388')
+## A:T in genome browser
+
+genome_meta_data %>% 
+  filter(ID == 'chr_IV_22817061')
+## T:A in genome browser
+
+genome_meta_data %>% 
+  filter(ID == 'chr_IV_22821293')
+## T:A in genome browser
+
 # pca on the chr xxi ------------------------------------------------------
 library(vegan)
 library(dartRverse)
