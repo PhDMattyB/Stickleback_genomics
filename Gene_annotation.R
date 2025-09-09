@@ -116,6 +116,65 @@ distinct(gene_name) %>%
 
 
 # chr xxi inversion gene ontology -----------------------------------------
+library(enrichR)
+listEnrichrSites()
+setEnrichrSite("Enrichr")
+
+dbs <- listEnrichrDbs()
+
+dbs %>% 
+  as_tibble() %>% 
+  View()
+#GO_Biological_Process_2025
+#GO_Cellular_Component_2025
+#	GO_Molecular_Function_2025
+#	KEGG_2021_Human
+#PhenGenI_Association_2021
+#Reactome_Pathways_2024
+#TRANSFAC_and_JASPAR_PWMs
+#WikiPathways_2024_Mouse
+#	WikiPathways_2024_Human
+
+dbs <- c("GO_Molecular_Function_2025", 
+         "GO_Cellular_Component_2025",
+         "GO_Biological_Process_2025",
+         'KEGG_2021_Human', 
+         'PhenGenI_Association_2021', 
+         'Reactome_Pathways_2024', 
+         'TRANSFAC_and_JASPAR_PWMs', 
+         'WikiPathways_2024_Mouse', 
+         'WikiPathways_2024_Human')
+
+chrxxi_inversion_gene_names = read_tsv('CHRXXI_Inversion_gene_names_fixed.txt')%>%
+  # as_tibble() %>% 
+  mutate_all(as.character) %>% 
+  as.data.frame()
+
+# data(input)
+enriched = enrichR::enrichr(chrxxi_inversion_gene_names, 
+                    dbs)
+head(enriched[["GO_Biological_Process_2025"]])
+enriched$GO_Cellular_Component_2025 %>% 
+  as_tibble() %>% 
+  filter(Adjusted.P.value <= 0.05)
+enriched$GO_Molecular_Function_2025 %>% 
+  as_tibble() %>% 
+  filter(Adjusted.P.value <= 0.05)
+enriched$GO_Biological_Process_2025 %>% 
+  as_tibble() %>% 
+  filter(Adjusted.P.value <= 0.05)
+enriched$KEGG_2021_Human %>% 
+  as_tibble() %>% 
+  filter(Adjusted.P.value <= 0.05)
+enriched$PhenGenI_Association_2021 %>% 
+  as_tibble() %>% 
+  filter(Adjusted.P.value <= 0.05)
+enriched$Reactome_Pathways_2024 %>% 
+  as_tibble() %>% 
+  filter(Adjusted.P.value <= 0.05)
+enriched$WikiPathways_2024_Human %>% 
+  as_tibble() %>% 
+  filter(Adjusted.P.value <= 0.05)
 
 
 
