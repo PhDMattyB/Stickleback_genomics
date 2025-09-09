@@ -10,9 +10,12 @@
 
 setwd('~/Parsons_Postdoc/Stickleback_Genomic/vcf_filter/')
 
+theme_set(theme_bw())
+
 library(tidyverse)
 library(vcfR)
-# library(ChromHeatMap)
+library(vegan)
+library(dartRverse)
 
 vcf = read.vcfR('stickleback_filtered_vcf.vcf')
 
@@ -20,8 +23,8 @@ head(vcf)
 
 chrxxi_data = vcf[getCHROM(vcf) == 'chr_XXI']
 
-write.vcf(x = chrxxi_data, 
-          'chrxxi_vcf.vcf')
+# write.vcf(x = chrxxi_data, 
+#           'chrxxi_vcf.vcf')
 
 head(chrxxi_data)
 
@@ -69,7 +72,7 @@ genome_meta_data = vcf@fix %>%
 
 genome_meta_data %>% 
   filter(ID == 'chr_IV_22813388')
-## A:T in genome browser
+## G:C in genome browser
 
 genome_meta_data %>% 
   filter(ID == 'chr_IV_22817061')
@@ -77,11 +80,9 @@ genome_meta_data %>%
 
 genome_meta_data %>% 
   filter(ID == 'chr_IV_22821293')
-## T:A in genome browser
+  ## T:A or C:G in genome browser
 
 # pca on the chr xxi ------------------------------------------------------
-library(vegan)
-library(dartRverse)
 
 chrxxi_dart = dartR.base::gl.read.vcf('chrxxi_vcf.vcf')
 
@@ -263,10 +264,12 @@ chrxxi_inversion_pca = cleaner_pca_data %>%
         axis.text = element_text(size = 12), 
         legend.position = 'none')
 
-ggsave(filename = 'ChrXXI_Ecotype_Inversion_plot.tiff', 
+ggsave(filename = 'ChrXXI_Ecotype_Inversion_plot.svg', 
        plot = chrxxi_inversion_pca, 
        dpi = 'retina', 
-       units = 'cm')
+       units = 'cm', 
+       height = 10, 
+       width = 15)
 
 
 
@@ -405,6 +408,23 @@ ggsave(filename = 'chrxxi_inversion_plots.tiff',
        width = 30, 
        height = 15)
 
+
+ggsave(filename = 'Karyotype_FIS_plot.svg', 
+       plot = Karyotype_FIS_plot, 
+       dpi = 'retina', 
+       units = 'cm', 
+       width = 15, 
+       height = 10)
+
+ggsave(filename = 'Karyotype_Ho_plot.svg', 
+       plot = Karyotype_Ho_plot, 
+       dpi = 'retina', 
+       units = 'cm', 
+       width = 15, 
+       height = 10)
+
+
+##
 # PCA per AFVAPER window --------------------------------------------------
 
 

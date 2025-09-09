@@ -50,6 +50,73 @@ gene_annotation %>%
   distinct(feature)
 
 
+# ChrXXI inversion genes --------------------------------------------------
+
+gene_annotation %>% 
+  filter(chromosome == 'chrXXI') %>% 
+# %>%
+#   separate(col = gene_id, 
+#            into = c('ensemble_id', 
+#                     'gene_name', 
+#                     'parent_code'), 
+#            sep = ';') %>% 
+#   separate(col = ensemble_id, 
+#            into = c('garbage', 
+#                     'ensemble_id'), 
+#            sep = '=') %>% 
+#   dplyr::select(-garbage) %>% 
+#   separate(col = gene_name, 
+#            into = c('Garbage', 
+#                     'gene_name'), 
+#            sep = '=') %>% 
+#   dplyr::select(-Garbage) %>% 
+#   separate(col = parent_code, 
+#            into = c('garbage', 
+#                     'parent_gene_name'), 
+#            sep = '=') %>% 
+#   dplyr::select(-garbage) %>% 
+  filter(start >= 9963830) %>% 
+  filter(end <= 11574024)
+
+chrxxi_inversion_genes = gene_annotation %>% 
+  filter(chromosome == 'chrXXI') %>% 
+  filter(start >= 9963830) %>% 
+  filter(end <= 11574024) %>% 
+  separate(col = gene_id, 
+           into = c('ensemble_id', 
+                    'gene_name', 
+                    'parent_code'), 
+           sep = ';') %>% 
+  separate(col = ensemble_id, 
+           into = c('garbage', 
+                    'ensemble_id'), 
+           sep = '=') %>% 
+  dplyr::select(-garbage) %>% 
+  separate(col = gene_name, 
+           into = c('Garbage', 
+                    'gene_name'), 
+           sep = '=') %>% 
+  dplyr::select(-Garbage) %>% 
+  separate(col = parent_code, 
+           into = c('garbage', 
+                    'parent_gene_name'), 
+           sep = '=') %>% 
+  dplyr::select(-garbage) 
+
+chrxxi_inversion_genes %>% 
+  # filter(feature == 'CDS') %>% View()
+  # filter(feature %in% c('gene', 'CDS')) %>% View()
+  filter(feature == 'gene') %>%
+  ungroup() %>% 
+  select(gene_name) %>% 
+  write_tsv('CHRXXI_Inversion_gene_names_fixed.txt')
+  
+distinct(gene_name) %>% 
+  filter(!if_any(everything(), ~ grepl('ENSG', .)))
+
+
+# chr xxi inversion gene ontology -----------------------------------------
+
 
 
 #### ASHN outliers ----------------------------------------------------
