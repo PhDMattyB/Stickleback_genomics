@@ -150,9 +150,9 @@ distinct(gene_name) %>%
 listEnrichrSites()
 setEnrichrSite("Enrichr")
 
-dbs <- listEnrichrDbs()
+database_list <- listEnrichrDbs()
 
-dbs %>% 
+database_list %>% 
   as_tibble() %>% 
   View()
 #GO_Biological_Process_2025
@@ -174,6 +174,8 @@ dbs <- c("GO_Molecular_Function_2025",
          'TRANSFAC_and_JASPAR_PWMs', 
          'WikiPathways_2024_Mouse', 
          'WikiPathways_2024_Human')
+
+dbs2 = c('PerturbAtlas')
 
 chrxxi_inversion_gene_names = read_tsv('CHRXXI_Inversion_gene_names_fixed.txt')%>%
   # as_tibble() %>% 
@@ -274,6 +276,283 @@ PhenGen %>%
 #   as_tibble() 
 # p.adjust(wiki_human$P.value, 
 #          method = 'bonferroni')
+
+
+
+# GO biocarta pathways ----------------------------------------------------
+dbs <- c("BioCarta_2013", 
+         "BioCarta_2015",
+         "BioCarta_2016",
+         'BioPlanet_2019', 
+         'BioPlex_2017')
+
+
+biocarta_enriched <- enrichr(chrxxi_inversion_gene_names, 
+                                     dbs, 
+                                     background = stickle_background, 
+                                     include_overlap = T)
+
+biocarta_2013 = biocarta_enriched$BioCarta_2013 %>% 
+  as_tibble() 
+
+
+# GO diabetes perturb -----------------------------------------------------
+
+dbs = c('Diabetes_Perturbations_GEO_2022')
+
+diabetes_enriched <- enrichr(chrxxi_inversion_gene_names, 
+                             dbs, 
+                             background = stickle_background, 
+                             include_overlap = T)
+
+go_diabetes = diabetes_enriched$Diabetes_Perturbations_GEO_2022 %>% 
+  as_tibble() %>% 
+  filter(Adjusted.P.value <= 0.05)
+
+
+# enrichr pathways --------------------------------------------------------
+
+dbs = c('Enrichr_Libraries_Most_Popular_Genes',
+        'Enrichr_Submissions_TF-Gene_Coocurrence',
+        'Enrichr_Users_Contributed_Lists_2020')
+
+enrichr_enriched <- enrichr(chrxxi_inversion_gene_names, 
+                             dbs, 
+                             background = stickle_background, 
+                             include_overlap = T)
+
+enrichr_enriched$`Enrichr_Submissions_TF-Gene_Coocurrence` %>% 
+  as_tibble() %>% 
+  filter(Adjusted.P.value <= 0.05) %>% View()
+
+
+# Go bio processes ----------------------------------------------------
+
+dbs = c('GO_Biological_Process_2021',
+        'GO_Biological_Process_2023',
+        'GO_Biological_Process_2025')
+
+GO_BIO_enriched <- enrichr(chrxxi_inversion_gene_names, 
+                            dbs, 
+                            background = stickle_background, 
+                            include_overlap = T)
+
+GO_BIO_enriched = GO_BIO_enriched$GO_Biological_Process_2021 %>% 
+  as_tibble() %>% 
+  filter(Adjusted.P.value <= 0.05) 
+
+
+# GO cell processes -------------------------------------------------------
+dbs = c('GO_Cellular_Component_2021',
+        'GO_Cellular_Component_2023',
+        'GO_Cellular_Component_2025')
+
+GO_CELL_enriched <- enrichr(chrxxi_inversion_gene_names, 
+                           dbs, 
+                           background = stickle_background, 
+                           include_overlap = T)
+
+GO_CELL_enriched1 = GO_CELL_enriched$GO_Cellular_Component_2021 %>% 
+  as_tibble() %>% 
+  filter(Adjusted.P.value <= 0.05) 
+GO_CELL_enriched2 = GO_CELL_enriched$GO_Cellular_Component_2023 %>% 
+  as_tibble() %>% 
+  filter(Adjusted.P.value <= 0.05) 
+GO_CELL_enriched3 = GO_CELL_enriched$GO_Cellular_Component_2025 %>% 
+  as_tibble() %>% 
+  filter(Adjusted.P.value <= 0.05) 
+
+# GO molecular function ---------------------------------------------------
+dbs = c('GO_Molecular_Function_2021',
+        'GO_Molecular_Function_2023',
+        'GO_Molecular_Function_2025')
+
+GO_MOL_enriched <- enrichr(chrxxi_inversion_gene_names, 
+                            dbs, 
+                            background = stickle_background, 
+                            include_overlap = T)
+
+GO_MOL_enriched1 = GO_MOL_enriched$GO_Molecular_Function_2021 %>% 
+  as_tibble() %>% 
+  filter(Adjusted.P.value <= 0.05) 
+GO_MOL_enriched2 = GO_MOL_enriched$GO_Molecular_Function_2023 %>% 
+  as_tibble() %>% 
+  filter(Adjusted.P.value <= 0.05) 
+GO_MOL_enriched3 = GO_MOL_enriched$GO_Molecular_Function_2025 %>% 
+  as_tibble() %>% 
+  filter(Adjusted.P.value <= 0.05) 
+
+
+# GO GTeX database --------------------------------------------------------
+dbs = c('GTEx_Aging_Signatures_2021',
+        'GTEx_Tissues_V8_2023')
+
+GO_GTEx_enriched <- enrichr(chrxxi_inversion_gene_names, 
+                           dbs, 
+                           background = stickle_background, 
+                           include_overlap = T)
+
+GO_GTEx_enriched$GTEx_Aging_Signatures_2021 %>% 
+  as_tibble() %>% 
+  filter(Adjusted.P.value <= 0.05) 
+GO_GTEx_enriched$GTEx_Tissues_V8_2023 %>% 
+  as_tibble() %>% 
+  filter(Adjusted.P.value <= 0.05) 
+
+
+# GO GWAS CATALOG ---------------------------------------------------------
+dbs = c('GWAS_Catalog_2019',
+        'GWAS_Catalog_2023', 
+        'GWAS_Catalog_2025')
+
+GO_GWAS_enriched <- enrichr(chrxxi_inversion_gene_names, 
+                            dbs, 
+                            background = stickle_background, 
+                            include_overlap = T)
+
+GO_GWAS1 = GO_GWAS_enriched$GWAS_Catalog_2019 %>% 
+  as_tibble() %>% 
+  filter(Adjusted.P.value <= 0.05) 
+# GO_GWAS_enriched$GWAS_Catalog_2023 %>% 
+#   as_tibble() %>% 
+#   filter(Adjusted.P.value <= 0.05) 
+GO_GWAS2 = GO_GWAS_enriched$GWAS_Catalog_2025 %>% 
+  as_tibble() %>% 
+  filter(Adjusted.P.value <= 0.05) 
+
+
+# KEA database GO ---------------------------------------------------------
+
+
+dbs = c('KEA_2013',
+        'KEA_2015')
+
+GO_KEA_enriched <- enrichr(chrxxi_inversion_gene_names, 
+                            dbs, 
+                            background = stickle_background, 
+                            include_overlap = T)
+
+GO_KEA_enriched$KEA_2013 %>% 
+  as_tibble() %>% 
+  filter(Adjusted.P.value <= 0.05) 
+GO_KEA_enriched$KEA_2015 %>% 
+  as_tibble() %>% 
+  filter(Adjusted.P.value <= 0.05) 
+
+
+# KEGG database GO --------------------------------------------------------
+
+dbs = c('KEGG_2013',
+        'KEGG_2015', 
+        'KEGG_2016')
+
+GO_KEGG_enriched <- enrichr(chrxxi_inversion_gene_names, 
+                           dbs, 
+                           background = stickle_background, 
+                           include_overlap = T)
+
+GO_KEGG1 = GO_KEGG_enriched$KEGG_2013 %>% 
+  as_tibble() %>% 
+  filter(Adjusted.P.value <= 0.05) 
+# GO_KEGG_enriched$KEGG_2015 %>% 
+#   as_tibble() %>% 
+#   filter(Adjusted.P.value <= 0.05) 
+# GO_KEGG_enriched$KEGG_2016 %>% 
+#   as_tibble() %>% 
+#   filter(Adjusted.P.value <= 0.05) 
+
+
+# GO panther database -----------------------------------------------------
+dbs = c('Panther_2015',
+        'Panther_2016', 
+        'PerturbAtlas')
+
+GO_Panther_enriched <- enrichr(chrxxi_inversion_gene_names, 
+                            dbs, 
+                            background = stickle_background, 
+                            include_overlap = T)
+
+GO_Panther_enriched$Panther_2015 %>% 
+  as_tibble() %>% 
+  filter(Adjusted.P.value <= 0.05) 
+GO_Panther_enriched$Panther_2016 %>% 
+  as_tibble() %>% 
+  filter(Adjusted.P.value <= 0.05) 
+
+GO_Panther_enriched$PerturbAtlas %>% 
+  as_tibble() %>% 
+  filter(Adjusted.P.value <= 0.05) 
+
+
+# Reactome GO -------------------------------------------------------------
+
+dbs = c('Reactome_2022',
+        'Reactome_Pathways_2024', 
+        'The_Kinase_Library_2024', 
+        'Transcription_Factor_PPIs')
+
+GO_REACT_enriched <- enrichr(chrxxi_inversion_gene_names, 
+                               dbs, 
+                               background = stickle_background, 
+                               include_overlap = T)
+
+GO_REACT_enriched$Reactome_2022 %>% 
+  as_tibble() %>% 
+  filter(Adjusted.P.value <= 0.05) 
+GO_REACT_enriched$Reactome_Pathways_2024 %>% 
+  as_tibble() %>% 
+  filter(Adjusted.P.value <= 0.05) 
+GO_REACT_enriched$The_Kinase_Library_2024 %>% 
+  as_tibble() %>% 
+  filter(Adjusted.P.value <= 0.05) 
+GO_REACT_enriched$Transcription_Factor_PPIs %>% 
+  as_tibble() %>% 
+  filter(Adjusted.P.value <= 0.05) 
+
+
+# GO Wikipathways ---------------------------------------------------------
+dbs = c('WikiPathways_2013',
+        'WikiPathways_2015', 
+        'WikiPathways_2016', 
+        'WikiPathways_2019_Human', 
+        'WikiPathways_2019_Mouse', 
+        'WikiPathway_2021_Human', 
+        'WikiPathway_2023_Human', 
+        'WikiPathways_2024_Human', 
+        'WikiPathways_2024_Mouse')
+
+GO_WIKI_enriched <- enrichr(chrxxi_inversion_gene_names, 
+                             dbs, 
+                             background = stickle_background, 
+                             include_overlap = T)
+
+GO_WIKI_enriched$WikiPathways_2013 %>% 
+  as_tibble() %>% 
+  filter(Adjusted.P.value <= 0.05) 
+GO_WIKI_enriched$WikiPathways_2015 %>% 
+  as_tibble() %>% 
+  filter(Adjusted.P.value <= 0.05) 
+GO_WIKI_enriched$WikiPathways_2016 %>% 
+  as_tibble() %>% 
+  filter(Adjusted.P.value <= 0.05) 
+GO_WIKI_enriched$WikiPathways_2019_Human %>% 
+  as_tibble() %>% 
+  filter(Adjusted.P.value <= 0.05) 
+GO_WIKI_enriched$WikiPathways_2019_Mouse %>% 
+  as_tibble() %>% 
+  filter(Adjusted.P.value <= 0.05) 
+GO_WIKI_enriched$WikiPathway_2021_Human %>% 
+  as_tibble() %>% 
+  filter(Adjusted.P.value <= 0.05) 
+GO_WIKI_enriched$WikiPathway_2023_Human %>% 
+  as_tibble() %>% 
+  filter(Adjusted.P.value <= 0.05) 
+GO_WIKI_enriched$WikiPathways_2024_Human %>% 
+  as_tibble() %>% 
+  filter(Adjusted.P.value <= 0.05) 
+GO_WIKI_enriched$WikiPathways_2024_Mouse %>% 
+  as_tibble() %>% 
+  filter(Adjusted.P.value <= 0.05) 
 
 
 #### ASHN outliers ----------------------------------------------------
