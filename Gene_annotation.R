@@ -12,7 +12,7 @@ setwd('~/Parsons_Postdoc/Stickleback_Genomic/Stickleback_Annotation_features/')
 
 library(tidyverse)
 library(data.table)
-
+library(enrichR)
 # 
 # read_tsv('stickleback_v5_ensembl_genes.gff3.gz', 
 #          col_names = F, 
@@ -48,6 +48,36 @@ gene_annotation %>%
   # filter(feature == 'gene')
   group_by(feature) %>% 
   distinct(feature)
+
+all_gene_names = gene_annotation %>% 
+  # filter(chromosome == 'chrXXI') %>% 
+  separate(col = gene_id, 
+           into = c('ensemble_id', 
+                    'gene_name', 
+                    'parent_code'), 
+           sep = ';') %>% 
+  separate(col = ensemble_id, 
+           into = c('garbage', 
+                    'ensemble_id'), 
+           sep = '=') %>% 
+  dplyr::select(-garbage) %>% 
+  separate(col = gene_name, 
+           into = c('Garbage', 
+                    'gene_name'), 
+           sep = '=') %>% 
+  dplyr::select(-Garbage) %>% 
+  separate(col = parent_code, 
+           into = c('garbage', 
+                    'parent_gene_name'), 
+           sep = '=') %>% 
+  dplyr::select(-garbage) %>% 
+  filter(feature == 'gene') %>% 
+  ungroup(chromosome) %>% 
+  dplyr::select(gene_name) %>% 
+  distinct(gene_name) %>% 
+  filter(!if_any(everything(), ~ grepl('ENSG', .))) %>% 
+  mutate_all(as.character) %>% 
+  as.data.frame()
 
 
 # ChrXXI inversion genes --------------------------------------------------
@@ -116,7 +146,7 @@ distinct(gene_name) %>%
 
 
 # chr xxi inversion gene ontology -----------------------------------------
-library(enrichR)
+# library(enrichR)
 listEnrichrSites()
 setEnrichrSite("Enrichr")
 
@@ -176,6 +206,74 @@ enriched$WikiPathways_2024_Human %>%
   as_tibble() %>% 
   filter(Adjusted.P.value <= 0.05)
 
+chrxxi_background = pull(chrxxi_inversion_gene_names, 
+                         gene_name)
+stickle_background = pull(all_gene_names, 
+                         gene_name)
+
+enriched_chrxxi_inversion <- enrichr(chrxxi_inversion_gene_names, 
+                     dbs, 
+                     background = stickle_background, 
+                     include_overlap = T)
+
+# GO_mol_func = enriched_chrxxi_inversion$GO_Molecular_Function_2025%>% 
+#   as_tibble() 
+# p.adjust(GO_mol_func$P.value, 
+#          method = 'bonferroni')
+# 
+# 
+# GO_cell_func = enriched_chrxxi_inversion$GO_Cellular_Component_2025%>% 
+#   as_tibble() 
+# p.adjust(GO_cell_func$P.value, 
+#          method = 'bonferroni')
+# 
+# 
+# GO_bio_func = enriched_chrxxi_inversion$GO_Biological_Process_2025%>% 
+#   as_tibble() 
+# p.adjust(GO_bio_func$P.value, 
+#          method = 'bonferroni')
+# 
+# KEGG = enriched_chrxxi_inversion$KEGG_2021_Human%>% 
+#   as_tibble() 
+# p.adjust(KEGG$P.value, 
+#          method = 'bonferroni')
+
+## ******
+PhenGen = enriched_chrxxi_inversion$PhenGenI_Association_2021%>% 
+  as_tibble() 
+PhenGen_pdj = p.adjust(PhenGen$P.value, 
+         method = 'bonferroni')
+
+PhenGen = bind_cols(PhenGen, 
+                    PhenGen_pdj) %>% 
+  rename(Bonferroni_adj_Pval = ...10)
+
+PhenGen %>% 
+  filter(Bonferroni_adj_Pval <= 0.05) %>% 
+  View()
+
+# 
+# reactome = enriched_chrxxi_inversion$Reactome_Pathways_2024%>% 
+#   as_tibble() 
+# p.adjust(reactome$P.value, 
+#          method = 'bonferroni')
+# 
+# 
+# transfac = enriched_chrxxi_inversion$TRANSFAC_and_JASPAR_PWMs%>% 
+#   as_tibble() 
+# p.adjust(transfac$P.value, 
+#          method = 'bonferroni')
+# 
+# 
+# wiki_mouse = enriched_chrxxi_inversion$WikiPathways_2024_Mouse%>% 
+#   as_tibble() 
+# p.adjust(wiki_mouse$P.value, 
+#          method = 'bonferroni')
+# 
+# wiki_human = enriched_chrxxi_inversion$WikiPathways_2024_Human%>% 
+#   as_tibble() 
+# p.adjust(wiki_human$P.value, 
+#          method = 'bonferroni')
 
 
 #### ASHN outliers ----------------------------------------------------
