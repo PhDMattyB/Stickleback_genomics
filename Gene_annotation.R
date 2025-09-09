@@ -280,6 +280,7 @@ PhenGen %>%
 
 
 # GO biocarta pathways ----------------------------------------------------
+#### *****************
 dbs <- c("BioCarta_2013", 
          "BioCarta_2015",
          "BioCarta_2016",
@@ -293,11 +294,12 @@ biocarta_enriched <- enrichr(chrxxi_inversion_gene_names,
                                      include_overlap = T)
 
 biocarta_2013 = biocarta_enriched$BioCarta_2013 %>% 
-  as_tibble() 
+  as_tibble() %>% 
+  filter(Adjusted.P.value <= 0.05)
 
 
 # GO diabetes perturb -----------------------------------------------------
-
+#### *****************
 dbs = c('Diabetes_Perturbations_GEO_2022')
 
 diabetes_enriched <- enrichr(chrxxi_inversion_gene_names, 
@@ -311,7 +313,7 @@ go_diabetes = diabetes_enriched$Diabetes_Perturbations_GEO_2022 %>%
 
 
 # enrichr pathways --------------------------------------------------------
-
+## ************88
 dbs = c('Enrichr_Libraries_Most_Popular_Genes',
         'Enrichr_Submissions_TF-Gene_Coocurrence',
         'Enrichr_Users_Contributed_Lists_2020')
@@ -323,11 +325,10 @@ enrichr_enriched <- enrichr(chrxxi_inversion_gene_names,
 
 enrichr_enriched$`Enrichr_Submissions_TF-Gene_Coocurrence` %>% 
   as_tibble() %>% 
-  filter(Adjusted.P.value <= 0.05) %>% View()
-
+  filter(Adjusted.P.value <= 0.05) 
 
 # Go bio processes ----------------------------------------------------
-
+## **************
 dbs = c('GO_Biological_Process_2021',
         'GO_Biological_Process_2023',
         'GO_Biological_Process_2025')
@@ -441,7 +442,7 @@ GO_KEA_enriched$KEA_2015 %>%
 
 
 # KEGG database GO --------------------------------------------------------
-
+## ************
 dbs = c('KEGG_2013',
         'KEGG_2015', 
         'KEGG_2016')
