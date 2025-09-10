@@ -242,17 +242,9 @@ enriched_chrxxi_inversion <- enrichr(chrxxi_inversion_gene_names,
 
 ## ******
 PhenGen = enriched_chrxxi_inversion$PhenGenI_Association_2021%>% 
-  as_tibble() 
-PhenGen_pdj = p.adjust(PhenGen$P.value, 
-         method = 'bonferroni')
-
-PhenGen = bind_cols(PhenGen, 
-                    PhenGen_pdj) %>% 
-  rename(Bonferroni_adj_Pval = ...10)
-
-PhenGen %>% 
-  filter(Bonferroni_adj_Pval <= 0.05) %>% 
-  View()
+  as_tibble() %>% 
+  filter(Adjusted.P.value <= 0.05) %>% 
+  mutate(database = 'PhenGenI 2021')
 
 # 
 # reactome = enriched_chrxxi_inversion$Reactome_Pathways_2024%>% 
@@ -295,7 +287,8 @@ biocarta_enriched <- enrichr(chrxxi_inversion_gene_names,
 
 biocarta_2013 = biocarta_enriched$BioCarta_2013 %>% 
   as_tibble() %>% 
-  filter(Adjusted.P.value <= 0.05)
+  filter(Adjusted.P.value <= 0.05) %>% 
+  mutate(database = 'BioCarta 2013')
 
 
 # GO diabetes perturb -----------------------------------------------------
@@ -309,7 +302,8 @@ diabetes_enriched <- enrichr(chrxxi_inversion_gene_names,
 
 go_diabetes = diabetes_enriched$Diabetes_Perturbations_GEO_2022 %>% 
   as_tibble() %>% 
-  filter(Adjusted.P.value <= 0.05)
+  filter(Adjusted.P.value <= 0.05) %>% 
+  mutate(database = 'Diabetes Pertubation GEO 2022')
 
 
 # enrichr pathways --------------------------------------------------------
@@ -323,9 +317,10 @@ enrichr_enriched <- enrichr(chrxxi_inversion_gene_names,
                              background = stickle_background, 
                              include_overlap = T)
 
-enrichr_enriched$`Enrichr_Submissions_TF-Gene_Coocurrence` %>% 
+enrichr_go = enrichr_enriched$`Enrichr_Submissions_TF-Gene_Coocurrence` %>% 
   as_tibble() %>% 
-  filter(Adjusted.P.value <= 0.05) 
+  filter(Adjusted.P.value <= 0.05) %>% 
+  mutate(database = 'EnrichR TF-Gene co-ocurrence')
 
 # Go bio processes ----------------------------------------------------
 ## **************
@@ -340,9 +335,10 @@ GO_BIO_enriched <- enrichr(chrxxi_inversion_gene_names,
 
 GO_BIO_enriched = GO_BIO_enriched$GO_Biological_Process_2021 %>% 
   as_tibble() %>% 
-  filter(Adjusted.P.value <= 0.05) 
+  filter(Adjusted.P.value <= 0.05) %>% 
+  mutate(database = 'GO Biological Process 2021')
 
-
+##
 # GO cell processes -------------------------------------------------------
 dbs = c('GO_Cellular_Component_2021',
         'GO_Cellular_Component_2023',
@@ -454,7 +450,8 @@ GO_KEGG_enriched <- enrichr(chrxxi_inversion_gene_names,
 
 GO_KEGG1 = GO_KEGG_enriched$KEGG_2013 %>% 
   as_tibble() %>% 
-  filter(Adjusted.P.value <= 0.05) 
+  filter(Adjusted.P.value <= 0.05) %>% 
+  mutate(database = 'KEGG 2013')
 # GO_KEGG_enriched$KEGG_2015 %>% 
 #   as_tibble() %>% 
 #   filter(Adjusted.P.value <= 0.05) 
@@ -556,6 +553,21 @@ GO_WIKI_enriched$WikiPathways_2024_Mouse %>%
   filter(Adjusted.P.value <= 0.05) 
 
 
+
+
+# Combine the GO results --------------------------------------------------
+GO_Sig_results = bind_rows(go_diabetes, 
+          biocarta_2013, 
+          PhenGen, 
+          enrichr_go, 
+          GO_BIO_enriched, 
+          GO_KEGG1)
+
+
+
+
+
+###
 #### ASHN outliers ----------------------------------------------------
   
 ASHN_div_snps = read_csv('ASHN_TOP_DAWG_Fst_clean.csv') %>% 
