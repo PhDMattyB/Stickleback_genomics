@@ -558,16 +558,51 @@ GO_WIKI_enriched$WikiPathways_2024_Mouse %>%
 # Combine the GO results --------------------------------------------------
 GO_Sig_results = bind_rows(go_diabetes, 
           biocarta_2013, 
-          PhenGen, 
+          # PhenGen, 
           enrichr_go, 
           GO_BIO_enriched, 
-          GO_KEGG1)
+          GO_KEGG1) %>% 
+  mutate(log_adj_pval = -log10(Adjusted.P.value))
+
+db_col_pal = c('#031d44', 
+               '#04395e', 
+               '#70a288', 
+               '#dab785', 
+               '#d5896f')
+
+GO_Sig_Plot = GO_Sig_results %>% 
+  mutate_if(is.character, toupper) %>% 
+  arrange(Combined.Score) %>% 
+  mutate(Term = factor(Term,levels = Term)) %>% 
+  rename(Database = database) %>% 
+  ggplot(aes(y = Term,
+             x = Combined.Score, 
+             fill = Database), 
+         col = 'black')+
+  # ggplot(aes(y = Term, 
+  #            x = log_adj_pval, 
+  #            col = Combined.Score, 
+  #            fill = Combined.Score))+
+  geom_col()+
+  scale_fill_manual(values = db_col_pal)+
+  labs(x = 'Combined score')+
+  theme(panel.grid.major.y = element_blank(),
+        panel.grid.minor.y = element_blank(), 
+        panel.grid.minor.x = element_blank(),
+        axis.title.x = element_text(size = 14), 
+        axis.title.y = element_blank(), 
+        axis.text = element_text(size = 12), 
+        legend.position = 'none')
+
+ggsave('EnrichR_GO_Term_Significant_plot_NoLeg_10.09.2025.svg', 
+       plot = GO_Sig_Plot, 
+       dpi = 'retina', 
+       units = 'cm', 
+       width = 30, 
+       height = 10)
 
 
-
-
-
-###
+ ###
 #### ASHN outliers ----------------------------------------------------
   
 ASHN_div_snps = read_csv('ASHN_TOP_DAWG_Fst_clean.csv') %>% 
