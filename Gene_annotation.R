@@ -183,30 +183,30 @@ chrxxi_inversion_gene_names = read_tsv('CHRXXI_Inversion_gene_names_fixed.txt')%
   as.data.frame()
 
 # data(input)
-enriched = enrichR::enrichr(chrxxi_inversion_gene_names, 
-                    dbs)
-head(enriched[["GO_Biological_Process_2025"]])
-enriched$GO_Cellular_Component_2025 %>% 
-  as_tibble() %>% 
-  filter(Adjusted.P.value <= 0.05)
-enriched$GO_Molecular_Function_2025 %>% 
-  as_tibble() %>% 
-  filter(Adjusted.P.value <= 0.05)
-enriched$GO_Biological_Process_2025 %>% 
-  as_tibble() %>% 
-  filter(Adjusted.P.value <= 0.05)
-enriched$KEGG_2021_Human %>% 
-  as_tibble() %>% 
-  filter(Adjusted.P.value <= 0.05)
-enriched$PhenGenI_Association_2021 %>% 
-  as_tibble() %>% 
-  filter(Adjusted.P.value <= 0.05)
-enriched$Reactome_Pathways_2024 %>% 
-  as_tibble() %>% 
-  filter(Adjusted.P.value <= 0.05)
-enriched$WikiPathways_2024_Human %>% 
-  as_tibble() %>% 
-  filter(Adjusted.P.value <= 0.05)
+# enriched = enrichR::enrichr(chrxxi_inversion_gene_names, 
+#                     dbs)
+# head(enriched[["GO_Biological_Process_2025"]])
+# enriched$GO_Cellular_Component_2025 %>% 
+#   as_tibble() %>% 
+#   filter(Adjusted.P.value <= 0.05)
+# enriched$GO_Molecular_Function_2025 %>% 
+#   as_tibble() %>% 
+#   filter(Adjusted.P.value <= 0.05)
+# enriched$GO_Biological_Process_2025 %>% 
+#   as_tibble() %>% 
+#   filter(Adjusted.P.value <= 0.05)
+# enriched$KEGG_2021_Human %>% 
+#   as_tibble() %>% 
+#   filter(Adjusted.P.value <= 0.05)
+# enriched$PhenGenI_Association_2021 %>% 
+#   as_tibble() %>% 
+#   filter(Adjusted.P.value <= 0.05)
+# enriched$Reactome_Pathways_2024 %>% 
+#   as_tibble() %>% 
+#   filter(Adjusted.P.value <= 0.05)
+# enriched$WikiPathways_2024_Human %>% 
+#   as_tibble() %>% 
+#   filter(Adjusted.P.value <= 0.05)
 
 chrxxi_background = pull(chrxxi_inversion_gene_names, 
                          gene_name)
