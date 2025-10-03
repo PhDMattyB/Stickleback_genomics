@@ -235,7 +235,7 @@ ggsave('admixture_k3_GTS_MYV_other.tiff',
 
 
 # admixture results -------------------------------------------------------
-setwd('Parsons_Postdoc/Stickleback_Genomic/vcf_filter/')
+setwd('~/Parsons_Postdoc/Stickleback_Genomic/vcf_filter/')
 
 ## K3 CV error is 0.47767
 ## K4 CV error is 0.47944
@@ -255,9 +255,9 @@ identifiers = identifiers %>%
   rowid_to_column() %>% 
   rename(order = rowid)
 
-K3_data = bind_cols(identifiers, 
-                    K3_Qval)%>% 
-  write_csv('Admixture_K3_Data.csv')
+# K3_data = bind_cols(identifiers, 
+#                     K3_Qval)%>% 
+#   write_csv('Admixture_K3_Data.csv')
 
 K3_data = read_csv('Admixture_K3_Data.csv')
 
@@ -268,7 +268,8 @@ K3_data %>%
 
 
 K3_melted_data = melt(K3_data, 
-                    id.vars = c('Plot_order', 
+                    id.vars = c(
+                      # 'Plot_order', 
                                 'order',
                                 'population', 
                                 'individual_id')) %>% 
@@ -277,6 +278,7 @@ K3_melted_data = melt(K3_data,
 K3_cols = c('#edae49',
             '#d1495b',
             '#00798c')
+
 
 admixture_k3_plot = ggplot(data = K3_melted_data, 
        aes(x = reorder(Plot_order, 
@@ -555,6 +557,11 @@ location_cols = c('#00798c',
                   '#d1495b',
                   '#30638e')
 
+population_pal2 = c('#277da1',
+                    '#9d4edd',
+                    '#EDAE49',
+                    '#D1495B',
+                    '#7ae7c7')
 
 stickleback_pca = stickle_plot %>%
   # arrange(population) %>% 
@@ -567,7 +574,7 @@ stickleback_pca = stickle_plot %>%
   # geom_point(aes(col = population),
   #            size = 2)+
   # scale_color_manual(values = cold_warm_cols)+
-  scale_color_manual(values = location_cols)+
+  scale_color_manual(values = population_pal2)+
   theme(panel.grid.major = element_blank(),
         panel.grid.minor = element_blank(), 
         axis.title = element_text(size = 15), 
@@ -584,7 +591,7 @@ stickleback_pca = stickle_plot %>%
 stickleback_pca
 
 
-ggsave(file = 'stickleback_pca_cold_warm_11.08.2023.tiff', 
+ggsave(file = 'stickleback_pca_cold_warm_10.10.2025.tiff', 
        path = '~/Parsons_Postdoc/Stickleback_Genomic/Figures/', 
        plot = stickleback_pca, 
        dpi = 'retina', 
