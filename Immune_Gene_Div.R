@@ -115,29 +115,35 @@ stat6 = bind_rows(ASHN_stat6,
 
 # cyp3a48 -----------------------------------------------------------------
 #chrXII:12,613,328..12,615,383
-
-ASHN_Fst %>% 
-  filter(CHR == 'chr_XII') %>% 
-  filter(POS >= 12613328,  
-         POS <= 12615383)
-MYV_Fst%>% 
-  filter(CHR == 'chr_XII') %>% 
-  filter(POS >= 12613328,  
-         POS <= 12615383)
-SKR_Fst %>% 
-  filter(CHR == 'chr_XII') %>% 
-  filter(POS >= 12613328,  
-         POS <= 12615383)
-GTS_CSWY_Fst%>% 
-  filter(CHR == 'chr_XII') %>% 
-  filter(POS >= 12613328,  
-         POS <= 12615383)
-WC_Fst %>% 
-  filter(CHR == 'chr_XII') %>% 
-  filter(POS >= 12613328,  
-         POS <= 12615383)
+#chrXII:8,154,600..8,158,564 
 
 
+ASHN_cyp3a48 = ASHN_Fst %>% 
+  filter(CHR == 'chr_XII') %>% 
+  filter(POS >= 8154600, 
+         POS <= 8158564)
+MYV_cyp3a48 = MYV_Fst%>% 
+  filter(CHR == 'chr_XII') %>% 
+  filter(POS >= 8154600, 
+         POS <= 8158564)
+SKR_cyp3a48 = SKR_Fst %>% 
+  filter(CHR == 'chr_XII') %>% 
+  filter(POS >= 8154600, 
+         POS <= 8158564)
+GTS_CSWY_cyp3a48 = GTS_CSWY_Fst%>% 
+  filter(CHR == 'chr_XII') %>% 
+  filter(POS >= 8154600, 
+         POS <= 8158564)
+WC_cyp3a48 = WC_Fst %>% 
+  filter(CHR == 'chr_XII') %>% 
+  filter(POS >= 8154600, 
+         POS <= 8158564)
+
+cyp3a48 = bind_rows(ASHN_cyp3a48, 
+                    MYV_cyp3a48, 
+                    SKR_cyp3a48, 
+                    GTS_CSWY_cyp3a48, 
+                    WC_cyp3a48)
 
 # ptpn6 -------------------------------------------------------------------
 
@@ -184,6 +190,7 @@ ptpn6 = bind_rows(ASHN_ptpn6,
 # all gene info ----------------------------------------------------------
 
 bind_rows(spi1b, 
-          stat6, 
+          stat6,
+          cyp3a48,
           ptpn6) %>% 
   write_tsv('Immune_Gene_FST_info.txt')
