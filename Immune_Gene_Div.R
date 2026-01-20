@@ -192,5 +192,5 @@ ptpn6 = bind_rows(ASHN_ptpn6,
 bind_rows(spi1b, 
           stat6,
           cyp3a48,
-          ptpn6) %>% 
+          ptpn6) %>% View() 
   write_tsv('Immune_Gene_FST_info.txt')
