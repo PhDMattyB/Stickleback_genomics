@@ -569,22 +569,38 @@ db_col_pal = c('#031d44',
                '#70a288', 
                '#dab785', 
                '#d5896f')
+db2_col_pal = c('#04395e', 
+                '#70a288', 
+                '#d5896f')
 
-GO_Sig_Plot = GO_Sig_results %>% 
+GO_Sign_results = GO_Sig_results %>% 
   mutate_if(is.character, toupper) %>% 
   arrange(Combined.Score) %>% 
   mutate(Term = factor(Term,levels = Term)) %>% 
   rename(Database = database) %>% 
-  ggplot(aes(y = Term,
+  mutate(.data = .,
+         FUNCTION = as.factor(case_when(
+           Term == 'HIF PATHWAY' ~ 'Hypoxia',
+           Term == 'MITOTIC DNA REPLICATION INITIATION (GO:1902975)' ~ 'DNA and cellular repair',
+           Term == 'NUCLEAR CELL CYCLE DNA REPLICATION INITIATION (GO:1902315)' ~ 'DNA and cellular repair',
+           Term == 'TERF1' ~ 'DNA and cellular repair',
+           Term == 'ST18' ~ 'DNA and cellular repair',
+           Term == 'PPARG PATHWAY' ~ 'Metabolism',
+           Term == 'HSA00627 1,4 DICHLOROBENZENE DEGRADATION' ~ 'Metabolism',
+           Term == 'GSE90531 HDAC3F F;CRE-HDAC3BETAKO MM ISLET DN' ~ 'Metabolism', 
+           Term == 'RARRXR PATHWAY' ~ 'Metabolism', 
+           Term == 'SOHLH2' ~ 'Metabolism')))
+
+GO_Sig_Plot = ggplot(data = GO_Sign_results, 
+                     aes(y = Term,
              x = Combined.Score, 
-             fill = Database), 
-         col = 'black')+
+             fill = FUNCTION))+
   # ggplot(aes(y = Term, 
   #            x = log_adj_pval, 
   #            col = Combined.Score, 
   #            fill = Combined.Score))+
   geom_col()+
-  scale_fill_manual(values = db_col_pal)+
+  scale_fill_manual(values = db2_col_pal)+
   labs(x = 'Combined score')+
   theme(panel.grid.major.y = element_blank(),
         panel.grid.minor.y = element_blank(), 
@@ -594,7 +610,7 @@ GO_Sig_Plot = GO_Sig_results %>%
         axis.text = element_text(size = 12), 
         legend.position = 'none')
 
-ggsave('EnrichR_GO_Term_Significant_plot_NoLeg_10.09.2025.svg', 
+ggsave('EnrichR_GO_Term_Significant_plot_NoLeg_10.02.2026.svg', 
        plot = GO_Sig_Plot, 
        dpi = 'retina', 
        units = 'cm', 
