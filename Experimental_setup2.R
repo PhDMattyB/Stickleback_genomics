@@ -661,4 +661,74 @@ final_data$Temp = as.factor(final_data$Temp)
 final_data$Rep = as.factor(final_data$Rep)
 
 
+final_data %>% 
+  filter(Pop == 'MCMC', 
+         Temp == '12', 
+         Treatment == 'High Food', 
+         # Rep == '', 
+         Tube_Number %in% c('1', 
+                            '2', 
+                            '3', 
+                            '4', 
+                            '5', 
+                            '6', 
+                            '7', 
+                            '8', 
+                            '9', 
+                            '10', 
+                            '11')) %>% View()
 
+
+final_data %>% 
+  filter(Pop == 'MCMC', 
+         Temp == '12', 
+         Treatment == 'Low Food', 
+         # Rep == '3', 
+         Tube_Number %in% c('1', 
+                            '2', 
+                            '3', 
+                            '4', 
+                            '5', 
+                            '6', 
+                            '7', 
+                            '8', 
+                            '9', 
+                            '10', 
+                            '11', 
+                            '12')) %>% View()
+
+final_data %>% 
+  filter(Pop == 'MCMC', 
+         Temp == '18', 
+         Treatment == 'Low Food', 
+         Rep == '1') %>% View()
+         # Tube_Number %in% c('1', 
+         #                    '2', 
+         #                    '3', 
+         #                    '4', 
+         #                    '5', 
+         #                    '6', 
+         #                    '7', 
+         #                    '8', 
+         #                    '9', 
+         #                    '10', 
+         #                    '11'))
+
+
+final_data %>% 
+  filter(Pop == 'MWMW', 
+         Temp == '18', 
+         # Treatment == 'Low Food', 
+         Rep == '2', 
+         Tube_Number %in% c('1', 
+                            '2', 
+                            '3', 
+                            '4', 
+                            '5', 
+                            '6', 
+                            '7', 
+                            '8', 
+                            '9', 
+                            '10', 
+                            '11', 
+                            '12')) %>% View()
