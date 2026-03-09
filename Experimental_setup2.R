@@ -701,25 +701,27 @@ final_data %>%
   filter(Pop == 'MCMC', 
          Temp == '18', 
          Treatment == 'Low Food', 
-         Rep == '1') %>% View()
-         # Tube_Number %in% c('1', 
-         #                    '2', 
-         #                    '3', 
-         #                    '4', 
-         #                    '5', 
-         #                    '6', 
-         #                    '7', 
-         #                    '8', 
-         #                    '9', 
-         #                    '10', 
-         #                    '11'))
+         # Rep == '1') %>% 
+         Tube_Number %in% c('1',
+                            '2',
+                            '3',
+                            '4',
+                            '5',
+                            '6',
+                            '7',
+                            '8',
+                            '9',
+                            '10',
+                            '11', 
+                            '12')) %>% 
+  View()
 
 
 final_data %>% 
-  filter(Pop == 'MWMW', 
+  filter(Pop == 'MCMC', 
          Temp == '18', 
-         # Treatment == 'Low Food', 
-         Rep == '2', 
+         Treatment == 'High Food',
+         # Rep == '2', 
          Tube_Number %in% c('1', 
                             '2', 
                             '3', 
