@@ -661,6 +661,9 @@ final_data$Temp = as.factor(final_data$Temp)
 final_data$Rep = as.factor(final_data$Rep)
 
 
+# MCMC RNA extraction -----------------------------------------------------
+
+
 final_data %>% 
   filter(Pop == 'MCMC', 
          Temp == '12', 
@@ -734,3 +737,237 @@ final_data %>%
                             '10', 
                             '11', 
                             '12')) %>% View()
+
+
+# ACAC RNA extraction -----------------------------------------------------
+
+
+final_data %>% 
+  filter(Pop == 'ACAC', 
+         Temp == '12', 
+         Treatment == 'High Food', 
+         # Rep == '', 
+         Tube_Number %in% c('1', 
+                            '2', 
+                            '3', 
+                            '4', 
+                            '5', 
+                            '6', 
+                            '7', 
+                            '8', 
+                            '9', 
+                            '10', 
+                            '11')) %>% View()
+
+
+final_data %>% 
+  filter(Pop == 'ACAC', 
+         Temp == '12', 
+         Treatment == 'Low Food', 
+         # Rep == '3', 
+         Tube_Number %in% c('1', 
+                            '2', 
+                            '3', 
+                            '4', 
+                            '5', 
+                            '6', 
+                            '7', 
+                            '8', 
+                            '9', 
+                            '10', 
+                            '11', 
+                            '12')) %>% View()
+
+final_data %>% 
+  filter(Pop == 'ACAC', 
+         Temp == '18', 
+         Treatment == 'Low Food', 
+         # Rep == '1') %>% 
+         Tube_Number %in% c('1',
+                            '2',
+                            '3',
+                            '4',
+                            '5',
+                            '6',
+                            '7',
+                            '8',
+                            '9',
+                            '10',
+                            '11', 
+                            '12')) %>% 
+  View()
+
+
+final_data %>% 
+  filter(Pop == 'ACAC', 
+         Temp == '18', 
+         Treatment == 'High Food',
+         # Rep == '2', 
+         Tube_Number %in% c('1', 
+                            '2', 
+                            '3', 
+                            '4', 
+                            '5', 
+                            '6', 
+                            '7', 
+                            '8', 
+                            '9', 
+                            '10', 
+                            '11', 
+                            '12')) %>% View()
+
+
+# MWMW RNA extraction -----------------------------------------------------
+
+
+final_data %>% 
+  filter(Pop == 'MWMW', 
+         Temp == '12', 
+         Treatment == 'High Food', 
+         # Rep == '', 
+         Tube_Number %in% c('1', 
+                            '2', 
+                            '3', 
+                            '4', 
+                            '5', 
+                            '6', 
+                            '7', 
+                            '8', 
+                            '9', 
+                            '10', 
+                            '11')) %>% View()
+
+
+final_data %>% 
+  filter(Pop == 'MWMW', 
+         Temp == '12', 
+         Treatment == 'Low Food', 
+         # Rep == '3', 
+         Tube_Number %in% c('1', 
+                            '2', 
+                            '3', 
+                            '4', 
+                            '5', 
+                            '6', 
+                            '7', 
+                            '8', 
+                            '9', 
+                            '10', 
+                            '11', 
+                            '12')) %>% View()
+
+final_data %>% 
+  filter(Pop == 'MWMW', 
+         Temp == '18', 
+         Treatment == 'Low Food', 
+         # Rep == '1') %>% 
+         Tube_Number %in% c('1',
+                            '2',
+                            '3',
+                            '4',
+                            '5',
+                            '6',
+                            '7',
+                            '8',
+                            '9',
+                            '10',
+                            '11', 
+                            '12')) %>% 
+  View()
+
+
+final_data %>% 
+  filter(Pop == 'MWMW', 
+         Temp == '18', 
+         Treatment == 'High Food',
+         # Rep == '2', 
+         Tube_Number %in% c('1', 
+                            '2', 
+                            '3', 
+                            '4', 
+                            '5', 
+                            '6', 
+                            '7', 
+                            '8', 
+                            '9', 
+                            '10', 
+                            '11', 
+                            '12')) %>% View()
+
+# AWAW RNA extraction -----------------------------------------------------
+
+
+final_data %>% 
+  filter(Pop == 'AWAW', 
+         Temp == '12', 
+         Treatment == 'High Food', 
+         # Rep == '', 
+         Tube_Number %in% c('1', 
+                            '2', 
+                            '3', 
+                            '4', 
+                            '5', 
+                            '6', 
+                            '7', 
+                            '8', 
+                            '9', 
+                            '10', 
+                            '11')) %>% View()
+
+
+final_data %>% 
+  filter(Pop == 'AWAW', 
+         Temp == '12', 
+         Treatment == 'Low Food', 
+         # Rep == '3', 
+         Tube_Number %in% c('1', 
+                            '2', 
+                            '3', 
+                            '4', 
+                            '5', 
+                            '6', 
+                            '7', 
+                            '8', 
+                            '9', 
+                            '10', 
+                            '11', 
+                            '12')) %>% View()
+
+final_data %>% 
+  filter(Pop == 'AWAW', 
+         Temp == '18', 
+         Treatment == 'Low Food', 
+         # Rep == '1') %>% 
+         Tube_Number %in% c('1',
+                            '2',
+                            '3',
+                            '4',
+                            '5',
+                            '6',
+                            '7',
+                            '8',
+                            '9',
+                            '10',
+                            '11', 
+                            '12')) %>% 
+  View()
+
+
+final_data %>% 
+  filter(Pop == 'AWAW', 
+         Temp == '18', 
+         Treatment == 'High Food',
+         # Rep == '2', 
+         Tube_Number %in% c('1', 
+                            '2', 
+                            '3', 
+                            '4', 
+                            '5', 
+                            '6', 
+                            '7', 
+                            '8', 
+                            '9', 
+                            '10', 
+                            '11', 
+                            '12')) %>% View()
+

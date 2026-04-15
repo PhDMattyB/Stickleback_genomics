@@ -397,6 +397,18 @@ plot(stickle_pca,
      option = 'screeplot', 
      K = 10)
 
+stickle_pca$singular.values %>% 
+  as.data.frame() %>% 
+  as_tibble() %>% 
+  mutate(PC_axis = 'PC') %>% 
+  rownames_to_column() %>% 
+  tidyr::unite(c('PC_axis', 
+                 'rowname'), 
+               col = 'PC_axis', 
+               sep = '') %>% 
+  rename(value = 2) %>% 
+  write_csv('NatComms_SuppFig1_data.csv')
+
 ## looks like k = 4 is the best k based on pcadapt
 
 # plot(stickle_pca, option = "scores")
@@ -1813,6 +1825,58 @@ GTS_CSWY_Fst_clean = Fst_manhatan_format(GTS_CSWY_Fst,
                                          GTS_CSWY_top_dist) %>% 
   write_csv('GTS_CSWY_Fst_clean.csv')
 
+
+# CHRxxi FST --------------------------------------------------------------
+WC_Fst_clean = read_csv('WC_Fst_clean.csv') %>% 
+  stickle_CHR_reorder() %>% 
+  dist_cal()
+
+axisdf_WC = axis_df(WC_Fst_clean)
+non_outs = 
+  WC_Fst_clean %>%
+  filter(value == 'Neutral') %>% 
+  filter(CHR == 'chr_XXI')
+
+## Get the outliers
+outs = 
+  WC_Fst_clean %>%
+  filter(value == 'Outlier') %>% 
+  filter(CHR == 'chr_XXI')
+
+
+
+ggplot(non_outs, 
+       aes(x = BPcum, 
+           y = FST_zero))+
+  # plot the non outliers in grey
+  geom_point(aes(color = as.factor(CHR)), 
+             alpha = 0.8, 
+             size = 1.3)+
+  ## alternate colors per chromosome
+  scale_color_manual(values = rep(c("grey", "dimgrey"), 39))+
+  ## plot the outliers on top of everything
+  ## currently digging this hot pink colour
+  geom_point(data = outs,
+             col = '#fb6f92',
+             alpha=0.8, 
+             size=1.3)+
+  # scale_x_continuous(label = WC_axis_df$CHR, 
+  #                    breaks = WC_axis_df$center)+
+  scale_y_continuous(expand = c(0, 0), 
+                     limits = c(0,0.10))+
+  labs(x = 'Cumulative base pair', 
+       y = 'Fst', 
+       title = 'B)')+
+  theme(legend.position="none",
+        # panel.border = element_blank(),
+        panel.grid.major.x = element_blank(),
+        panel.grid.minor.x = element_blank(), 
+        axis.text.x = element_text(size = 9, 
+                                   angle = 90), 
+        axis.title = element_text(size = 14),
+        axis.title.x = element_blank(),
+        axis.text.y = element_text(size = 12))
+
 # FST outlier manhattan plot ----------------------------------------------
 
 ASHN_Fst_clean = read_csv('ASHN_Fst_clean.csv') %>% 
@@ -1960,7 +2024,7 @@ GTS_CSWY_Fst_clean = read_csv('GTS_CSWY_TOP_DAWG_Fst_clean.csv') %>%
   filter(value == 'Outlier') %>% 
   select(SNP)
 
-WC_FST_clean = read_csv("WC_FST_Outliers_WARM_COLD_COMBO.csv") %>%
+WC_FST_clean = read_csv("WC_TOP_DAWG_Fst_clean.csv") %>%
   stickle_CHR_reorder() %>%
   dist_cal()%>%
   filter(value == 'Outlier') %>% 

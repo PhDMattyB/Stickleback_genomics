@@ -21,6 +21,16 @@ library(enrichR)
 #   distinct()
 
 
+# read_csv('WC_TOP_DAWG_Fst_clean.csv') %>% 
+#   filter(CHR == 'chr_XXI') %>% 
+#   dplyr::select(-NMISS,
+#                 -FST) %>%
+#   rename(FST = FST_zero) %>%
+#   ggplot()+
+#   geom_point(aes(x = POS, 
+#                  y = FST, 
+#                  col = value))
+
 gene_annotation = read_tsv('stickleback_v5_ensembl_genes.gff3.gz', 
                      col_names = F, 
                      skip = 1) %>% 
