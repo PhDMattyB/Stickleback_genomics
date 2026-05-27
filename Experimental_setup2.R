@@ -723,7 +723,9 @@ final_data %>%
 final_data %>% 
   filter(Pop == 'MCMC', 
          Temp == '18', 
+         
          Treatment == 'High Food',
+         
          # Rep == '2', 
          Tube_Number %in% c('1', 
                             '2', 
